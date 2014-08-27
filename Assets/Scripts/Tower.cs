@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+
 using RAIN.Core;
+using RAIN.Perception.Sensors;
+using RAIN.Entities.Aspects;
 
 public class Tower : MonoBehaviour
 {
@@ -51,6 +55,13 @@ public class Tower : MonoBehaviour
         set { _fireRate = value; }
     }
 
+    protected float _lastFired;
+    public float LastFired
+    {
+        get { return _lastFired; }
+        set { _lastFired = value; }
+    }
+
     protected float _range;
     public float Range
     {
@@ -72,76 +83,131 @@ public class Tower : MonoBehaviour
         set { _aiRig = value; }
     }
 
-    protected GameObject _target;
-    public GameObject Target
+    protected IList<RAINAspect> _targets;
+    public IList<RAINAspect> Targets
     {
-        get { return _target; }
-        set { _target = value; }
+        get { return _targets; }
+        set { _targets = value; }
+    }
+
+    protected Enemy _priorityTarget;
+    public Enemy PriorityTarget
+    {
+        get { return _priorityTarget; }
+        set { _priorityTarget = value; }
+    }
+
+    protected VisualSensor _visualSensor;
+    public VisualSensor VisualSensor
+    {
+        get { return _visualSensor; }
+        set { _visualSensor = value; }
     }
 
     /// <summary>
-    /// Common code for all Enemy objects to function.
-    /// Calls Initialize which should be overriden.
+    /// Override the following when making sub towers, then call Initialize()
+    /// 
+    /// Tower.TYPE _type
+    /// BEHAVIOR _behavior
+    /// float _fireRate (do not set to 0)
+    /// float _range
     /// </summary>
     void Start()
     {
-        _isAlive = true;
-
-        _aiRig = gameObject.GetComponentInChildren<AIRig>();
+        _type = TYPE.basic;
+        _behavior = BEHAVIOR.first;
+        _fireRate = 1f;
+        _range = 10f;
 
         Initialize();
     }
 
     /// <summary>
-    /// Function to override when making sub towers.
-    /// TYPE _type
-    /// BEHAVIOR _behavior
-    /// float _fireRate
-    /// 
-    /// Then call Finish();
+    /// Initializes functions based on inputed start values.
+    /// Do not override.
     /// </summary>
     void Initialize()
     {
-        _type = TYPE.basic;
-        _behavior = BEHAVIOR.first;
-        _fireRate = 1f;
-        Finish();
-    }
+        _isAlive = true;
+        _lastFired = 0;
+        _targets = new List<RAINAspect>();
 
-    /// <summary>
-    /// Called at the end of Initialize().
-    /// </summary>
-    void Finish()
-    {
-        if (_fireRate != 0)
-        {
-            Debug.LogWarning("KNOWN BUG: Towers instantly fire 2 (instead of 1) projectiles on instantiation");
-            InvokeRepeating("Fire", 0, (1 / _fireRate));
-        }
+        _aiRig = gameObject.GetComponentInChildren<AIRig>();
+        _visualSensor = (VisualSensor)_aiRig.AI.Senses.GetSensor("_visualSensor");
+        _visualSensor.Range = _range;
     }
 
     void Update()
     {
-        if (!IsAlive)
+        if (!_isAlive)
         {
             Destroy(gameObject);
+        }
+        else if ((Time.time - _lastFired) >= (1 / _fireRate))
+        {
+            AcquireTarget();
+
+            if (_targets.Count != 0)
+            {
+                Fire();
+            }
+        }
+        else
+        {
+            _lastFired -= Time.deltaTime;
+        }
+    }
+
+    void AcquireTarget()
+    {
+        _targets = _visualSensor.Matches;
+
+        if (_targets.Count != 0)
+        {
+            switch (_behavior)
+            {
+                case BEHAVIOR.first:
+                    _targets.OrderBy(aspect => aspect.Entity.Form.GetComponent<Enemy>().Distance);
+                    _priorityTarget = _targets.First<RAINAspect>().Entity.Form.GetComponent<Enemy>();
+                    break;
+                case BEHAVIOR.last:
+                    _targets.OrderBy(aspect => aspect.Entity.Form.GetComponent<Enemy>().Distance);
+                    _priorityTarget = _targets.Last<RAINAspect>().Entity.Form.GetComponent<Enemy>();
+                    break;
+
+                case BEHAVIOR.strongest:
+                    _targets.OrderBy(aspect => aspect.Entity.Form.GetComponent<Enemy>().MaxHealth);
+                    _priorityTarget = _targets.First<RAINAspect>().Entity.Form.GetComponent<Enemy>();
+                    break;
+
+                case BEHAVIOR.weakest:
+                    _targets.OrderBy(aspect => aspect.Entity.Form.GetComponent<Enemy>().MaxHealth);
+                    _priorityTarget = _targets.Last<RAINAspect>().Entity.Form.GetComponent<Enemy>();
+                    break;
+
+                case BEHAVIOR.closest:
+                    // RAIN does this by default
+                    break;
+
+                default:
+                    // will target the closest enemy
+                    break;
+            }
         }
     }
 
     /// <summary>
-    /// function called every (1 / _fireRate) seconds.
+    /// Fires a projectile and prevents refiring for time = (1 / _fireRate).
     /// </summary>
     void Fire()
     {
-        _target = _aiRig.AI.WorkingMemory.GetItem<GameObject>("towerTarget");
+        // set cooldown
+        _lastFired = Time.time;
 
-        if (_target != null)
-        {
-            // create projectile from Projectile prefab attached
-            GameObject projectile = Instantiate(Projectile, transform.position, Quaternion.identity) as GameObject;
+        // create projectile from Projectile prefab attached
+        GameObject projectile = Instantiate(Projectile, transform.position, Quaternion.identity) as GameObject;
 
-            // set its target
-            projectile.GetComponent<Projectile>().Target = _target.transform;
-        }
+        // set its target
+        projectile.GetComponent<Projectile>().Target = _priorityTarget.transform;
     }
 }

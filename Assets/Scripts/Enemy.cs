@@ -72,10 +72,28 @@ public class Enemy : MonoBehaviour
     }
 
     /// <summary>
-    /// Common code for all Enemy objects to function.
-    /// Calls Initialize which should be overriden.
+    /// Override the following when making sub enemies, then call Initialize()
+    /// 
+    /// Enemy.TYPE _type
+    /// int _maxHealth
+    /// int _currentHealth
+    /// float _speed
     /// </summary>
     void Start()
+    {
+        _type = TYPE.basic;
+        _maxHealth = 1;
+        _currentHealth = 1;
+        _speed = 3f;
+
+        Initialize();
+    }
+
+    /// <summary>
+    /// Initializes functions based on inputed start values.
+    /// Do not override.
+    /// </summary>
+    void Initialize()
     {
         _isAlive = true;
 
@@ -83,31 +101,6 @@ public class Enemy : MonoBehaviour
         _target = GameObject.Find("Finish").GetComponent<Transform>().position;
         _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
         _navMeshAgent.SetDestination(_target);
-
-        Initialize();
-    }
-
-    /// <summary>
-    /// Function to override when making sub enemies.
-    /// Enemy.TYPE _type
-    /// int _maxHealth
-    /// int _currentHealth
-    /// float _speed
-    /// </summary>
-    void Initialize()
-    {
-        _type = TYPE.basic;
-        _maxHealth = 1;
-        _currentHealth = 1;
-        _speed = 3f;
-        Finish();
-    }
-
-    /// <summary>
-    /// Called at the end of Initialize().
-    /// </summary>
-    void Finish()
-    {
         _navMeshAgent.speed = _speed;
     }
 

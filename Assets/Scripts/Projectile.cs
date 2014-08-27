@@ -44,33 +44,26 @@ public class Projectile : MonoBehaviour
     }
 
     /// <summary>
-    /// Common code for all Projectile objects to function.
-    /// Calls Initialize which should be overriden.
+    /// Override when making sub projectiles, then call Initialize()
+    /// 
+    /// int _damage
+    /// float _speed
     /// </summary>
     void Start()
     {
-        _isAlive = true;
+        _damage = 1;
+        _speed = 5f;
+
         Initialize();
     }
 
     /// <summary>
-    /// Function to override when making sub projectiles.
-    /// int _damage
-    /// float _speed
+    /// Initializes functions based on inputed start values.
+    /// Do not override.
     /// </summary>
     void Initialize()
     {
-        _damage = 1;
-        _speed = 5f;
-        Finish();
-    }
-
-    /// <summary>
-    /// Called at the end of Initialize().
-    /// </summary>
-    void Finish()
-    {
-
+        _isAlive = true;
     }
 
     void Update()
