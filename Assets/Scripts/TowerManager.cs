@@ -35,7 +35,7 @@ public class TowerManager : MonoBehaviour
         GameObject temp;
         if (type == Tower.TYPE.basic)
         {
-            temp = Instantiate(TowerBasic, new Vector3(Coordinates.x, 0.5f, Coordinates.y), Quaternion.identity) as GameObject;
+            temp = Instantiate(TowerBasic, new Vector3(Coordinates.x, 0f, Coordinates.y), Quaternion.identity) as GameObject;
             Towers.Add(temp);
         }
     }

@@ -107,7 +107,7 @@ public class Spawner : MonoBehaviour
         if (unitList[(int)unitLevel] != null)
         {
             Transform unit = InstanceManager.Spawn(unitList[(int)unitLevel].transform, spawnLocation.position, Quaternion.identity);
-			unit.GetComponent<SpawnAI>().SetOwner(this);
+			unit.GetComponentInChildren<SpawnAI>().SetOwner(this);
             // Increase the total number of enemies spawned and the number of spawned enemies
             numberOfUnits++;
             totalSpawnedUnits++;

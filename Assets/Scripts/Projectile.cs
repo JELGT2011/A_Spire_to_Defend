@@ -36,8 +36,8 @@ public class Projectile : MonoBehaviour
         set { _speed = value; }
     }
 
-    protected Transform _target;
-    public Transform Target
+    protected GameObject _target;
+    public GameObject Target
     {
         get { return _target; }
         set { _target = value; }
@@ -70,17 +70,17 @@ public class Projectile : MonoBehaviour
     {
         if (!IsAlive)
         {
-            Destroy(gameObject);
+            Destroy(transform.root.gameObject);
         }
         else if (_target != null)
         {
             // chase the target
-            transform.LookAt(Target.transform.position);
-            transform.Translate(Vector3.forward * _speed * Time.deltaTime);
+            transform.root.LookAt(Target.transform.position);
+            transform.root.Translate(Vector3.forward * _speed * Time.deltaTime);
         }
         else {
             // target was destroyed
-            transform.Translate(Vector3.forward * _speed * Time.deltaTime);
+            transform.root.Translate(Vector3.forward * _speed * Time.deltaTime);
         }
     }
 
@@ -94,9 +94,9 @@ public class Projectile : MonoBehaviour
         GameObject collisionObject;
         Enemy enemy;
 
-        collisionObject = collision.collider.gameObject;
+        collisionObject = collision.collider.transform.root.gameObject;
 
-        if ((enemy = collisionObject.GetComponent<Enemy>()) != null)
+        if ((enemy = collisionObject.GetComponentInChildren<Enemy>()) != null)
         {
             
         }

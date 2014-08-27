@@ -81,14 +81,21 @@ public class Player : MonoBehaviour
 
                 if (_lastClickedObject.tag == "Build Area")
                 {
+
+                    Debug.Log("Build Area clicked at time: " + Time.realtimeSinceStartup);
+
                     _lastClickedCoordinates = new Vector2((float) Mathf.RoundToInt(_raycastHit.point.x), (float)Mathf.RoundToInt(_raycastHit.point.z));
                 }
                 else if (_lastClickedObject.tag == "Tower")
                 {
 
+                    Debug.Log("Tower clicked at time: " + Time.realtimeSinceStartup);
+
                 }
                 else if (_lastClickedObject.tag == "Enemy")
                 {
+
+                    Debug.Log("Enemy clicked at time: " + Time.realtimeSinceStartup);
 
                 }
                 else

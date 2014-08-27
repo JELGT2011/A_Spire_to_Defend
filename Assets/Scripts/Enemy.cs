@@ -57,6 +57,13 @@ public class Enemy : MonoBehaviour
         set { _navMeshAgent = value; }
     }
 
+    protected float _accuracy;
+    public float Accuracy
+    {
+        get { return _accuracy; }
+        set { _accuracy = value; }
+    }
+
     protected float _distance;
     public float Distance
     {
@@ -84,7 +91,7 @@ public class Enemy : MonoBehaviour
         _type = TYPE.basic;
         _maxHealth = 1;
         _currentHealth = 1;
-        _speed = 3f;
+        _speed = 4f;
 
         Initialize();
     }
@@ -96,10 +103,12 @@ public class Enemy : MonoBehaviour
     void Initialize()
     {
         _isAlive = true;
+        _accuracy = 1f;
 
         // find and navigate to target
         _target = GameObject.Find("Finish").GetComponent<Transform>().position;
-        _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
+
+        _navMeshAgent = transform.parent.gameObject.GetComponentInChildren<NavMeshAgent>();
         _navMeshAgent.SetDestination(_target);
         _navMeshAgent.speed = _speed;
     }
@@ -110,7 +119,7 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         // check if enemy is close enough to Target
-        if (Mathf.Abs(_navMeshAgent.remainingDistance) == 0)
+        if (Mathf.Abs(_navMeshAgent.remainingDistance) <= _accuracy)
         {
             _isAlive = false;
             _targetReached = true;
@@ -119,7 +128,7 @@ public class Enemy : MonoBehaviour
 
         if (!_isAlive)
         {
-            Destroy(gameObject);
+            Destroy(transform.root.gameObject);
         }
     }
 
@@ -133,10 +142,10 @@ public class Enemy : MonoBehaviour
         GameObject collisionObject;
         Projectile projectile;
 
-        collisionObject = collision.collider.gameObject;
+        collisionObject = collision.collider.transform.root.gameObject;
 
         // Only check against projectiles
-        if ((projectile = collisionObject.GetComponent<Projectile>()) != null)
+        if ((projectile = collisionObject.GetComponentInChildren<Projectile>()) != null)
         {
             _currentHealth -= projectile.Damage;
 

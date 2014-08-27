@@ -90,8 +90,8 @@ public class Tower : MonoBehaviour
         set { _targets = value; }
     }
 
-    protected Enemy _priorityTarget;
-    public Enemy PriorityTarget
+    protected GameObject _priorityTarget;
+    public GameObject PriorityTarget
     {
         get { return _priorityTarget; }
         set { _priorityTarget = value; }
@@ -117,7 +117,7 @@ public class Tower : MonoBehaviour
         _type = TYPE.basic;
         _behavior = BEHAVIOR.first;
         _fireRate = 1f;
-        _range = 5f;
+        _range = 6f;
 
         Initialize();
     }
@@ -132,7 +132,7 @@ public class Tower : MonoBehaviour
         _lastFired = 0;
         _targets = new List<RAINAspect>();
 
-        _aiRig = gameObject.GetComponentInChildren<AIRig>();
+        _aiRig = gameObject.GetComponent<AIRig>();
         _visualSensor = (VisualSensor)_aiRig.AI.Senses.GetSensor("_visualSensor");
         _visualSensor.Range = _range;
     }
@@ -141,7 +141,7 @@ public class Tower : MonoBehaviour
     {
         if (!_isAlive)
         {
-            Destroy(gameObject);
+            Destroy(transform.root.gameObject);
         }
         else if ((Time.time - _lastFired) >= (1 / _fireRate))
         {
@@ -169,23 +169,23 @@ public class Tower : MonoBehaviour
             {
                 case BEHAVIOR.first:
                     // lambda functions to reorder _targets based on the behavior
-                    _targets.OrderBy(aspect => aspect.Entity.Form.GetComponent<Enemy>().Distance);
-                    _priorityTarget = _targets.First<RAINAspect>().Entity.Form.GetComponent<Enemy>();
+                    _targets.OrderBy(aspect => aspect.Entity.Form.GetComponentInChildren<Enemy>().Distance);
+                    _priorityTarget = _targets.First<RAINAspect>().Entity.Form;
                     break;
 
                 case BEHAVIOR.last:
-                    _targets.OrderBy(aspect => aspect.Entity.Form.GetComponent<Enemy>().Distance);
-                    _priorityTarget = _targets.Last<RAINAspect>().Entity.Form.GetComponent<Enemy>();
+                    _targets.OrderBy(aspect => aspect.Entity.Form.GetComponentInChildren<Enemy>().Distance);
+                    _priorityTarget = _targets.Last<RAINAspect>().Entity.Form;
                     break;
 
                 case BEHAVIOR.strongest:
-                    _targets.OrderBy(aspect => aspect.Entity.Form.GetComponent<Enemy>().MaxHealth);
-                    _priorityTarget = _targets.First<RAINAspect>().Entity.Form.GetComponent<Enemy>();
+                    _targets.OrderBy(aspect => aspect.Entity.Form.GetComponentInChildren<Enemy>().MaxHealth);
+                    _priorityTarget = _targets.First<RAINAspect>().Entity.Form;
                     break;
 
                 case BEHAVIOR.weakest:
-                    _targets.OrderBy(aspect => aspect.Entity.Form.GetComponent<Enemy>().MaxHealth);
-                    _priorityTarget = _targets.Last<RAINAspect>().Entity.Form.GetComponent<Enemy>();
+                    _targets.OrderBy(aspect => aspect.Entity.Form.GetComponentInChildren<Enemy>().MaxHealth);
+                    _priorityTarget = _targets.Last<RAINAspect>().Entity.Form;
                     break;
 
                 case BEHAVIOR.closest:
@@ -211,6 +211,6 @@ public class Tower : MonoBehaviour
         GameObject projectile = Instantiate(Projectile, transform.position, Quaternion.identity) as GameObject;
 
         // set its target
-        projectile.GetComponent<Projectile>().Target = _priorityTarget.transform;
+        projectile.GetComponentInChildren<Projectile>().Target = _priorityTarget;
     }
 }
