@@ -66,6 +66,8 @@ public class Player : MonoBehaviour
     {
         _towerManager = GetComponent<TowerManager>();
         _lastClickedCoordinates = new Vector2(0f, 0f);
+
+        Debug.LogWarning("spawner still needs full implementation");
     }
 
     void Update()
