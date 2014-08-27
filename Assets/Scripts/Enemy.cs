@@ -114,6 +114,7 @@ public class Enemy : MonoBehaviour
         {
             _isAlive = false;
             _targetReached = true;
+            GameObject.FindGameObjectWithTag("Global").GetComponent<Global>().Lives -= _currentHealth;
         }
 
         if (!_isAlive)

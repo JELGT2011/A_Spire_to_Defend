@@ -108,7 +108,7 @@ public class Tower : MonoBehaviour
     /// Override the following when making sub towers, then call Initialize()
     /// 
     /// Tower.TYPE _type
-    /// BEHAVIOR _behavior
+    /// Tower.BEHAVIOR _behavior
     /// float _fireRate (do not set to 0)
     /// float _range
     /// </summary>
@@ -117,7 +117,7 @@ public class Tower : MonoBehaviour
         _type = TYPE.basic;
         _behavior = BEHAVIOR.first;
         _fireRate = 1f;
-        _range = 10f;
+        _range = 5f;
 
         Initialize();
     }

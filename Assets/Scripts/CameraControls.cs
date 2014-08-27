@@ -2,7 +2,7 @@
 using System.Collections;
 using System.ComponentModel;
 
-public class CameraControls : Photon.MonoBehaviour
+public class CameraControls : MonoBehaviour
 {
     public KeyCode MoveForward  = KeyCode.W;
     public KeyCode MoveBackward = KeyCode.S;

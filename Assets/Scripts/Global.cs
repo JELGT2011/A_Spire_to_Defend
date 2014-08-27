@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Global
+public class Global : MonoBehaviour
 {
     public static int MAX_PLAYERS = 4;
     public static int NUM_PLAYERS = 0;
@@ -20,5 +20,27 @@ public class Global
         game,
         paused,
         endgame
+    }
+
+    protected int _lives;
+    public int Lives
+    {
+        get { return _lives; }
+        set { _lives = value; }
+    }
+
+    void Start()
+    {
+        _lives = 1000;
+    }
+
+    void Update()
+    {
+
+    }
+
+    void OnGUI()
+    {
+
     }
 }

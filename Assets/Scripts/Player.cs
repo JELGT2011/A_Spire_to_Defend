@@ -3,13 +3,6 @@ using System.Collections;
 
 public class Player : MonoBehaviour
 {
-    protected int _lives;
-    public int Lives
-    {
-        get { return _lives; }
-        set { _lives = value; }
-    }
-
     protected int _gold;
     public int Gold
     {
@@ -168,5 +161,10 @@ public class Player : MonoBehaviour
 
             }
         }
+    }
+
+    void OnGUI()
+    {
+
     }
 }
