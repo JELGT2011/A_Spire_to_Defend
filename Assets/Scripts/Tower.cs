@@ -160,6 +160,7 @@ public class Tower : MonoBehaviour
 
     void AcquireTarget()
     {
+        // get all targets in range of tower from _visualSensor
         _targets = _visualSensor.Matches;
 
         if (_targets.Count != 0)
@@ -167,9 +168,11 @@ public class Tower : MonoBehaviour
             switch (_behavior)
             {
                 case BEHAVIOR.first:
+                    // lambda functions to reorder _targets based on the behavior
                     _targets.OrderBy(aspect => aspect.Entity.Form.GetComponent<Enemy>().Distance);
                     _priorityTarget = _targets.First<RAINAspect>().Entity.Form.GetComponent<Enemy>();
                     break;
+
                 case BEHAVIOR.last:
                     _targets.OrderBy(aspect => aspect.Entity.Form.GetComponent<Enemy>().Distance);
                     _priorityTarget = _targets.Last<RAINAspect>().Entity.Form.GetComponent<Enemy>();
