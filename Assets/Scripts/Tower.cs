@@ -7,7 +7,7 @@ using RAIN.Core;
 using RAIN.Perception.Sensors;
 using RAIN.Entities.Aspects;
 
-public class Tower : MonoBehaviour
+public class Tower : MonoBehaviour, ITower
 {
     public enum TYPE
     {
@@ -25,7 +25,12 @@ public class Tower : MonoBehaviour
 
 
 
-    public GameObject Projectile;
+    public GameObject _projectile;
+    public GameObject Projectile
+    {
+        get { return _projectile; }
+        set { _projectile = value; }
+    }
 
     protected TYPE _type;
     public TYPE Type
@@ -126,7 +131,7 @@ public class Tower : MonoBehaviour
     /// Initializes functions based on inputed start values.
     /// Do not override.
     /// </summary>
-    void Initialize()
+    public void Initialize()
     {
         _isAlive = true;
         _lastFired = 0;
@@ -169,22 +174,22 @@ public class Tower : MonoBehaviour
             {
                 case BEHAVIOR.first:
                     // lambda functions to reorder _targets based on the behavior
-                    _targets.OrderBy(aspect => aspect.Entity.Form.GetComponentInChildren<Enemy>().Distance);
+                    _targets.OrderBy(aspect => (aspect.Entity.Form.GetComponentInChildren(typeof(IEnemy)) as IEnemy).Distance);
                     _priorityTarget = _targets.First<RAINAspect>().Entity.Form;
                     break;
 
                 case BEHAVIOR.last:
-                    _targets.OrderBy(aspect => aspect.Entity.Form.GetComponentInChildren<Enemy>().Distance);
+                    _targets.OrderBy(aspect => (aspect.Entity.Form.GetComponentInChildren(typeof(IEnemy)) as IEnemy).Distance);
                     _priorityTarget = _targets.Last<RAINAspect>().Entity.Form;
                     break;
 
                 case BEHAVIOR.strongest:
-                    _targets.OrderBy(aspect => aspect.Entity.Form.GetComponentInChildren<Enemy>().MaxHealth);
+                    _targets.OrderBy(aspect => (aspect.Entity.Form.GetComponentInChildren(typeof(IEnemy)) as IEnemy).MaxHealth);
                     _priorityTarget = _targets.First<RAINAspect>().Entity.Form;
                     break;
 
                 case BEHAVIOR.weakest:
-                    _targets.OrderBy(aspect => aspect.Entity.Form.GetComponentInChildren<Enemy>().MaxHealth);
+                    _targets.OrderBy(aspect => (aspect.Entity.Form.GetComponentInChildren(typeof(IEnemy)) as IEnemy).MaxHealth);
                     _priorityTarget = _targets.Last<RAINAspect>().Entity.Form;
                     break;
 
@@ -208,9 +213,9 @@ public class Tower : MonoBehaviour
         _lastFired = Time.time;
 
         // create projectile from Projectile prefab attached
-        GameObject projectile = Instantiate(Projectile, transform.position, Quaternion.identity) as GameObject;
+        GameObject projectile = Instantiate(_projectile, transform.position, Quaternion.identity) as GameObject;
 
         // set its target
-        projectile.GetComponentInChildren<Projectile>().Target = _priorityTarget;
+        (projectile.GetComponentInChildren(typeof(IProjectile)) as IProjectile).Target = _priorityTarget;
     }
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IEnemy
 {
     public enum TYPE
     {
@@ -140,12 +140,12 @@ public class Enemy : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         GameObject collisionObject;
-        Projectile projectile;
+        IProjectile projectile;
 
         collisionObject = collision.collider.transform.root.gameObject;
 
         // Only check against projectiles
-        if ((projectile = collisionObject.GetComponentInChildren<Projectile>()) != null)
+        if ((projectile = (collisionObject.GetComponentInChildren(typeof(IProjectile))) as IProjectile) != null)
         {
             _currentHealth -= projectile.Damage;
 

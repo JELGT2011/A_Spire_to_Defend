@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Projectile : MonoBehaviour
+public class Projectile : MonoBehaviour, IProjectile
 {
     public enum TYPE
     {
@@ -92,11 +92,11 @@ public class Projectile : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         GameObject collisionObject;
-        Enemy enemy;
+        IEnemy enemy;
 
         collisionObject = collision.collider.transform.root.gameObject;
 
-        if ((enemy = collisionObject.GetComponentInChildren<Enemy>()) != null)
+        if ((enemy = (collisionObject.GetComponentInChildren(typeof(IEnemy))) as IEnemy) != null)
         {
             
         }
