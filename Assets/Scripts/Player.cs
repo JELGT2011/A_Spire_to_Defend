@@ -59,15 +59,14 @@ public class Player : MonoBehaviour
         set { _raycastHit = value; }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     void Start()
     {
         _towerManager = GetComponent<TowerManager>();
         _lastClickedCoordinates = new Vector2(0f, 0f);
 
         Debug.LogWarning("spawner still needs full implementation");
+        Debug.LogWarning("incorporate RAIN pathfinding");
+        Debug.LogWarning("set more public variables for easier testing (for enemies)");
     }
 
     void Update()
@@ -100,7 +99,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        if ((Input.GetKeyDown(KeyCode.Keypad0)) && (_lastClickedObject != null))
+        if ((Input.GetKeyDown(KeyCode.Alpha0)) && (_lastClickedObject != null))
         {
             if (_lastClickedObject.tag == "Build Area")
             {
@@ -116,7 +115,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        if ((Input.GetKeyDown(KeyCode.Keypad1)) && (_lastClickedObject != null))
+        if ((Input.GetKeyDown(KeyCode.Alpha1)) && (_lastClickedObject != null))
         {
             if (_lastClickedObject.tag == "Build Area")
             {
@@ -124,7 +123,7 @@ public class Player : MonoBehaviour
             }
             else if (_lastClickedObject.tag == "Tower")
             {
-                _towerManager.DestroyTower(_lastClickedCoordinates);
+                _towerManager.DestroyTower(_lastClickedObject.transform.root.gameObject);
             }
             else if (_lastClickedObject.tag == "Enemy")
             {
@@ -132,7 +131,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        if ((Input.GetKeyDown(KeyCode.Keypad2)) && (_lastClickedObject != null))
+        if ((Input.GetKeyDown(KeyCode.Alpha2)) && (_lastClickedObject != null))
         {
             if (_lastClickedObject.tag == "Build Area")
             {
@@ -148,7 +147,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        if ((Input.GetKeyDown(KeyCode.Keypad3)) && (_lastClickedObject != null))
+        if ((Input.GetKeyDown(KeyCode.Alpha3)) && (_lastClickedObject != null))
         {
             if (_lastClickedObject.tag == "Build Area")
             {

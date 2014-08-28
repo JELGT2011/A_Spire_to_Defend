@@ -4,25 +4,22 @@ using System.Collections.Generic;
 
 public class TowerManager : MonoBehaviour
 {
-    //
-    // Properties
-    //
-
     public GameObject TowerBasic;
 
     public GameObject TowerType01;
 
     public GameObject TowerType02;
 
-    public List<GameObject> Towers { get; set; }
-
-    //
-    // Methods
-    //
+    protected List<GameObject> _towers;
+    public List<GameObject> Towers
+    {
+        get { return _towers; }
+        set { _towers = value; }
+    }
 
     void Start()
     {
-        Towers = new List<GameObject>();
+        _towers = new List<GameObject>();
     }
 
     void Update()
@@ -40,13 +37,14 @@ public class TowerManager : MonoBehaviour
         }
     }
 
-    public void DestroyTower(Vector2 Coordinates)
+    public void DestroyTower(GameObject tower)
     {
-        foreach (GameObject tower in Towers)
+        foreach (GameObject Tower in _towers)
         {
-            if ((tower.transform.position.x == Coordinates.x) && (tower.transform.position.z == Coordinates.y))
+            if (Tower.Equals(tower))
             {
-                Destroy(tower);
+                _towers.Remove(Tower);
+                Destroy(Tower);
                 return;
             }
         }

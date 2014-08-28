@@ -28,6 +28,4 @@ public interface ITower
     GameObject PriorityTarget { get; set; }
 
     RAIN.Perception.Sensors.VisualSensor VisualSensor { get; set; }
-
-
 }

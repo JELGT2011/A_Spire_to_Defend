@@ -89,8 +89,8 @@ public class Enemy : MonoBehaviour, IEnemy
     void Start()
     {
         _type = TYPE.basic;
-        _maxHealth = 1;
-        _currentHealth = 1;
+        _maxHealth = 10;
+        _currentHealth = 10;
         _speed = 4f;
 
         Initialize();
