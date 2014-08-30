@@ -6,13 +6,13 @@ using System.Collections;
 /// </summary>
 public interface IProjectile
 {
-    public Projectile.TYPE Type;
+    Projectile.TYPE Type { get; set; }
 
-    public int Damage;
+    int Damage { get; set; }
 
-    public bool IsAlive;
+    bool IsAlive { get; set; }
 
-    public float Speed;
+    float Speed { get; set; }
 
-    public GameObject Target;
+    GameObject Target { get; set; }
 }
