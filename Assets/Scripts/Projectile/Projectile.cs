@@ -8,25 +8,13 @@ public class Projectile : MonoBehaviour, IProjectile
         basic
     }
 
-    public TYPE _type;
-    public TYPE Type
-    {
-        get { return _type; }
-        set { _type = value; }
-    }
+    public TYPE Type { get; set; }
 
     public int _damage;
     public int Damage
     {
         get { return _damage; }
         set { _damage = value; }
-    }
-
-    public bool _isAlive;
-    public bool IsAlive
-    {
-        get { return _isAlive; }
-        set { _isAlive = value; }
     }
 
     public float _speed;
@@ -36,12 +24,9 @@ public class Projectile : MonoBehaviour, IProjectile
         set { _speed = value; }
     }
 
-    public GameObject _target;
-    public GameObject Target
-    {
-        get { return _target; }
-        set { _target = value; }
-    }
+    public bool IsAlive { get; set; }
+
+    public GameObject Target { get; set; }
 
     /// <summary>
     /// Override when making sub projectiles, then call Initialize()
@@ -51,9 +36,6 @@ public class Projectile : MonoBehaviour, IProjectile
     /// </summary>
     void Start()
     {
-        _damage = 1;
-        _speed = 5f;
-
         Initialize();
     }
 
@@ -63,19 +45,20 @@ public class Projectile : MonoBehaviour, IProjectile
     /// </summary>
     void Initialize()
     {
-        _isAlive = true;
+        IsAlive = true;
+        Target = Target.transform.Find("Root").gameObject;
     }
 
     void Update()
     {
-        if (!_isAlive)
+        if (!IsAlive)
         {
             Destroy(transform.root.gameObject);
         }
-        else if (_target != null)
+        else if (Target != null)
         {
             // chase the target
-            transform.root.LookAt(_target.transform.position);
+            transform.root.LookAt(Target.transform.position);
             transform.root.Translate(Vector3.forward * _speed * Time.deltaTime);
         }
         else {
@@ -101,6 +84,6 @@ public class Projectile : MonoBehaviour, IProjectile
             
         }
 
-        _isAlive = false;
+        IsAlive = false;
     }
 }

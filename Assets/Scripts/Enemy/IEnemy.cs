@@ -16,15 +16,13 @@ public interface IEnemy
 
     float CurrentSpeed { get; set; }
 
+    float Accuracy { get; set; }
+
     bool IsAlive { get; set; }
 
     bool TargetReached { get; set; }
 
     NavMeshAgent NavMeshAgent { get; set; }
-
-    float Accuracy { get; set; }
-
-    float Distance { get; set; }
 
     Vector3 Target { get; set; }
 }

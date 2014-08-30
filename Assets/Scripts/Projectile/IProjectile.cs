@@ -10,9 +10,9 @@ public interface IProjectile
 
     int Damage { get; set; }
 
-    bool IsAlive { get; set; }
-
     float Speed { get; set; }
+
+    bool IsAlive { get; set; }
 
     GameObject Target { get; set; }
 }

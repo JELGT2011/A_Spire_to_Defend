@@ -30,12 +30,7 @@ public class Tower : MonoBehaviour, ITower
         set { _projectileType = value; }
     }
 
-    public TYPE _type;
-    public TYPE Type
-    {
-        get { return _type; }
-        set { _type = value; }
-    }
+    public TYPE Type { get; set; }
 
     public BEHAVIOR _behavior;
     public BEHAVIOR Behavior
@@ -51,20 +46,6 @@ public class Tower : MonoBehaviour, ITower
         set { _damage = value; }
     }
 
-    public float _fireRate;
-    public float FireRate
-    {
-        get { return _fireRate; }
-        set { _fireRate = value; }
-    }
-
-    public float _lastFired;
-    public float LastFired
-    {
-        get { return _lastFired; }
-        set { _lastFired = value; }
-    }
-
     public float _range;
     public float Range
     {
@@ -72,55 +53,36 @@ public class Tower : MonoBehaviour, ITower
         set { _range = value; }
     }
 
-    public bool _isAlive;
-    public bool IsAlive
+    public float _fireRate;
+    public float FireRate
     {
-        get { return _isAlive; }
-        set { _isAlive = value; }
+        get { return _fireRate; }
+        set { _fireRate = value; }
     }
 
-    public AIRig _aiRig;
-    public AIRig AIRig
-    {
-        get { return _aiRig; }
-        set { _aiRig = value; }
-    }
+    public float LastFired { get; set; }
 
-    public IList<RAINAspect> _targets;
-    public IList<RAINAspect> Targets
-    {
-        get { return _targets; }
-        set { _targets = value; }
-    }
+    public bool IsAlive { get; set; }
 
-    public GameObject _priorityTarget;
-    public GameObject PriorityTarget
-    {
-        get { return _priorityTarget; }
-        set { _priorityTarget = value; }
-    }
+    public AIRig AIRig { get; set; }
 
-    public VisualSensor _visualSensor;
-    public VisualSensor VisualSensor
-    {
-        get { return _visualSensor; }
-        set { _visualSensor = value; }
-    }
+    public IList<RAINAspect> Targets { get; set; }
+
+    public GameObject PriorityTarget { get; set; }
+
+    public VisualSensor VisualSensor { get; set; }
+
+    public Transform FiringMount { get; set; }
 
     /// <summary>
     /// Override the following when making sub towers, then call Initialize()
     /// 
     /// Tower.TYPE _type
-    /// Tower.BEHAVIOR _behavior
-    /// float _fireRate (do not set to 0)
-    /// float _range
     /// </summary>
     void Start()
     {
-        _type = TYPE.basic;
-        _behavior = BEHAVIOR.first;
-        _fireRate = 1f;
-        _range = 6f;
+        Type = TYPE.basic;
+        FiringMount = GameObject.Find("DSLT_GUN").transform;
 
         Initialize();
     }
@@ -131,64 +93,64 @@ public class Tower : MonoBehaviour, ITower
     /// </summary>
     public void Initialize()
     {
-        _isAlive = true;
-        _lastFired = 0;
-        _targets = new List<RAINAspect>();
+        IsAlive = true;
+        LastFired = 0;
+        Targets = new List<RAINAspect>();
 
-        _aiRig = gameObject.GetComponent<AIRig>();
-        _visualSensor = (VisualSensor)_aiRig.AI.Senses.GetSensor("_visualSensor");
-        _visualSensor.Range = _range;
+        AIRig = gameObject.GetComponentInChildren<AIRig>();
+        VisualSensor = (VisualSensor)AIRig.AI.Senses.GetSensor("_visualSensor");
+        VisualSensor.Range = _range;
     }
 
     void Update()
     {
-        if (!_isAlive)
+        if (!IsAlive)
         {
             Destroy(transform.root.gameObject);
         }
-        else if ((Time.time - _lastFired) >= (1 / _fireRate))
+        else if ((Time.time - LastFired) >= (1 / _fireRate))
         {
             AcquireTarget();
 
-            if (_targets.Count != 0)
+            if (Targets.Count != 0)
             {
                 Fire();
             }
         }
         else
         {
-            _lastFired -= Time.deltaTime;
+            LastFired -= Time.deltaTime;
         }
     }
 
     void AcquireTarget()
     {
         // get all targets in range of tower from _visualSensor
-        _targets = _visualSensor.Matches;
+        Targets = VisualSensor.Matches;
 
-        if (_targets.Count != 0)
+        if (Targets.Count != 0)
         {
             switch (_behavior)
             {
                 case BEHAVIOR.first:
                     // lambda functions to reorder _targets based on the behavior
-                    _targets.OrderBy(aspect => (aspect.Entity.Form.GetComponentInChildren(typeof(IEnemy)) as IEnemy).Distance);
-                    _priorityTarget = _targets.First<RAINAspect>().Entity.Form;
+                    Targets.OrderBy(aspect => (aspect.Entity.Form.GetComponentInChildren(typeof(IEnemy)) as IEnemy).NavMeshAgent.remainingDistance);
+                    PriorityTarget = Targets.First<RAINAspect>().Entity.Form;
                     break;
 
                 case BEHAVIOR.last:
-                    _targets.OrderBy(aspect => (aspect.Entity.Form.GetComponentInChildren(typeof(IEnemy)) as IEnemy).Distance);
-                    _priorityTarget = _targets.Last<RAINAspect>().Entity.Form;
+                    Targets.OrderBy(aspect => (aspect.Entity.Form.GetComponentInChildren(typeof(IEnemy)) as IEnemy).NavMeshAgent.remainingDistance);
+                    PriorityTarget = Targets.Last<RAINAspect>().Entity.Form;
                     break;
 
                 case BEHAVIOR.strongest:
-                    _targets.OrderBy(aspect => (aspect.Entity.Form.GetComponentInChildren(typeof(IEnemy)) as IEnemy).MaxHealth);
-                    _priorityTarget = _targets.First<RAINAspect>().Entity.Form;
+                    Targets.OrderBy(aspect => (aspect.Entity.Form.GetComponentInChildren(typeof(IEnemy)) as IEnemy).MaxHealth);
+                    PriorityTarget = Targets.First<RAINAspect>().Entity.Form;
                     break;
 
                 case BEHAVIOR.weakest:
-                    _targets.OrderBy(aspect => (aspect.Entity.Form.GetComponentInChildren(typeof(IEnemy)) as IEnemy).MaxHealth);
-                    _priorityTarget = _targets.Last<RAINAspect>().Entity.Form;
+                    Targets.OrderBy(aspect => (aspect.Entity.Form.GetComponentInChildren(typeof(IEnemy)) as IEnemy).MaxHealth);
+                    PriorityTarget = Targets.Last<RAINAspect>().Entity.Form;
                     break;
 
                 case BEHAVIOR.closest:
@@ -208,12 +170,12 @@ public class Tower : MonoBehaviour, ITower
     void Fire()
     {
         // set cooldown
-        _lastFired = Time.time;
+        LastFired = Time.time;
 
         // create projectile from Projectile prefab attached
-        GameObject projectile = Instantiate(_projectileType, transform.position, Quaternion.identity) as GameObject;
+        GameObject projectile = Instantiate(_projectileType, FiringMount.position, FiringMount.rotation) as GameObject;
 
         // set its target
-        (projectile.GetComponentInChildren(typeof(IProjectile)) as IProjectile).Target = _priorityTarget;
+        (projectile.GetComponentInChildren(typeof(IProjectile)) as IProjectile).Target = PriorityTarget;
     }
 }

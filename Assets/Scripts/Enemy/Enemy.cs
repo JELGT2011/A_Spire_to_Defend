@@ -8,12 +8,7 @@ public class Enemy : MonoBehaviour, IEnemy
         basic
     }
 
-    public TYPE _type;
-    public TYPE Type
-    {
-        get { return _type; }
-        set { _type = value; }
-    }
+    public TYPE Type { get; set; }
 
     public int _maxHealth;
     public int MaxHealth
@@ -22,12 +17,7 @@ public class Enemy : MonoBehaviour, IEnemy
         set { _maxHealth = value; }
     }
 
-    public int _currentHealth;
-    public int CurrentHealth
-    {
-        get { return _currentHealth; }
-        set { _currentHealth = value; }
-    }
+    public int CurrentHealth { get; set; }
 
     public float _maxSpeed;
     public float MaxSpeed
@@ -36,54 +26,19 @@ public class Enemy : MonoBehaviour, IEnemy
         set { _maxSpeed = value; }
     }
 
-    public float _currentSpeed;
-    public float CurrentSpeed
-    {
-        get { return _currentSpeed; }
-        set { _currentSpeed = value; }
-    }
+    public float CurrentSpeed { get; set; }
 
-    public bool _isAlive;
-    public bool IsAlive
-    {
-        get { return _isAlive; }
-        set { _isAlive = value; }
-    }
+    public float Accuracy { get; set; }
 
-    public bool _targetReached;
-    public bool TargetReached
-    {
-        get { return _targetReached; }
-        set { _targetReached = value; }
-    }
+    public bool IsAlive { get; set; }
 
-    public NavMeshAgent _navMeshAgent;
-    public NavMeshAgent NavMeshAgent
-    {
-        get { return _navMeshAgent; }
-        set { _navMeshAgent = value; }
-    }
+    public bool TargetReached { get; set; }
 
-    public float _accuracy;
-    public float Accuracy
-    {
-        get { return _accuracy; }
-        set { _accuracy = value; }
-    }
+    public NavMeshAgent NavMeshAgent { get; set; }
 
-    public float _distance;
-    public float Distance
-    {
-        get { return _distance; }
-        set { _distance = value; }
-    }
+    public Animator Animator { get; set; }
 
-    public Vector3 _target;
-    public Vector3 Target
-    {
-        get { return _target; }
-        set { _target = value; }
-    }
+    public Vector3 Target { get; set; }
 
     /// <summary>
     /// Override the following when making sub enemies, then call Initialize()
@@ -91,14 +46,14 @@ public class Enemy : MonoBehaviour, IEnemy
     /// Enemy.TYPE _type
     /// int _maxHealth
     /// int _currentHealth
-    /// float _speed
+    /// float _maxSpeed
+    /// float _currentspeed
     /// </summary>
     void Start()
     {
-        _type = TYPE.basic;
-        _maxHealth = 10;
-        _currentHealth = 10;
-        _currentSpeed = 4f;
+        Type = TYPE.basic;
+        CurrentHealth = _maxHealth;
+        CurrentSpeed = _maxSpeed;
 
         Initialize();
     }
@@ -109,15 +64,18 @@ public class Enemy : MonoBehaviour, IEnemy
     /// </summary>
     void Initialize()
     {
-        _isAlive = true;
-        _accuracy = 1f;
+        IsAlive = true;
+        Accuracy = 1f;
 
         // find and navigate to target
-        _target = GameObject.Find("Finish").GetComponent<Transform>().position;
+        Target = GameObject.Find("Finish").GetComponent<Transform>().position;
 
-        _navMeshAgent = transform.parent.gameObject.GetComponentInChildren<NavMeshAgent>();
-        _navMeshAgent.SetDestination(_target);
-        _navMeshAgent.speed = _currentSpeed;
+        NavMeshAgent = GetComponentInChildren<NavMeshAgent>();
+        NavMeshAgent.SetDestination(Target);
+        NavMeshAgent.speed = CurrentSpeed;
+
+        // find animator
+        Animator = GetComponentInChildren<Animator>();
     }
 
     /// <summary>
@@ -126,17 +84,19 @@ public class Enemy : MonoBehaviour, IEnemy
     void Update()
     {
         // check if enemy is close enough to Target
-        if (Mathf.Abs(_navMeshAgent.remainingDistance) <= _accuracy)
+        if (Mathf.Abs(NavMeshAgent.remainingDistance) <= Accuracy)
         {
-            _isAlive = false;
-            _targetReached = true;
-            GameObject.FindGameObjectWithTag("Global").GetComponent<Global>().Lives -= _currentHealth;
+            IsAlive = false;
+            TargetReached = true;
+            GameObject.FindGameObjectWithTag("Global").GetComponent<Global>().Lives -= CurrentHealth;
         }
 
-        if (!_isAlive)
+        if (!IsAlive)
         {
             Destroy(transform.root.gameObject);
         }
+
+        Animator.SetFloat("CurrentSpeed", CurrentSpeed);
     }
 
     /// <summary>
@@ -154,11 +114,11 @@ public class Enemy : MonoBehaviour, IEnemy
         // Only check against projectiles
         if ((projectile = (collisionObject.GetComponentInChildren(typeof(IProjectile))) as IProjectile) != null)
         {
-            _currentHealth -= projectile.Damage;
+            CurrentHealth -= projectile.Damage;
 
-            if (_currentHealth <= 0)
+            if (CurrentHealth <= 0)
             {
-                _isAlive = false;
+                IsAlive = false;
             }
         }
     }

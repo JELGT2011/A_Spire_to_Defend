@@ -65,8 +65,6 @@ public class Player : MonoBehaviour
         _lastClickedCoordinates = new Vector2(0f, 0f);
 
         Debug.LogWarning("spawner still needs full implementation");
-        Debug.LogWarning("incorporate RAIN pathfinding");
-        Debug.LogWarning("set more public variables for easier testing (for enemies)");
     }
 
     void Update()
