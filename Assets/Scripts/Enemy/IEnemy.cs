@@ -6,23 +6,25 @@ using System.Collections;
 /// </summary>
 public interface IEnemy
 {
-    Enemy.TYPE Type { get; set; }
+    public Enemy.TYPE Type;
 
-    int MaxHealth { get; set; }
+    public int MaxHealth;
 
-    int CurrentHealth { get; set; }
+    public int CurrentHealth;
 
-    float Speed { get; set; }
+    public float MaxSpeed;
 
-    bool IsAlive { get; set; }
+    public float CurrentSpeed;
 
-    bool TargetReached { get; set; }
+    public bool IsAlive;
 
-    NavMeshAgent NavMeshAgent { get; set; }
+    public bool TargetReached;
 
-    float Accuracy { get; set; }
+    public NavMeshAgent NavMeshAgent;
 
-    float Distance { get; set; }
+    public float Accuracy;
 
-    Vector3 Target { get; set; }
+    public float Distance;
+
+    public Vector3 Target;
 }

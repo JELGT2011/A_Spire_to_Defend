@@ -10,16 +10,11 @@ public class TowerManager : MonoBehaviour
 
     public GameObject TowerType02;
 
-    protected List<GameObject> _towers;
-    public List<GameObject> Towers
-    {
-        get { return _towers; }
-        set { _towers = value; }
-    }
+    public List<GameObject> Towers;
 
     void Start()
     {
-        _towers = new List<GameObject>();
+        Towers = new List<GameObject>();
     }
 
     void Update()
@@ -39,11 +34,11 @@ public class TowerManager : MonoBehaviour
 
     public void DestroyTower(GameObject tower)
     {
-        foreach (GameObject Tower in _towers)
+        foreach (GameObject Tower in Towers)
         {
             if (Tower.Equals(tower))
             {
-                _towers.Remove(Tower);
+                Towers.Remove(Tower);
                 Destroy(Tower);
                 return;
             }

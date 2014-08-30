@@ -7,25 +7,27 @@ using System.Collections.Generic;
 /// </summary>
 public interface ITower
 {
-    GameObject Projectile { get; set; }
-    Tower.TYPE Type { get; set; }
+    public GameObject ProjectileType;
 
-    Tower.BEHAVIOR Behavior { get; set; }
+    public Tower.TYPE Type;
 
-    int Damage { get; set; }
+    public Tower.BEHAVIOR Behavior;
 
-    float FireRate { get; set; }
+    public int Damage;
 
-    float LastFired { get; set; }
+    public float FireRate;
 
-    float Range { get; set; }
+    public float LastFired;
 
-    bool IsAlive { get; set; }
+    public float Range;
 
-    RAIN.Core.AIRig AIRig { get; set; }
-    IList<RAIN.Entities.Aspects.RAINAspect> Targets { get; set; }
+    public bool IsAlive;
 
-    GameObject PriorityTarget { get; set; }
+    public RAIN.Core.AIRig AIRig;
 
-    RAIN.Perception.Sensors.VisualSensor VisualSensor { get; set; }
+    public IList<RAIN.Entities.Aspects.RAINAspect> Targets;
+
+    public GameObject PriorityTarget;
+
+    public RAIN.Perception.Sensors.VisualSensor VisualSensor;
 }

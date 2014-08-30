@@ -8,75 +8,27 @@ public class Enemy : MonoBehaviour, IEnemy
         basic
     }
 
-    protected TYPE _type;
-    public TYPE Type
-    {
-        get { return _type; }
-        set { _type = value; }
-    }
+    public TYPE Type;
 
-    protected int _maxHealth;
-    public int MaxHealth
-    {
-        get { return _maxHealth; }
-        set { _maxHealth = value; }
-    }
+    public int MaxHealth;
 
-    protected int _currentHealth;
-    public int CurrentHealth
-    {
-        get { return _currentHealth; }
-        set { _currentHealth = value; }
-    }
+    public int CurrentHealth;
 
-    protected float _speed;
-    public float Speed
-    {
-        get { return _speed; }
-        set { _speed = value; }
-    }
+    public float MaxSpeed;
 
-    protected bool _isAlive;
-    public bool IsAlive
-    {
-        get { return _isAlive; }
-        set { _isAlive = value; }
-    }
+    public float CurrentSpeed;
 
-    protected bool _targetReached;
-    public bool TargetReached
-    {
-        get { return _targetReached; }
-        set { _targetReached = value; }
-    }
+    public bool IsAlive;
 
-    protected NavMeshAgent _navMeshAgent;
-    public NavMeshAgent NavMeshAgent
-    {
-        get { return _navMeshAgent; }
-        set { _navMeshAgent = value; }
-    }
+    public bool TargetReached;
 
-    protected float _accuracy;
-    public float Accuracy
-    {
-        get { return _accuracy; }
-        set { _accuracy = value; }
-    }
+    public NavMeshAgent _navMeshAgent;
 
-    protected float _distance;
-    public float Distance
-    {
-        get { return _distance; }
-        set { _distance = value; }
-    }
+    public float Accuracy;
 
-    protected Vector3 _target;
-    public Vector3 Target
-    {
-        get { return _target; }
-        set { _target = value; }
-    }
+    public float Distance;
+
+    public Vector3 Target;
 
     /// <summary>
     /// Override the following when making sub enemies, then call Initialize()
@@ -88,10 +40,10 @@ public class Enemy : MonoBehaviour, IEnemy
     /// </summary>
     void Start()
     {
-        _type = TYPE.basic;
-        _maxHealth = 10;
-        _currentHealth = 10;
-        _speed = 4f;
+        Type = TYPE.basic;
+        MaxHealth = 10;
+        CurrentHealth = 10;
+        CurrentSpeed = 4f;
 
         Initialize();
     }
@@ -102,15 +54,15 @@ public class Enemy : MonoBehaviour, IEnemy
     /// </summary>
     void Initialize()
     {
-        _isAlive = true;
-        _accuracy = 1f;
+        IsAlive = true;
+        Accuracy = 1f;
 
         // find and navigate to target
-        _target = GameObject.Find("Finish").GetComponent<Transform>().position;
+        Target = GameObject.Find("Finish").GetComponent<Transform>().position;
 
         _navMeshAgent = transform.parent.gameObject.GetComponentInChildren<NavMeshAgent>();
-        _navMeshAgent.SetDestination(_target);
-        _navMeshAgent.speed = _speed;
+        _navMeshAgent.SetDestination(Target);
+        _navMeshAgent.speed = CurrentSpeed;
     }
 
     /// <summary>
@@ -119,14 +71,14 @@ public class Enemy : MonoBehaviour, IEnemy
     void Update()
     {
         // check if enemy is close enough to Target
-        if (Mathf.Abs(_navMeshAgent.remainingDistance) <= _accuracy)
+        if (Mathf.Abs(_navMeshAgent.remainingDistance) <= Accuracy)
         {
-            _isAlive = false;
-            _targetReached = true;
-            GameObject.FindGameObjectWithTag("Global").GetComponent<Global>().Lives -= _currentHealth;
+            IsAlive = false;
+            TargetReached = true;
+            GameObject.FindGameObjectWithTag("Global").GetComponent<Global>().Lives -= CurrentHealth;
         }
 
-        if (!_isAlive)
+        if (!IsAlive)
         {
             Destroy(transform.root.gameObject);
         }
@@ -147,11 +99,11 @@ public class Enemy : MonoBehaviour, IEnemy
         // Only check against projectiles
         if ((projectile = (collisionObject.GetComponentInChildren(typeof(IProjectile))) as IProjectile) != null)
         {
-            _currentHealth -= projectile.Damage;
+            CurrentHealth -= projectile.Damage;
 
-            if (_currentHealth <= 0)
+            if (CurrentHealth <= 0)
             {
-                _isAlive = false;
+                IsAlive = false;
             }
         }
     }

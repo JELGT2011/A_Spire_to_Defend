@@ -8,40 +8,15 @@ public class Projectile : MonoBehaviour, IProjectile
         basic
     }
 
-    protected TYPE _type;
-    public TYPE Type
-    {
-        get { return _type; }
-        set { _type = value; }
-    }
+    public TYPE Type;
 
-    protected int _damage;
-    public int Damage
-    {
-        get { return _damage; }
-        set { _damage = value; }
-    }
+    public int Damage;
 
-    protected bool _isAlive;
-    public bool IsAlive
-    {
-        get { return _isAlive; }
-        set { _isAlive = value; }
-    }
+    public bool IsAlive;
 
-    protected float _speed;
-    public float Speed
-    {
-        get { return _speed; }
-        set { _speed = value; }
-    }
+    public float Speed;
 
-    protected GameObject _target;
-    public GameObject Target
-    {
-        get { return _target; }
-        set { _target = value; }
-    }
+    public GameObject Target;
 
     /// <summary>
     /// Override when making sub projectiles, then call Initialize()
@@ -51,8 +26,8 @@ public class Projectile : MonoBehaviour, IProjectile
     /// </summary>
     void Start()
     {
-        _damage = 1;
-        _speed = 5f;
+        Damage = 1;
+        Speed = 5f;
 
         Initialize();
     }
@@ -63,7 +38,7 @@ public class Projectile : MonoBehaviour, IProjectile
     /// </summary>
     void Initialize()
     {
-        _isAlive = true;
+        IsAlive = true;
     }
 
     void Update()
@@ -72,15 +47,15 @@ public class Projectile : MonoBehaviour, IProjectile
         {
             Destroy(transform.root.gameObject);
         }
-        else if (_target != null)
+        else if (Target != null)
         {
             // chase the target
             transform.root.LookAt(Target.transform.position);
-            transform.root.Translate(Vector3.forward * _speed * Time.deltaTime);
+            transform.root.Translate(Vector3.forward * Speed * Time.deltaTime);
         }
         else {
             // target was destroyed
-            transform.root.Translate(Vector3.forward * _speed * Time.deltaTime);
+            transform.root.Translate(Vector3.forward * Speed * Time.deltaTime);
         }
     }
 
@@ -101,6 +76,6 @@ public class Projectile : MonoBehaviour, IProjectile
             
         }
 
-        _isAlive = false;
+        IsAlive = false;
     }
 }
