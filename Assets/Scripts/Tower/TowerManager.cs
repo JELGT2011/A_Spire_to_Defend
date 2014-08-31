@@ -2,33 +2,26 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class TowerManager : MonoBehaviour
+public class TowerManager : ScriptableObject
 {
-    public GameObject TowerBasic;
-
-    public GameObject TowerType01;
-
-    public GameObject TowerType02;
+    public List<GameObject> TowerTypes;
 
     public List<GameObject> Towers;
 
-    void Start()
+    public void Init(List<GameObject> towerList)
     {
         Towers = new List<GameObject>();
-    }
-
-    void Update()
-    {
-
+        TowerTypes = towerList;
     }
 
     public void CreateTower(Tower.TYPE type, Vector2 Coordinates)
     {
-        GameObject temp;
+        GameObject tower;
+
         if (type == Tower.TYPE.basic)
         {
-            temp = Instantiate(TowerBasic, new Vector3(Coordinates.x, 0f, Coordinates.y), Quaternion.identity) as GameObject;
-            Towers.Add(temp);
+            tower = Instantiate(TowerTypes[0], new Vector3(Coordinates.x, 0f, Coordinates.y), Quaternion.identity) as GameObject;
+            Towers.Add(tower);
         }
     }
 

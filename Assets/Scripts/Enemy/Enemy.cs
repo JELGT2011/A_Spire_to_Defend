@@ -43,27 +43,23 @@ public class Enemy : MonoBehaviour, IEnemy
     /// <summary>
     /// Override the following when making sub enemies, then call Initialize()
     /// 
-    /// Enemy.TYPE _type
-    /// int _maxHealth
-    /// int _currentHealth
-    /// float _maxSpeed
-    /// float _currentspeed
+    /// Enemy.TYPE Type
     /// </summary>
     void Start()
     {
         Type = TYPE.basic;
-        CurrentHealth = _maxHealth;
-        CurrentSpeed = _maxSpeed;
 
         Initialize();
     }
 
     /// <summary>
-    /// Initializes functions based on inputed start values.
-    /// Do not override.
+    /// Initializes common values.  Do not override.
     /// </summary>
     void Initialize()
     {
+        CurrentHealth = MaxHealth;
+        CurrentSpeed = MaxSpeed;
+
         IsAlive = true;
         Accuracy = 1f;
 

@@ -13,6 +13,10 @@ public interface ITower
 
     Tower.BEHAVIOR Behavior { get; set; }
 
+    int Cost { get; set; }
+
+    float Created { get; set; }
+
     int Damage { get; set; }
 
     float FireRate { get; set; }
@@ -23,11 +27,9 @@ public interface ITower
 
     bool IsAlive { get; set; }
 
-    RAIN.Core.AIRig AIRig { get; set; }
+    SphereCollider RangeCollider { get; set; }
 
-    IList<RAIN.Entities.Aspects.RAINAspect> Targets { get; set; }
+    List<GameObject> Targets { get; set; }
 
     GameObject PriorityTarget { get; set; }
-
-    RAIN.Perception.Sensors.VisualSensor VisualSensor { get; set; }
 }

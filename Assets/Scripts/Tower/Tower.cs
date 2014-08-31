@@ -3,10 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-using RAIN.Core;
-using RAIN.Perception.Sensors;
-using RAIN.Entities.Aspects;
-
 public class Tower : MonoBehaviour, ITower
 {
     public enum TYPE
@@ -30,6 +26,12 @@ public class Tower : MonoBehaviour, ITower
         set { _projectileType = value; }
     }
 
+    public int Cost { get; set; }
+
+    public float Created { get; set; }
+
+    public ProjectileManager ProjectileManager { get; set; }
+
     public TYPE Type { get; set; }
 
     public BEHAVIOR _behavior;
@@ -50,7 +52,11 @@ public class Tower : MonoBehaviour, ITower
     public float Range
     {
         get { return _range; }
-        set { _range = value; }
+        set 
+        {
+            _range = value;
+            RangeCollider.radius = _range;
+        }
     }
 
     public float _fireRate;
@@ -60,24 +66,22 @@ public class Tower : MonoBehaviour, ITower
         set { _fireRate = value; }
     }
 
+    public List<GameObject> Targets { get; set; }
+
+    public SphereCollider RangeCollider { get; set; }
+
     public float LastFired { get; set; }
 
     public bool IsAlive { get; set; }
 
-    public AIRig AIRig { get; set; }
-
-    public IList<RAINAspect> Targets { get; set; }
-
     public GameObject PriorityTarget { get; set; }
-
-    public VisualSensor VisualSensor { get; set; }
 
     public Transform FiringMount { get; set; }
 
     /// <summary>
     /// Override the following when making sub towers, then call Initialize()
     /// 
-    /// Tower.TYPE _type
+    /// Tower.TYPE Type
     /// </summary>
     void Start()
     {
@@ -95,11 +99,20 @@ public class Tower : MonoBehaviour, ITower
     {
         IsAlive = true;
         LastFired = 0;
-        Targets = new List<RAINAspect>();
+        
+        Created = Time.realtimeSinceStartup;
 
-        AIRig = gameObject.GetComponentInChildren<AIRig>();
-        VisualSensor = (VisualSensor)AIRig.AI.Senses.GetSensor("_visualSensor");
-        VisualSensor.Range = _range;
+        ProjectileManager = ScriptableObject.CreateInstance<ProjectileManager>();
+
+        Debug.LogWarning("set capacity more accurately");
+        ProjectileManager.Init(10, ProjectileType);
+
+        RangeCollider = transform.root.gameObject.GetComponentInChildren<SphereCollider>();
+        RangeCollider.radius = Range;
+
+        Targets = new List<GameObject>();
+
+        
     }
 
     void Update()
@@ -108,7 +121,7 @@ public class Tower : MonoBehaviour, ITower
         {
             Destroy(transform.root.gameObject);
         }
-        else if ((Time.time - LastFired) >= (1 / _fireRate))
+        else if ((Time.time - LastFired) >= (1 / FireRate))
         {
             AcquireTarget();
 
@@ -125,47 +138,46 @@ public class Tower : MonoBehaviour, ITower
 
     void AcquireTarget()
     {
-        // get all targets in range of tower from _visualSensor
-        Targets = VisualSensor.Matches;
 
         if (Targets.Count != 0)
         {
-            switch (_behavior)
+            switch (Behavior)
             {
                 case BEHAVIOR.first:
-                    // lambda functions to reorder _targets based on the behavior
-                    Targets.OrderBy(aspect => (aspect.Entity.Form.GetComponentInChildren(typeof(IEnemy)) as IEnemy).NavMeshAgent.remainingDistance);
-                    PriorityTarget = Targets.First<RAINAspect>().Entity.Form;
+                    // lambda functions to reorder targets based on the behavior
+                    Targets.OrderBy(target => (target.GetComponentInChildren(typeof(IEnemy)) as IEnemy).NavMeshAgent.remainingDistance);
+                    PriorityTarget = Targets.First<GameObject>();
                     break;
 
                 case BEHAVIOR.last:
-                    Targets.OrderBy(aspect => (aspect.Entity.Form.GetComponentInChildren(typeof(IEnemy)) as IEnemy).NavMeshAgent.remainingDistance);
-                    PriorityTarget = Targets.Last<RAINAspect>().Entity.Form;
+                    Targets.OrderBy(target => (target.GetComponentInChildren(typeof(IEnemy)) as IEnemy).NavMeshAgent.remainingDistance);
+                    PriorityTarget = Targets.Last<GameObject>();
                     break;
 
                 case BEHAVIOR.strongest:
-                    Targets.OrderBy(aspect => (aspect.Entity.Form.GetComponentInChildren(typeof(IEnemy)) as IEnemy).MaxHealth);
-                    PriorityTarget = Targets.First<RAINAspect>().Entity.Form;
+                    Targets.OrderBy(target => (target.GetComponentInChildren(typeof(IEnemy)) as IEnemy).MaxHealth);
+                    PriorityTarget = Targets.First<GameObject>();
                     break;
 
                 case BEHAVIOR.weakest:
-                    Targets.OrderBy(aspect => (aspect.Entity.Form.GetComponentInChildren(typeof(IEnemy)) as IEnemy).MaxHealth);
-                    PriorityTarget = Targets.Last<RAINAspect>().Entity.Form;
+                    Targets.OrderBy(target => (target.GetComponentInChildren(typeof(IEnemy)) as IEnemy).MaxHealth);
+                    PriorityTarget = Targets.Last<GameObject>();
                     break;
 
                 case BEHAVIOR.closest:
-                    // RAIN does this by default
+                    Targets.OrderBy(target => Vector3.Distance(target.transform.position, gameObject.transform.position));
+                    PriorityTarget = Targets.First<GameObject>();
                     break;
 
                 default:
-                    // will target the closest enemy
+                    // undefined targeting behavior
                     break;
             }
         }
     }
 
     /// <summary>
-    /// Fires a projectile and prevents refiring for time = (1 / _fireRate).
+    /// Fires a projectile and prevents refiring for time = (1 / FireRate).
     /// </summary>
     void Fire()
     {
@@ -173,9 +185,19 @@ public class Tower : MonoBehaviour, ITower
         LastFired = Time.time;
 
         // create projectile from Projectile prefab attached
-        GameObject projectile = Instantiate(_projectileType, FiringMount.position, FiringMount.rotation) as GameObject;
+        GameObject projectile = Instantiate(ProjectileType, FiringMount.position, FiringMount.rotation) as GameObject;
 
         // set its target
         (projectile.GetComponentInChildren(typeof(IProjectile)) as IProjectile).Target = PriorityTarget;
+    }
+
+    void OnTriggerEnter(Collider collider)
+    {
+        GameObject enemy = collider.transform.root.gameObject;
+
+        if (enemy.tag == "Enemy")
+        {
+            Targets.Add(enemy);
+        }
     }
 }

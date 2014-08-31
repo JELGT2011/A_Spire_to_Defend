@@ -1,68 +1,46 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
-    protected int _gold;
+    public int _gold;
     public int Gold
     {
         get { return _gold; }
         set { _gold = value; }
     }
 
-    protected int _playerNumber;
-    public int PlayerNumber
-    {
-        get { return _playerNumber; }
-        set { _playerNumber = value; }
-    }
+    public GameObject[] TowerTypes;
 
-    protected TowerManager _towerManager;
-    public TowerManager TowerManager
-    {
-        get { return _towerManager; }
-        set { _towerManager = value; }
-    }
+    public int PlayerNumber { get; protected set; }
 
-    protected Vector2 _lastClickedCoordinates;
-    public Vector2 LastClickedCoordinates
-    {
-        get { return _lastClickedCoordinates; }
-        set { _lastClickedCoordinates = value; }
-    }
+    public TowerManager TowerManager { get; set; }
 
-    protected Ray _ray;
-    public Ray Ray
-    {
-        get { return _ray; }
-        set { _ray = value; }
-    }
+    public Vector2 LastClickedCoordinates { get; protected set; }
 
-    protected GameObject _objectClicked;
-    public GameObject ObjectClicked
-    {
-        get { return _objectClicked; }
-        set { _objectClicked = value; }
-    }
+    public Ray Ray { get; protected set; }
 
-    protected GameObject _lastClickedObject;
-    public GameObject LastClickedObject
-    {
-        get { return _lastClickedObject; }
-        set { _lastClickedObject = value; }
-    }
+    public GameObject LastClickedObject { get; protected set; }
 
-    protected RaycastHit _raycastHit;
+    public RaycastHit _raycastHit;
     public RaycastHit RaycastHit
     {
         get { return _raycastHit; }
-        set { _raycastHit = value; }
+        protected set { _raycastHit = value; }
     }
 
     void Start()
     {
-        _towerManager = GetComponent<TowerManager>();
-        _lastClickedCoordinates = new Vector2(0f, 0f);
+        TowerManager = ScriptableObject.CreateInstance<TowerManager>();
+
+        Debug.Log("");
+
+        List<GameObject> towerList = new List<GameObject>();
+        towerList.Add(TowerTypes[0]);
+
+        TowerManager.Init(towerList);
+        LastClickedCoordinates = new Vector2(0f, 0f);
 
         Debug.LogWarning("spawner still needs full implementation");
     }
@@ -72,21 +50,21 @@ public class Player : MonoBehaviour
         // Determines what the player clicked on
         if (Input.GetMouseButtonDown(0))
         {
-            _ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(_ray, out _raycastHit))
+            if (Physics.Raycast(Ray, out _raycastHit))
             {
-                _lastClickedObject = _raycastHit.transform.collider.gameObject;
+                LastClickedObject = _raycastHit.transform.collider.gameObject;
 
-                if (_lastClickedObject.tag == "Build Area")
+                if (LastClickedObject.tag == "Build Area")
                 {
-                    _lastClickedCoordinates = new Vector2((float) Mathf.RoundToInt(_raycastHit.point.x), (float)Mathf.RoundToInt(_raycastHit.point.z));
+                    LastClickedCoordinates = new Vector2((float) Mathf.RoundToInt(_raycastHit.point.x), (float)Mathf.RoundToInt(_raycastHit.point.z));
                 }
-                else if (_lastClickedObject.tag == "Tower")
+                else if (LastClickedObject.tag == "Tower")
                 {
 
                 }
-                else if (_lastClickedObject.tag == "Enemy")
+                else if (LastClickedObject.tag == "Enemy")
                 {
 
                 }
@@ -97,65 +75,65 @@ public class Player : MonoBehaviour
             }
         }
 
-        if ((Input.GetKeyDown(KeyCode.Alpha0)) && (_lastClickedObject != null))
+        if ((Input.GetKeyDown(KeyCode.Alpha0)) && (LastClickedObject != null))
         {
-            if (_lastClickedObject.tag == "Build Area")
+            if (LastClickedObject.tag == "Build Area")
             {
 
             }
-            else if (_lastClickedObject.tag == "Tower")
+            else if (LastClickedObject.tag == "Tower")
             {
 
             }
-            else if (_lastClickedObject.tag == "Enemy")
+            else if (LastClickedObject.tag == "Enemy")
             {
 
             }
         }
 
-        if ((Input.GetKeyDown(KeyCode.Alpha1)) && (_lastClickedObject != null))
+        if ((Input.GetKeyDown(KeyCode.Alpha1)) && (LastClickedObject != null))
         {
-            if (_lastClickedObject.tag == "Build Area")
+            if (LastClickedObject.tag == "Build Area")
             {
-                _towerManager.CreateTower(Tower.TYPE.basic, _lastClickedCoordinates);
+                TowerManager.CreateTower(Tower.TYPE.basic, LastClickedCoordinates);
             }
-            else if (_lastClickedObject.tag == "Tower")
+            else if (LastClickedObject.tag == "Tower")
             {
-                _towerManager.DestroyTower(_lastClickedObject.transform.root.gameObject);
+                TowerManager.DestroyTower(LastClickedObject.transform.root.gameObject);
             }
-            else if (_lastClickedObject.tag == "Enemy")
+            else if (LastClickedObject.tag == "Enemy")
             {
 
             }
         }
 
-        if ((Input.GetKeyDown(KeyCode.Alpha2)) && (_lastClickedObject != null))
+        if ((Input.GetKeyDown(KeyCode.Alpha2)) && (LastClickedObject != null))
         {
-            if (_lastClickedObject.tag == "Build Area")
+            if (LastClickedObject.tag == "Build Area")
             {
 
             }
-            else if (_lastClickedObject.tag == "Tower")
+            else if (LastClickedObject.tag == "Tower")
             {
 
             }
-            else if (_lastClickedObject.tag == "Enemy")
+            else if (LastClickedObject.tag == "Enemy")
             {
 
             }
         }
 
-        if ((Input.GetKeyDown(KeyCode.Alpha3)) && (_lastClickedObject != null))
+        if ((Input.GetKeyDown(KeyCode.Alpha3)) && (LastClickedObject != null))
         {
-            if (_lastClickedObject.tag == "Build Area")
+            if (LastClickedObject.tag == "Build Area")
             {
 
             }
-            else if (_lastClickedObject.tag == "Tower")
+            else if (LastClickedObject.tag == "Tower")
             {
 
             }
-            else if (_lastClickedObject.tag == "Enemy")
+            else if (LastClickedObject.tag == "Enemy")
             {
 
             }

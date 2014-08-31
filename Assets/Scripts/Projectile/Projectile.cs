@@ -59,11 +59,11 @@ public class Projectile : MonoBehaviour, IProjectile
         {
             // chase the target
             transform.root.LookAt(Target.transform.position);
-            transform.root.Translate(Vector3.forward * _speed * Time.deltaTime);
+            transform.root.Translate(Vector3.forward * Speed * Time.deltaTime);
         }
         else {
             // target was destroyed
-            transform.root.Translate(Vector3.forward * _speed * Time.deltaTime);
+            transform.root.Translate(Vector3.forward * Speed * Time.deltaTime);
         }
     }
 
@@ -81,7 +81,7 @@ public class Projectile : MonoBehaviour, IProjectile
 
         if ((enemy = (collisionObject.GetComponentInChildren(typeof(IEnemy))) as IEnemy) != null)
         {
-            
+
         }
 
         IsAlive = false;
