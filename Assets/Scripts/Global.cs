@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Global : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class Global : MonoBehaviour
         endgame
     }
 
+
+
     protected int _lives;
     public int Lives
     {
@@ -29,9 +32,18 @@ public class Global : MonoBehaviour
         set { _lives = value; }
     }
 
+    protected int _gold;
+    public int Gold
+    {
+        get { return _gold; }
+        set { _gold = value; }
+    }
+
+    public Stack<GameObject> Towers { get; set; }
+
     void Start()
     {
-        _lives = 1000;
+
     }
 
     void Update()
@@ -42,5 +54,11 @@ public class Global : MonoBehaviour
     void OnGUI()
     {
 
+    }
+
+    public void CreateTower(GameObject tower, Vector2 coordinates)
+    {
+        GameObject created = (Instantiate(tower, new Vector3(coordinates.x, 0f, coordinates.y), Quaternion.identity) as GameObject);
+        Towers.Push(tower);
     }
 }

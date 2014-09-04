@@ -46,7 +46,10 @@ public class Projectile : MonoBehaviour, IProjectile
     void Initialize()
     {
         IsAlive = true;
-        Target = Target.transform.Find("Root").gameObject;
+        if (Target)
+        {
+            Target = Target.transform.Find("Root").gameObject;
+        }
     }
 
     void Update()
@@ -55,7 +58,7 @@ public class Projectile : MonoBehaviour, IProjectile
         {
             Destroy(transform.root.gameObject);
         }
-        else if (Target != null)
+        else if (Target)
         {
             // chase the target
             transform.root.LookAt(Target.transform.position);

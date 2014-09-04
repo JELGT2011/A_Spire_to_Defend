@@ -24,5 +24,7 @@ public interface IEnemy
 
     NavMeshAgent NavMeshAgent { get; set; }
 
+    Animator Animator { get; set; }
+
     Vector3 Target { get; set; }
 }

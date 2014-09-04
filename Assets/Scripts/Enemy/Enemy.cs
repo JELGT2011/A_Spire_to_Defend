@@ -63,9 +63,6 @@ public class Enemy : MonoBehaviour, IEnemy
         IsAlive = true;
         Accuracy = 1f;
 
-        // find and navigate to target
-        Target = GameObject.Find("Finish").GetComponent<Transform>().position;
-
         NavMeshAgent = GetComponentInChildren<NavMeshAgent>();
         NavMeshAgent.SetDestination(Target);
         NavMeshAgent.speed = CurrentSpeed;
@@ -84,7 +81,7 @@ public class Enemy : MonoBehaviour, IEnemy
         {
             IsAlive = false;
             TargetReached = true;
-            GameObject.FindGameObjectWithTag("Global").GetComponent<Global>().Lives -= CurrentHealth;
+            GameObject.FindGameObjectWithTag("Global").GetComponentInChildren<Global>().Lives -= CurrentHealth;
         }
 
         if (!IsAlive)

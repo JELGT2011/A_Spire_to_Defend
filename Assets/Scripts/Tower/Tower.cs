@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
+using RAIN.Entities.Aspects;
+using RAIN.Core;
+using RAIN.Perception.Sensors;
+
 public class Tower : MonoBehaviour, ITower
 {
     public enum TYPE
@@ -55,7 +59,7 @@ public class Tower : MonoBehaviour, ITower
         set 
         {
             _range = value;
-            RangeCollider.radius = _range;
+            VisualSensor.Range = _range;
         }
     }
 
@@ -66,7 +70,7 @@ public class Tower : MonoBehaviour, ITower
         set { _fireRate = value; }
     }
 
-    public List<GameObject> Targets { get; set; }
+    public IList<RAINAspect> Targets { get; set; }
 
     public SphereCollider RangeCollider { get; set; }
 
@@ -77,6 +81,10 @@ public class Tower : MonoBehaviour, ITower
     public GameObject PriorityTarget { get; set; }
 
     public Transform FiringMount { get; set; }
+
+    public AIRig AIRig { get; set; }
+
+    public VisualSensor VisualSensor { get; set; }
 
     /// <summary>
     /// Override the following when making sub towers, then call Initialize()
@@ -104,15 +112,13 @@ public class Tower : MonoBehaviour, ITower
 
         ProjectileManager = ScriptableObject.CreateInstance<ProjectileManager>();
 
+        AIRig = GetComponentInChildren<RAIN.Core.AIRig>();
+        VisualSensor = AIRig.AI.Senses.GetSensor("_visualSensor") as VisualSensor;
+
         Debug.LogWarning("set capacity more accurately");
         ProjectileManager.Init(10, ProjectileType);
 
-        RangeCollider = transform.root.gameObject.GetComponentInChildren<SphereCollider>();
-        RangeCollider.radius = Range;
-
-        Targets = new List<GameObject>();
-
-        
+        VisualSensor.Range = _range;
     }
 
     void Update()
@@ -139,34 +145,35 @@ public class Tower : MonoBehaviour, ITower
     void AcquireTarget()
     {
 
+        Targets = VisualSensor.Matches;
+
         if (Targets.Count != 0)
         {
             switch (Behavior)
             {
                 case BEHAVIOR.first:
                     // lambda functions to reorder targets based on the behavior
-                    Targets.OrderBy(target => (target.GetComponentInChildren(typeof(IEnemy)) as IEnemy).NavMeshAgent.remainingDistance);
-                    PriorityTarget = Targets.First<GameObject>();
+                    Targets.OrderBy(target => (target.Entity.Form.GetComponentInChildren(typeof(IEnemy)) as IEnemy).NavMeshAgent.remainingDistance);
+                    PriorityTarget = Targets.First<RAINAspect>().Entity.Form;
                     break;
 
                 case BEHAVIOR.last:
-                    Targets.OrderBy(target => (target.GetComponentInChildren(typeof(IEnemy)) as IEnemy).NavMeshAgent.remainingDistance);
-                    PriorityTarget = Targets.Last<GameObject>();
+                    Targets.OrderBy(target => (target.Entity.Form.GetComponentInChildren(typeof(IEnemy)) as IEnemy).NavMeshAgent.remainingDistance);
+                    PriorityTarget = Targets.Last<RAINAspect>().Entity.Form;
                     break;
 
                 case BEHAVIOR.strongest:
-                    Targets.OrderBy(target => (target.GetComponentInChildren(typeof(IEnemy)) as IEnemy).MaxHealth);
-                    PriorityTarget = Targets.First<GameObject>();
+                    Targets.OrderBy(target => (target.Entity.Form.GetComponentInChildren(typeof(IEnemy)) as IEnemy).MaxHealth);
+                    PriorityTarget = Targets.First<RAINAspect>().Entity.Form;
                     break;
 
                 case BEHAVIOR.weakest:
-                    Targets.OrderBy(target => (target.GetComponentInChildren(typeof(IEnemy)) as IEnemy).MaxHealth);
-                    PriorityTarget = Targets.Last<GameObject>();
+                    Targets.OrderBy(target => (target.Entity.Form.GetComponentInChildren(typeof(IEnemy)) as IEnemy).MaxHealth);
+                    PriorityTarget = Targets.Last<RAINAspect>().Entity.Form;
                     break;
 
                 case BEHAVIOR.closest:
-                    Targets.OrderBy(target => Vector3.Distance(target.transform.position, gameObject.transform.position));
-                    PriorityTarget = Targets.First<GameObject>();
+                    // RAIN default behavior
                     break;
 
                 default:
@@ -189,15 +196,5 @@ public class Tower : MonoBehaviour, ITower
 
         // set its target
         (projectile.GetComponentInChildren(typeof(IProjectile)) as IProjectile).Target = PriorityTarget;
-    }
-
-    void OnTriggerEnter(Collider collider)
-    {
-        GameObject enemy = collider.transform.root.gameObject;
-
-        if (enemy.tag == "Enemy")
-        {
-            Targets.Add(enemy);
-        }
     }
 }

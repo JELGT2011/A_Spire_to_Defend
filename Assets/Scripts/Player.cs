@@ -4,18 +4,9 @@ using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
-    public int _gold;
-    public int Gold
-    {
-        get { return _gold; }
-        set { _gold = value; }
-    }
-
     public GameObject[] TowerTypes;
 
     public int PlayerNumber { get; protected set; }
-
-    public TowerManager TowerManager { get; set; }
 
     public Vector2 LastClickedCoordinates { get; protected set; }
 
@@ -30,17 +21,12 @@ public class Player : MonoBehaviour
         protected set { _raycastHit = value; }
     }
 
+    public Global Global { get; set; }
+
     void Start()
     {
-        TowerManager = ScriptableObject.CreateInstance<TowerManager>();
-
-        Debug.Log("");
-
-        List<GameObject> towerList = new List<GameObject>();
-        towerList.Add(TowerTypes[0]);
-
-        TowerManager.Init(towerList);
         LastClickedCoordinates = new Vector2(0f, 0f);
+        Global = GameObject.FindGameObjectWithTag("Global").GetComponentInChildren<Global>();
 
         Debug.LogWarning("spawner still needs full implementation");
     }
@@ -95,11 +81,11 @@ public class Player : MonoBehaviour
         {
             if (LastClickedObject.tag == "Build Area")
             {
-                TowerManager.CreateTower(Tower.TYPE.basic, LastClickedCoordinates);
+                Global.CreateTower(TowerTypes[1], LastClickedCoordinates);
             }
             else if (LastClickedObject.tag == "Tower")
             {
-                TowerManager.DestroyTower(LastClickedObject.transform.root.gameObject);
+                //TowerManager.DestroyTower(LastClickedObject.transform.root.gameObject);
             }
             else if (LastClickedObject.tag == "Enemy")
             {
