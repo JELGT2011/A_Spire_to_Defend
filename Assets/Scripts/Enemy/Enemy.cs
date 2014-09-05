@@ -40,8 +40,10 @@ public class Enemy : MonoBehaviour, IEnemy
 
     public Vector3 Target { get; set; }
 
+    public EnemyManager EnemyManager { get; set; }
+
     /// <summary>
-    /// Override the following when making sub enemies, then call Initialize()
+    /// Override the following when making sub enemies, then call Initialize();
     /// 
     /// Enemy.TYPE Type
     /// </summary>
@@ -57,17 +59,17 @@ public class Enemy : MonoBehaviour, IEnemy
     /// </summary>
     void Initialize()
     {
+        Target = GameObject.Find("Finish").transform.position;
+
         CurrentHealth = MaxHealth;
         CurrentSpeed = MaxSpeed;
-
         IsAlive = true;
         Accuracy = 1f;
-
+        
         NavMeshAgent = GetComponentInChildren<NavMeshAgent>();
         NavMeshAgent.SetDestination(Target);
         NavMeshAgent.speed = CurrentSpeed;
 
-        // find animator
         Animator = GetComponentInChildren<Animator>();
     }
 
@@ -76,12 +78,12 @@ public class Enemy : MonoBehaviour, IEnemy
     /// </summary>
     void Update()
     {
+
         // check if enemy is close enough to Target
         if (Mathf.Abs(NavMeshAgent.remainingDistance) <= Accuracy)
         {
             IsAlive = false;
             TargetReached = true;
-            GameObject.FindGameObjectWithTag("Global").GetComponentInChildren<Global>().Lives -= CurrentHealth;
         }
 
         if (!IsAlive)

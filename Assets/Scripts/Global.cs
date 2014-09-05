@@ -43,7 +43,7 @@ public class Global : MonoBehaviour
 
     void Start()
     {
-
+        Towers = new Stack<GameObject>();
     }
 
     void Update()

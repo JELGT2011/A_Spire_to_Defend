@@ -29,6 +29,7 @@ public class Player : MonoBehaviour
         Global = GameObject.FindGameObjectWithTag("Global").GetComponentInChildren<Global>();
 
         Debug.LogWarning("spawner still needs full implementation");
+        Debug.LogWarning("add error checking for towers blocking all paths");
     }
 
     void Update()
