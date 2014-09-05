@@ -98,7 +98,7 @@ public class Player : MonoBehaviour
         {
             if (LastClickedObject.tag == "Build Area")
             {
-
+                Global.CreateTower(TowerTypes[2], LastClickedCoordinates);
             }
             else if (LastClickedObject.tag == "Tower")
             {
@@ -114,7 +114,7 @@ public class Player : MonoBehaviour
         {
             if (LastClickedObject.tag == "Build Area")
             {
-
+                Global.CreateTower(TowerTypes[3], LastClickedCoordinates);
             }
             else if (LastClickedObject.tag == "Tower")
             {

@@ -67,6 +67,7 @@ public class Projectile : MonoBehaviour, IProjectile
         else {
             // target was destroyed
             transform.root.Translate(Vector3.forward * Speed * Time.deltaTime);
+            IsAlive = false;
         }
     }
 
@@ -84,9 +85,9 @@ public class Projectile : MonoBehaviour, IProjectile
 
         if ((enemy = (collisionObject.GetComponentInChildren(typeof(IEnemy))) as IEnemy) != null)
         {
-
+            IsAlive = false;
         }
 
-        IsAlive = false;
+        
     }
 }

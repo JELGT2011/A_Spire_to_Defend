@@ -11,7 +11,9 @@ public class Tower : MonoBehaviour, ITower
 {
     public enum TYPE
     {
-        basic
+        basic,
+        Dome_inator,
+        Automated
     }
 
     public enum BEHAVIOR
@@ -36,7 +38,12 @@ public class Tower : MonoBehaviour, ITower
 
     public ProjectileManager ProjectileManager { get; set; }
 
-    public TYPE Type { get; set; }
+    public TYPE _type;
+    public TYPE Type
+    {
+        get { return _type; }
+        set { _type = value; }
+    }
 
     public BEHAVIOR _behavior;
     public BEHAVIOR Behavior
@@ -90,24 +97,28 @@ public class Tower : MonoBehaviour, ITower
     /// Override the following when making sub towers, then call Initialize()
     /// 
     /// Tower.TYPE Type
+    /// Transform FiringMount
     /// </summary>
     void Start()
     {
-        Type = TYPE.basic;
-        FiringMount = GameObject.Find("DSLT_GUN").transform;
-
-        Initialize();
-    }
-
-    /// <summary>
-    /// Initializes functions based on inputed start values.
-    /// Do not override.
-    /// </summary>
-    public void Initialize()
-    {
+        switch (_type)
+        {
+            case TYPE.basic:
+                FiringMount = GameObject.Find("DSLT_GUN").transform;
+                break;
+            case TYPE.Dome_inator:
+                FiringMount = GameObject.Find("DSLT_GUN").transform;
+                break;
+            case TYPE.Automated:
+                FiringMount = GameObject.Find("Root").transform;
+                break;
+            default:
+                break;
+        }
+        
         IsAlive = true;
         LastFired = 0;
-        
+
         Created = Time.realtimeSinceStartup;
 
         ProjectileManager = ScriptableObject.CreateInstance<ProjectileManager>();
