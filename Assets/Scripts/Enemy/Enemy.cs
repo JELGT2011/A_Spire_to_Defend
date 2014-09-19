@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Enemy : MonoBehaviour, IEnemy
+public class Enemy : MonoBehaviour
 {
     public enum TYPE
     {
@@ -40,37 +40,28 @@ public class Enemy : MonoBehaviour, IEnemy
 
     public Vector3 Target { get; set; }
 
-    public EnemyManager EnemyManager { get; set; }
-
-    /// <summary>
-    /// Override the following when making sub enemies, then call Initialize();
-    /// 
-    /// Enemy.TYPE Type
-    /// </summary>
     void Start()
     {
-        Type = TYPE.basic;
-
-        Initialize();
+        NavMeshAgent = GetComponentInChildren<NavMeshAgent>();
+        Animator = GetComponentInChildren<Animator>();
     }
 
     /// <summary>
     /// Initializes common values.  Do not override.
     /// </summary>
-    void Initialize()
+    public void Initialize(TYPE type, Vector3 target)
     {
-        Target = GameObject.Find("Finish").transform.position;
+        Type = type;
+        Target = target;
 
         CurrentHealth = MaxHealth;
         CurrentSpeed = MaxSpeed;
         IsAlive = true;
         Accuracy = 1f;
-        
-        NavMeshAgent = GetComponentInChildren<NavMeshAgent>();
-        NavMeshAgent.SetDestination(Target);
-        NavMeshAgent.speed = CurrentSpeed;
 
-        Animator = GetComponentInChildren<Animator>();
+        NavMeshAgent = GetComponentInChildren<NavMeshAgent>();
+        NavMeshAgent.SetDestination(target);
+        NavMeshAgent.speed = CurrentSpeed;
     }
 
     /// <summary>
@@ -78,7 +69,6 @@ public class Enemy : MonoBehaviour, IEnemy
     /// </summary>
     void Update()
     {
-
         // check if enemy is close enough to Target
         if (Mathf.Abs(NavMeshAgent.remainingDistance) <= Accuracy)
         {
@@ -101,13 +91,13 @@ public class Enemy : MonoBehaviour, IEnemy
     /// <param name="collision"></param>
     void OnCollisionEnter(Collision collision)
     {
-        GameObject collisionObject;
-        IProjectile projectile;
+        GameObject other;
+        Projectile projectile;
 
-        collisionObject = collision.collider.transform.root.gameObject;
+        other = collision.collider.transform.root.gameObject;
 
         // Only check against projectiles
-        if ((projectile = (collisionObject.GetComponentInChildren(typeof(IProjectile))) as IProjectile) != null)
+        if ((projectile = other.GetComponentInChildren<Projectile>()) != null)
         {
             CurrentHealth -= projectile.Damage;
 

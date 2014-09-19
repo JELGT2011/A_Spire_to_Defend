@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Projectile : MonoBehaviour, IProjectile
+public class Projectile : MonoBehaviour
 {
     public enum TYPE
     {
@@ -79,12 +79,13 @@ public class Projectile : MonoBehaviour, IProjectile
     void OnCollisionEnter(Collision collision)
     {
         GameObject collisionObject;
-        IEnemy enemy;
+        Enemy enemy;
 
         collisionObject = collision.collider.transform.root.gameObject;
 
-        if ((enemy = (collisionObject.GetComponentInChildren(typeof(IEnemy))) as IEnemy) != null)
+        if ((enemy = collisionObject.GetComponentInChildren<Enemy>()) != null)
         {
+            Debug.Log("collision with enemy");
             IsAlive = false;
         }
 

@@ -117,6 +117,13 @@ public class SpawnerInspector : Editor
 
         EditorGUILayout.BeginHorizontal();
         {
+            EditorGUILayout.PrefixLabel("Unit Target");
+            spawn.endLocation = (Transform)EditorGUILayout.ObjectField(spawn.endLocation, typeof(Transform), true);
+        }
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.BeginHorizontal();
+        {
             EditorGUILayout.PrefixLabel("Spawn");
             spawn.spawn = EditorGUILayout.Toggle(spawn.spawn);
         }

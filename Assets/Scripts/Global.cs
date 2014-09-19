@@ -23,8 +23,6 @@ public class Global : MonoBehaviour
         endgame
     }
 
-
-
     protected int _lives;
     public int Lives
     {
