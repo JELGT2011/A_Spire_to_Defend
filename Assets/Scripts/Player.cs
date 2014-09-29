@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     public Ray Ray { get; protected set; }
 
     public GameObject LastClickedObject { get; protected set; }
+	private GridPoint lastClickedGridPoint;
 
     public RaycastHit _raycastHit;
     public RaycastHit RaycastHit
@@ -28,8 +29,8 @@ public class Player : MonoBehaviour
         LastClickedCoordinates = new Vector2(0f, 0f);
         Global = GameObject.FindGameObjectWithTag("Global").GetComponentInChildren<Global>();
 
-        Debug.LogWarning("spawner still needs full implementation");
-        Debug.LogWarning("add error checking for towers blocking all paths");
+       	//Debug.LogWarning("spawner still needs full implementation");
+        //Debug.LogWarning("add error checking for towers blocking all paths");
     }
 
     void Update()
@@ -43,87 +44,62 @@ public class Player : MonoBehaviour
             {
                 LastClickedObject = _raycastHit.transform.collider.gameObject;
 
-                if (LastClickedObject.tag == "Build Area")
-                {
-                    LastClickedCoordinates = new Vector2((float) Mathf.RoundToInt(_raycastHit.point.x), (float)Mathf.RoundToInt(_raycastHit.point.z));
-                }
-                else if (LastClickedObject.tag == "Tower")
-                {
+				GridPoint maybeClicked = LastClickedObject.GetComponent<GridPoint>();
 
-                }
-                else if (LastClickedObject.tag == "Enemy")
-                {
+				if(maybeClicked!=null && maybeClicked.CanBuild()){
+					if(lastClickedGridPoint!=null){
+						lastClickedGridPoint.Deselect();
+					}
 
-                }
-                else
-                {
+					lastClickedGridPoint = maybeClicked;	
 
-                }
+					lastClickedGridPoint.Select();
+				}
+                
             }
         }
 
         if ((Input.GetKeyDown(KeyCode.Alpha0)) && (LastClickedObject != null))
         {
-            if (LastClickedObject.tag == "Build Area")
-            {
-
-            }
-            else if (LastClickedObject.tag == "Tower")
-            {
-
-            }
-            else if (LastClickedObject.tag == "Enemy")
-            {
-
-            }
+			if(lastClickedGridPoint.CanBuild()){
+				lastClickedGridPoint.CreateTower(Global.CreateTower(TowerTypes[0], lastClickedGridPoint.transform.position+Vector3.up));
+			}
+			else if(lastClickedGridPoint.HasTower()){
+				lastClickedGridPoint.DestroyTower();
+			}
         }
 
         if ((Input.GetKeyDown(KeyCode.Alpha1)) && (LastClickedObject != null))
         {
-            if (LastClickedObject.tag == "Build Area")
-            {
-                Global.CreateTower(TowerTypes[1], LastClickedCoordinates);
-            }
-            else if (LastClickedObject.tag == "Tower")
-            {
-                //TowerManager.DestroyTower(LastClickedObject.transform.root.gameObject);
-            }
-            else if (LastClickedObject.tag == "Enemy")
-            {
+            if(lastClickedGridPoint.CanBuild()){
 
-            }
+				lastClickedGridPoint.CreateTower(Global.CreateTower(TowerTypes[1], lastClickedGridPoint.transform.position+Vector3.up));
+			}
+			else if(lastClickedGridPoint.HasTower()){
+				lastClickedGridPoint.DestroyTower();
+			}
         }
 
         if ((Input.GetKeyDown(KeyCode.Alpha2)) && (LastClickedObject != null))
         {
-            if (LastClickedObject.tag == "Build Area")
-            {
-                Global.CreateTower(TowerTypes[2], LastClickedCoordinates);
-            }
-            else if (LastClickedObject.tag == "Tower")
-            {
-
-            }
-            else if (LastClickedObject.tag == "Enemy")
-            {
-
-            }
+			if(lastClickedGridPoint.CanBuild()){
+				lastClickedGridPoint.CreateTower(Global.CreateTower(TowerTypes[2], lastClickedGridPoint.transform.position+Vector3.up));
+			}
+			else if(lastClickedGridPoint.HasTower()){
+				lastClickedGridPoint.DestroyTower();
+			}
         }
 
         if ((Input.GetKeyDown(KeyCode.Alpha3)) && (LastClickedObject != null))
         {
-            if (LastClickedObject.tag == "Build Area")
-            {
-                Global.CreateTower(TowerTypes[3], LastClickedCoordinates);
-            }
-            else if (LastClickedObject.tag == "Tower")
-            {
-
-            }
-            else if (LastClickedObject.tag == "Enemy")
-            {
-
-            }
+			if(lastClickedGridPoint.CanBuild()){
+				
+				lastClickedGridPoint.CreateTower(Global.CreateTower(TowerTypes[3], lastClickedGridPoint.transform.position+Vector3.up));
+				
+			}
+			else if(lastClickedGridPoint.HasTower()){
+				lastClickedGridPoint.DestroyTower();
+			}
         }
     }
 

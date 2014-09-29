@@ -5,10 +5,10 @@ public class Enemy : MonoBehaviour
 {
     public enum TYPE
     {
-        basic
+        basic, advanced
     }
 
-    public TYPE Type { get; set; }
+	public TYPE Type;
 
     public int _maxHealth;
     public int MaxHealth
@@ -34,24 +34,20 @@ public class Enemy : MonoBehaviour
 
     public bool TargetReached { get; set; }
 
-    public NavMeshAgent NavMeshAgent { get; set; }
+	public GridPoint Target;
 
-    public Animator Animator { get; set; }
+	private const float MIN_DIST = 0.1f;
 
-    public Vector3 Target { get; set; }
+	public SpriteRenderer healthRenderer;
 
-    void Start()
-    {
-        NavMeshAgent = GetComponentInChildren<NavMeshAgent>();
-        Animator = GetComponentInChildren<Animator>();
-    }
-
+	private GridPoint[] path;
+	private int pathIndex=0;
+	
     /// <summary>
     /// Initializes common values.  Do not override.
     /// </summary>
-    public void Initialize(TYPE type, Vector3 target)
+	public void Initialize(GridPoint start, GridPoint target)
     {
-        Type = type;
         Target = target;
 
         CurrentHealth = MaxHealth;
@@ -59,29 +55,53 @@ public class Enemy : MonoBehaviour
         IsAlive = true;
         Accuracy = 1f;
 
-        NavMeshAgent = GetComponentInChildren<NavMeshAgent>();
-        NavMeshAgent.SetDestination(target);
-        NavMeshAgent.speed = CurrentSpeed;
+		path = AStar.Path (start, target);
+
+		foreach (GridPoint pnt in path) {
+		}
     }
 
     /// <summary>
     /// Determines if it has reached the target.
     /// </summary>
-    void Update()
-    {
-        // check if enemy is close enough to Target
-        if (Mathf.Abs(NavMeshAgent.remainingDistance) <= Accuracy)
-        {
-            IsAlive = false;
-            TargetReached = true;
-        }
+    void Update(){
+       
+		if(path!=null && path.Length>0){
+			Vector3 differenceToGoal = (path[pathIndex].transform.position+Vector3.up) - transform.position;
 
-        if (!IsAlive)
-        {
+			if (differenceToGoal.magnitude < MIN_DIST) {
+
+				if(path.Length<=pathIndex+1){
+					IsAlive =false;
+
+					//TODO; hurt the player
+				}
+				else{
+					pathIndex++;
+
+					if(Grid.Instance.GetGridPoint(path[pathIndex]).CanPassThough()){
+						//Do nothing! We're good
+
+					}
+					else{
+						path = AStar.Path(path[pathIndex-1],Target);
+					}
+				}
+
+			}
+			else{
+				transform.position+=differenceToGoal.normalized*CurrentSpeed*Time.deltaTime;
+
+				//TODO; smooth look at
+			}
+		}
+
+
+        if (!IsAlive){
+			Global.Instance.RemoveEnemy(this);
             Destroy(transform.root.gameObject);
         }
 
-        Animator.SetFloat("CurrentSpeed", CurrentSpeed);
     }
 
     /// <summary>
@@ -101,10 +121,15 @@ public class Enemy : MonoBehaviour
         {
             CurrentHealth -= projectile.Damage;
 
+
+
             if (CurrentHealth <= 0)
             {
                 IsAlive = false;
             }
+			else{
+				healthRenderer.color = Color.Lerp(Color.white,Color.red,((float)_maxHealth-(float)CurrentHealth)/(float)_maxHealth);
+			}
         }
     }
 }

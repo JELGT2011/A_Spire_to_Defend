@@ -34,8 +34,7 @@ public class Projectile : MonoBehaviour
     /// int _damage
     /// float _speed
     /// </summary>
-    void Start()
-    {
+    void Start(){
         Initialize();
     }
 
@@ -43,17 +42,12 @@ public class Projectile : MonoBehaviour
     /// Initializes functions based on inputed start values.
     /// Do not override.
     /// </summary>
-    void Initialize()
-    {
+    void Initialize(){
         IsAlive = true;
-        if (Target)
-        {
-            Target = Target.transform.Find("Root").gameObject;
-        }
+        
     }
 
-    void Update()
-    {
+    void Update(){
         if (!IsAlive)
         {
             Destroy(transform.root.gameObject);
@@ -76,19 +70,13 @@ public class Projectile : MonoBehaviour
     /// Destroys itself after collision.
     /// </summary>
     /// <param name="collision"></param>
-    void OnCollisionEnter(Collision collision)
-    {
+    void OnCollisionEnter(Collision collision){
         GameObject collisionObject;
-        Enemy enemy;
 
         collisionObject = collision.collider.transform.root.gameObject;
 
-        if ((enemy = collisionObject.GetComponentInChildren<Enemy>()) != null)
-        {
-            Debug.Log("collision with enemy");
+        if ((collisionObject.GetComponentInChildren<Enemy>()) != null){
             IsAlive = false;
         }
-
-        
     }
 }

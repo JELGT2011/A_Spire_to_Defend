@@ -16,6 +16,8 @@ public class CameraControls : MonoBehaviour
 
     public int ScrollSpeed = 30;
 
+	public Transform wallLeft, wallRight, wallUp, wallDown;
+
     void Update()
     {
         InputMovement();
@@ -23,34 +25,37 @@ public class CameraControls : MonoBehaviour
 
     void InputMovement()
     {
-        if (Input.GetKey(MoveForward))
+        if (Input.GetKey(MoveForward) && (wallUp!=null || transform.position.z>wallUp.position.z))
         {
             transform.Translate(Vector3.forward * Speed * Time.deltaTime);
         }
 
-        if (Input.GetKey(MoveBackward))
+		if (Input.GetKey(MoveBackward)&& (wallDown!=null || transform.position.z<wallDown.position.z))
         {
             transform.Translate(Vector3.back * Speed * Time.deltaTime);
         }
 
-        if (Input.GetKey(MoveLeft))
+		if (Input.GetKey(MoveLeft)&& (wallLeft!=null || transform.position.x>wallLeft.position.x))
         {
             transform.Translate(Vector3.left * Speed * Time.deltaTime);
         }
 
-        if (Input.GetKey(MoveRight))
+		if (Input.GetKey(MoveRight)&& (wallRight!=null || transform.position.x<wallRight.position.x))
         {
             transform.Translate(Vector3.right * Speed * Time.deltaTime);
         }
 
         if (Input.GetAxis("Mouse ScrollWheel") > 0 || Input.GetKey(ZoomIn))
         {
-            gameObject.GetComponentInChildren<Transform>().Translate(Vector3.forward * Time.deltaTime * ScrollSpeed, Camera.main.transform);
+			float currSize = Camera.main.orthographicSize;
+			if(currSize-ScrollSpeed*Time.deltaTime>1){
+				Camera.main.orthographicSize-=ScrollSpeed*Time.deltaTime;
+			}
         }
 
         if (Input.GetAxis("Mouse ScrollWheel") < 0 || Input.GetKey(ZoomOut))
         {
-            gameObject.GetComponentInChildren<Transform>().Translate(Vector3.back * Time.deltaTime * ScrollSpeed, Camera.main.transform);
+			Camera.main.orthographicSize+=ScrollSpeed*Time.deltaTime;
         }
     }
 }
