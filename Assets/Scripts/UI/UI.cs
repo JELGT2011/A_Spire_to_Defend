@@ -5,7 +5,7 @@ using System.Collections.Specialized;
 namespace UINamespace
 {
 		// Until file reading is a thing, the constructors will just
-		// make the menus from codes.
+		// make the menus from enum codes.
 	public enum UIEnum
 	{
 		TEST_UI,
@@ -42,6 +42,12 @@ namespace UINamespace
 		public void OnGUI()
 		{
 
+		}
+
+		private static int componentId = 0;
+		public static int GenerateId()
+		{
+			return (++componentId);
 		}
 	}
 }
