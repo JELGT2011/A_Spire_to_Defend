@@ -13,6 +13,7 @@ public class MenuRunner : MonoBehaviour
 	void Start()
 	{
 		m_ui = new UI(UIEnum.TEST_UI);
+		m_ui.SetStartMenu(UIEnum.TEST_MENU1);
 	}
 
 	void OnGUI()

@@ -20,6 +20,12 @@ namespace UINamespace
 	{
 		private UIAnchorLocation m_anchorLocation;
 
+		private delegate int pixelDelegate(int value);
+		private delegate float relativeDelegate(float value);
 
+		public UIAnchor(UIAnchorLocation anchorLocation)
+		{
+
+		}
 	}
 }

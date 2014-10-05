@@ -29,8 +29,15 @@ namespace UINamespace
 			m_grid = new ArrayList(xGridSections * yGridSections);
 		}
 
-		public UIGridLayout AddUIComponent(UIComponent component, int xSlot, int ySlot, int xSlotWidth, int ySlotWidth)
+		public UIGridLayout AddUIComponent(UIComponentFactoryData componentData, int xSlot, int ySlot, int xSlotWidth, int ySlotWidth)
 		{
+			UIComponent component = UIComponentFactory.CreateUIComponent(componentData, this);
+			if (null == component)
+			{
+				Debug.LogError("UIComponent data incorrect");
+				return null;
+			}
+
 			base.AddUIComponent(component);
 
 			UIGridLayoutSlot gridSlot = new UIGridLayoutSlot(xSlot, ySlot, xSlotWidth, ySlotWidth, component);
@@ -39,6 +46,8 @@ namespace UINamespace
 			return this;
 		}
 
+			// Always has an anchor at the Top-Left corner. It is
+			// indexed like reading left to right and top to bottom.
 		private class UIGridLayoutSlot
 		{
 			public int xSlotStart;
@@ -60,11 +69,6 @@ namespace UINamespace
 				this.ySlotWidth = ySlotWidth;
 				this.component = component;
 			}
-		}
-
-		public override void DrawGUI()
-		{
-			// do nothing
 		}
 	}
 }

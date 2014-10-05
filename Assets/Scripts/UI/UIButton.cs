@@ -6,13 +6,14 @@ namespace UINamespace
 	{
 		private string m_text;
 
-		private float m_xStart;
-		private float m_yStart;
-		private float m_xWidth;
-		private float m_yHeight;
-
-		public UIButton(string text)
-			: base()
+		public UIButton(float xStart,
+		                float yStart,
+		                float xWidth,
+		                float yHeight,
+		                UIComponentGroup parentComponentGroup,
+		                UIAnchorLocation anchorLocation,
+		                string text)
+			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, anchorLocation)
 		{
 			m_text = text;
 		}
@@ -22,6 +23,11 @@ namespace UINamespace
 
 		}
 
+			// There are no child UIComponents
+		public override System.Collections.Generic.LinkedList<UIComponent> GetChildComponentsList()
+		{
+			return null;
+		}
 
 	}
 }

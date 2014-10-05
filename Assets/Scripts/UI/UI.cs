@@ -44,6 +44,14 @@ namespace UINamespace
 
 		}
 
+		public void SetStartMenu(UIEnum whichMenu)
+		{
+			UIMenu menu = m_menuDictionary[whichMenu] as UIMenu;
+			if (null == menu)
+				throw new UnassignedReferenceException("Menu does not exist in menuDictionary");
+			m_menuStack.PushTop(menu);
+		}
+
 		private static int componentId = 0;
 		public static int GenerateId()
 		{
