@@ -20,4 +20,9 @@ public class MenuRunner : MonoBehaviour
 	{
 		m_ui.OnGUI();
 	}
+
+	void OnUpdate()
+	{
+		m_ui.UpdateDeltaTime(Time.deltaTime);
+	}
 }

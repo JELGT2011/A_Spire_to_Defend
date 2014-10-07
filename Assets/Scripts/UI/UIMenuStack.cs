@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 
 namespace UINamespace
 {
@@ -9,12 +10,12 @@ namespace UINamespace
 	public class UIMenuStack
 	{
 		private LinkedList<UIMenu> m_menuStack;
-		private int m_numberMenusRendered;
+		private int m_maxNumberMenusRendered;
 		private bool m_renderAllMenus;
 
-		public int MenusRendered
+		public int MaxMenusRendered
 		{
-			get { return m_numberMenusRendered; }
+			get { return m_maxNumberMenusRendered; }
 			set
 			{
 				if (value < 0)
@@ -23,12 +24,12 @@ namespace UINamespace
 				if (value >= m_menuStack.Count)
 				{
 					m_renderAllMenus = true;
-					m_numberMenusRendered = m_menuStack.Count;
+					m_maxNumberMenusRendered = m_menuStack.Count;
 				}
 				else
 				{
 					m_renderAllMenus = false;
-					m_numberMenusRendered = value;
+					m_maxNumberMenusRendered = value;
 				}
 			}
 		}
@@ -36,24 +37,28 @@ namespace UINamespace
 		public void SetRenderAllMenus()
 		{
 			m_renderAllMenus = true;
-			m_numberMenusRendered = m_menuStack.Count;
+			m_maxNumberMenusRendered = m_menuStack.Count;
 		}
 
 		public UIMenuStack()
 		{
 			m_menuStack = new LinkedList<UIMenu>();
 			m_renderAllMenus = true;
-			m_numberMenusRendered = 0;
+			m_maxNumberMenusRendered = 0;
 		}
 
 		public void PushTop(UIMenu menu)
 		{
 			m_menuStack.AddFirst(menu);
+			if (m_renderAllMenus)
+				m_maxNumberMenusRendered = m_menuStack.Count;
 		}
 
 		public void PushBottom(UIMenu menu)
 		{
 			m_menuStack.AddLast(menu);
+			if (m_renderAllMenus)
+				m_maxNumberMenusRendered = m_menuStack.Count;
 		}
 
 		public UIMenu PopTop()
@@ -79,5 +84,10 @@ namespace UINamespace
 		{
 			return m_menuStack.Last.Value;
 		}
+
+		public LinkedList<UIMenu>.Enumerator GetEnumerator()
+		{
+			return m_menuStack.GetEnumerator();
+		}	
 	}
 }

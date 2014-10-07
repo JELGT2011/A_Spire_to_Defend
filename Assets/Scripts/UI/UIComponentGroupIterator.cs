@@ -12,30 +12,35 @@ namespace UINamespace
 
 		private UIComponentGroup m_componentGroup;
 
-		public UIComponentGroupIterator(UIComponentGroup inputComponentGroup, bool includeComponentGroups)
+		public UIComponentGroupIterator(UIComponentGroup inputComponentGroup)
 		{
 			m_componentDictionary = new HybridDictionary();
 			m_componentArrayList = new ArrayList();
 
 			m_componentGroup = inputComponentGroup;
 
-			List<UIComponent> componentQueue = new List<UIComponent>();
-			componentQueue.Add(inputComponentGroup);
+			List<UIComponentGroupIteratorData> componentQueue = new List<UIComponentGroupIteratorData>();
+			int parentSlot = -1;
+			int componentArrayListIndex = -1;
+			componentQueue.Add(new UIComponentGroupIteratorData(inputComponentGroup, parentSlot));
 			while (componentQueue.Count > 0)
 			{
-				UIComponent currentComponent = componentQueue[0];
-				if (includeComponentGroups)
-				{
-					m_componentDictionary.Add(currentComponent.Id, currentComponent);
-					m_componentArrayList.Add(currentComponent);
-				}
+				UIComponentGroupIteratorData currentComponentData = componentQueue[0];
+				currentComponentData.component.CalculateRenderingOutput();
+
+				m_componentArrayList.Add(currentComponentData);
+				++componentArrayListIndex;
+
+				m_componentDictionary.Add(currentComponentData.component.Id, currentComponentData.component);
+
 				componentQueue.RemoveAt(0);
 
-				LinkedList<UIComponent> childComponents = currentComponent.GetChildComponentsList();
+				LinkedList<UIComponent> childComponents = currentComponentData.component.GetChildComponentsList();
 				if (null != childComponents)
 				{
+					parentSlot = componentArrayListIndex;
 					foreach (UIComponent component in childComponents)
-						componentQueue.Add(component);
+						componentQueue.Add(new UIComponentGroupIteratorData(component, parentSlot));
 				}
 			}
 		}
@@ -44,6 +49,17 @@ namespace UINamespace
 		{
 			foreach (UIComponent component in m_componentArrayList)
 				component.DrawGUI();
+		}
+
+		private sealed class UIComponentGroupIteratorData
+		{
+			public UIComponent component;
+			public int parentSlot;
+			public UIComponentGroupIteratorData(UIComponent component, int parentSlot)
+			{
+				this.component = component;
+				this.parentSlot = parentSlot;
+			}
 		}
 	}
 }

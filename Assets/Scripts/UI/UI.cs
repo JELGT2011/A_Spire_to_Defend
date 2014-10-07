@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 
 namespace UINamespace
@@ -21,6 +22,8 @@ namespace UINamespace
 		private UIMenuStack m_menuStack;
 		private HybridDictionary m_menuDictionary;
 
+		private LinkedList<UIMenu>.Enumerator m_menuStackEnumerator;
+
 		public UI(UIEnum whichUI)
 		{
 			m_menuDictionary = new HybridDictionary(4, true);
@@ -40,6 +43,17 @@ namespace UINamespace
 		}
 
 		public void OnGUI()
+		{
+			m_menuStackEnumerator = m_menuStack.GetEnumerator();
+			UIMenu currentMenu = m_menuStackEnumerator.Current;
+			int count = 0;
+			while (count < m_menuStack.MaxMenusRendered && null != currentMenu)
+			{
+				currentMenu.OnGUI();
+			}
+		}
+
+		public void UpdateDeltaTime(float deltaTime)
 		{
 
 		}

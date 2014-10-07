@@ -49,5 +49,10 @@ namespace UINamespace
 				break;
 			}
 		}
+
+		public void OnGUI()
+		{
+			m_componentGroupIterator.OnGUI();
+		}
 	}
 }

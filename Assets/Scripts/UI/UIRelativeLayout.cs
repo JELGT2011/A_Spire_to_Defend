@@ -31,5 +31,13 @@ namespace UINamespace
 		{
 			// do nothing;
 		}
+
+		public override void CalculateRenderingOutput()
+		{
+			if (null == m_parentComponentGroup)
+				m_parentRenderingInput = new UIComponentRenderingInput(0f, 0f, 1f, 1f, UIAnchorLocation.LEFT_BOT, UILayoutType.RELATIVE_LAYOUT);
+
+			return
+		}
 	}
 }

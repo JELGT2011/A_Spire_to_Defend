@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace UINamespace
 {
-	public class UIComponentFactoryData
+	public sealed class UIComponentFactoryData
 	{
 		public UIComponentEnum componentEnum;
 		public IList componentData;

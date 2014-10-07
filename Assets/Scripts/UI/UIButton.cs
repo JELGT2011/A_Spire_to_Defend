@@ -23,6 +23,11 @@ namespace UINamespace
 
 		}
 
+		public override void CalculateRenderingOutput()
+		{
+			throw new NotImplementedException();
+		}
+
 			// There are no child UIComponents
 		public override System.Collections.Generic.LinkedList<UIComponent> GetChildComponentsList()
 		{

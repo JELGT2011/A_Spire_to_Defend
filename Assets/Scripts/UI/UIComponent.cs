@@ -15,6 +15,12 @@ namespace UINamespace
 
 		protected UIComponentGroup m_parentComponentGroup = null;
 
+			// Amount of screen space for this component to work with
+		protected UIComponentRenderingInput m_parentRenderingInput = null;
+
+			// Amount of screen space for child components to work with
+		protected UIComponentRenderingInput m_childRenderingInput = null;
+
 		public int Id
 		{
 			get { return m_componentId; }
@@ -46,5 +52,32 @@ namespace UINamespace
 
 		public abstract void DrawGUI();
 		public abstract LinkedList<UIComponent> GetChildComponentsList();
+		public abstract void CalculateRenderingOutput(); //Create a UIComponentRenderingInput class/struct to pass to child components
+
+		public UIComponentRenderingInput GetChildComponentRenderingInput()
+		{
+			if (null == m_childRenderingInput)
+				CalculateRenderingOutput();
+			return m_childRenderingInput;
+		}
+
+		public sealed class UIComponentRenderingInput
+		{
+			public float xStart;
+			public float yStart;
+			public float xWidth;
+			public float yHeight;
+			public UIAnchorLocation anchorLocation;
+			public UILayoutType layoutType;
+			public UIComponentRenderingInput(float xStart, float yStart, float xWidth, float yHeight, UIAnchorLocation anchorLocation, UILayoutType layoutType)
+			{
+				this.xStart = xStart;
+				this.yStart = yStart;
+				this.xWidth = xWidth;
+				this.yHeight = yHeight;
+				this.anchorLocation = anchorLocation;
+				this.layoutType = layoutType;
+			}
+		}
 	}
 }
