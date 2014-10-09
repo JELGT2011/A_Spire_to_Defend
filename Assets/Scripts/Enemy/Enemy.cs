@@ -83,13 +83,20 @@ public class Enemy : MonoBehaviour
 				}
 				else{
 					pathIndex++;
-					
-					if(Grid.Instance.GetGridPoint(path[pathIndex]).CanPassThough()){
-						//Do nothing! We're good
-						
+
+					GridPoint grid = path[pathIndex].ArriveAtGridpoint(this);
+
+					if(grid==null){
+
+						if(Grid.Instance.GetGridPoint(path[pathIndex]).CanPassThough()){
+							//Do nothing! We're good
+						}
+						else{
+							path = AStar.Path(path[pathIndex-1],Target);
+						}
 					}
 					else{
-						path = AStar.Path(path[pathIndex-1],Target);
+						path = AStar.Path(grid,Target);
 					}
 				}
 				

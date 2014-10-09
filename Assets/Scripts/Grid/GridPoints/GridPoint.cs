@@ -18,6 +18,11 @@ public class GridPoint : MonoBehaviour {
 		}
 	}
 
+	//This method be called when an enemy arrives at a gridpoint, returns whether or not to replan afterwards based on the gridpoint being null or not
+	public virtual GridPoint ArriveAtGridpoint(Enemy enemy){
+		return null;
+	}
+
 	public virtual void Select(){
 		oldColor = renderer.material.color;
 		renderer.material.color = Color.Lerp (oldColor, Color.green, 0.5f);
