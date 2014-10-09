@@ -35,9 +35,10 @@ namespace UINamespace
 
 				componentQueue.RemoveAt(0);
 
-				LinkedList<UIComponent> childComponents = currentComponentData.component.GetChildComponentsList();
-				if (null != childComponents)
+				if (currentComponentData.component.HasChildComponents())
 				{
+					LinkedList<UIComponent> childComponents = currentComponentData.component.GetChildComponentsList();
+
 					parentSlot = componentArrayListIndex;
 					foreach (UIComponent component in childComponents)
 						componentQueue.Add(new UIComponentGroupIteratorData(component, parentSlot));

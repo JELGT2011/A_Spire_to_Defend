@@ -36,6 +36,11 @@ namespace UINamespace
 			return this;
 		}
 
+		public override bool HasChildComponents()
+		{
+			return true;
+		}
+
 		public override LinkedList<UIComponent> GetChildComponentsList()
 		{
 			return m_listComponent;

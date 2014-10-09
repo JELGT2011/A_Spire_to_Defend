@@ -29,6 +29,10 @@ namespace UINamespace
 		}
 
 			// There are no child UIComponents
+		public override bool HasChildComponents()
+		{
+			return false;
+		}
 		public override System.Collections.Generic.LinkedList<UIComponent> GetChildComponentsList()
 		{
 			return null;

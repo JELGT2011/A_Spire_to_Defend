@@ -13,6 +13,14 @@ namespace UINamespace
 		
 		private int m_xGridSections;
 		private int m_yGridSections;
+		public int XGridSections
+		{
+			get { return m_xGridSections; }
+		}
+		public int YGridSections
+		{
+			get { return m_yGridSections; }
+		}
 
 		public UIGridLayout(float xStart,
 		                    float yStart,
@@ -31,6 +39,8 @@ namespace UINamespace
 
 		public UIGridLayout AddUIComponent(UIComponentFactoryData componentData, int xSlot, int ySlot, int xSlotWidth, int ySlotWidth)
 		{
+			UIRelativeLayout gridSlotLayout = new UIRelativeLayout();
+
 			UIComponent component = UIComponentFactory.CreateUIComponent(componentData, this);
 			if (null == component)
 			{
@@ -38,9 +48,11 @@ namespace UINamespace
 				return null;
 			}
 
-			base.AddUIComponent(component);
+			gridSlotLayout.AddUIComponent(component);
 
-			UIGridLayoutSlot gridSlot = new UIGridLayoutSlot(xSlot, ySlot, xSlotWidth, ySlotWidth, component);
+			base.AddUIComponent(gridSlotLayout);
+
+			UIGridLayoutSlot gridSlot = new UIGridLayoutSlot(xSlot, ySlot, xSlotWidth, ySlotWidth);
 			m_grid.Add(gridSlot);
 
 			return this;
@@ -54,20 +66,18 @@ namespace UINamespace
 			public int ySlotStart;
 			public int xSlotWidth;
 			public int ySlotWidth;
-			public UIComponent component;
 
 			public UIGridLayoutSlot lowerSlot;
 			public UIGridLayoutSlot aboveSlot;
 			public UIGridLayoutSlot leftSlot;
 			public UIGridLayoutSlot rightSlot;
-
-			public UIGridLayoutSlot(int xSlotStart, int ySlotStart, int xSlotWidth, int ySlotWidth, UIComponent component)
+			
+			public UIGridLayoutSlot(int xSlotStart, int ySlotStart, int xSlotWidth, int ySlotWidth)
 			{
 				this.xSlotStart = xSlotStart;
 				this.ySlotStart = ySlotStart;
 				this.xSlotWidth = xSlotWidth;
 				this.ySlotWidth = ySlotWidth;
-				this.component = component;
 			}
 		}
 	}

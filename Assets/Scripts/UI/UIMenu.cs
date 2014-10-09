@@ -41,7 +41,7 @@ namespace UINamespace
 				menu1Group.AddUIComponent(menu1Button1Data, 0, 0, 1, 1);
 				menu1Group.AddUIComponent(menu1Button2Data, 0, 2, 1, 1);
 
-				m_componentGroupIterator = new UIComponentGroupIterator(menu1Group, true);
+				m_componentGroupIterator = new UIComponentGroupIterator(menu1Group);
 			}
 				break;
 			case UIEnum.TEST_MENU2:

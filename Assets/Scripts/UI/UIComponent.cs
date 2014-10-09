@@ -52,6 +52,7 @@ namespace UINamespace
 
 		public abstract void DrawGUI();
 		public abstract LinkedList<UIComponent> GetChildComponentsList();
+		public abstract bool HasChildComponents();
 		public abstract void CalculateRenderingOutput(); //Create a UIComponentRenderingInput class/struct to pass to child components
 
 		public UIComponentRenderingInput GetChildComponentRenderingInput()
