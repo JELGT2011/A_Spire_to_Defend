@@ -65,44 +65,48 @@ public class Enemy : MonoBehaviour
     /// Determines if it has reached the target.
     /// </summary>
     void Update(){
-       
+		EnemyUpdate ();
+
+
+    }
+
+	protected virtual void EnemyUpdate(){
 		if(path!=null && path.Length>0){
 			Vector3 differenceToGoal = (path[pathIndex].transform.position+Vector3.up) - transform.position;
-
+			
 			if (differenceToGoal.magnitude < MIN_DIST) {
-
+				
 				if(path.Length<=pathIndex+1){
 					IsAlive =false;
-
+					
 					//TODO; hurt the player
 				}
 				else{
 					pathIndex++;
-
+					
 					if(Grid.Instance.GetGridPoint(path[pathIndex]).CanPassThough()){
 						//Do nothing! We're good
-
+						
 					}
 					else{
 						path = AStar.Path(path[pathIndex-1],Target);
 					}
 				}
-
+				
 			}
 			else{
 				transform.position+=differenceToGoal.normalized*CurrentSpeed*Time.deltaTime;
-
+				
 				//TODO; smooth look at
 			}
 		}
-
-
-        if (!IsAlive){
+		
+		
+		if (!IsAlive){
 			Global.Instance.RemoveEnemy(this);
-            Destroy(transform.root.gameObject);
-        }
-
-    }
+			Destroy(transform.root.gameObject);
+		}
+	}
 
     /// <summary>
     /// Only processes collisions with a GameObject that has a Projectile component.

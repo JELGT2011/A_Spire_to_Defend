@@ -18,7 +18,7 @@ public class GridPoint : MonoBehaviour {
 		}
 	}
 
-	public void Select(){
+	public virtual void Select(){
 		oldColor = renderer.material.color;
 		renderer.material.color = Color.Lerp (oldColor, Color.green, 0.5f);
 	}
@@ -27,11 +27,11 @@ public class GridPoint : MonoBehaviour {
 		renderer.material.color = oldColor;
 	}
 
-	public bool CanBuild(){
+	public virtual bool CanBuild(){
 		return myTraits != null && !myTraits.Contains (Trait.NON_BUILDABLE) ;
 	}
 
-	public bool CanPassThough(){
+	public virtual bool CanPassThough(){
 		return myTraits != null && !myTraits.Contains (Trait.IMPASSABLE);
 	}
 
@@ -39,12 +39,12 @@ public class GridPoint : MonoBehaviour {
 		return tower!=null;
 	}
 
-	public float GetSpeedMultiplier(){
+	public virtual float GetSpeedMultiplier(){
 		return speedMultiplier;
 	}
 
 	//Set up this GridPoint to be built on
-	public void CreateTower(Tower _tower){
+	public virtual void CreateTower(Tower _tower){
 		myTraits.Add (Trait.IMPASSABLE);
 		myTraits.Add (Trait.NON_BUILDABLE);
 
@@ -52,7 +52,7 @@ public class GridPoint : MonoBehaviour {
 	}
 
 	//Remove the Building on this thing
-	public void DestroyTower(){
+	public virtual void DestroyTower(){
 		myTraits.Remove (Trait.NON_BUILDABLE);
 
 		Destroy (tower);
