@@ -36,12 +36,12 @@ public class Enemy : MonoBehaviour
 
 	public GridPoint Target;
 
-	private const float MIN_DIST = 0.1f;
+	protected const float MIN_DIST = 0.1f;
 
 	public SpriteRenderer healthRenderer;
 
-	private GridPoint[] path;
-	private int pathIndex=0;
+	protected GridPoint[] path;
+	protected int pathIndex=0;
 	
     /// <summary>
     /// Initializes common values.  Do not override.

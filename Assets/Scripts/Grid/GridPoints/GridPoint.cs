@@ -44,6 +44,10 @@ public class GridPoint : MonoBehaviour {
 		return tower!=null;
 	}
 
+	public Tower GetTower(){
+		return tower;
+	}
+
 	public virtual float GetSpeedMultiplier(){
 		return speedMultiplier;
 	}
