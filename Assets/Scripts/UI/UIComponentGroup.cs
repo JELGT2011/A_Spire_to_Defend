@@ -5,12 +5,6 @@ using System.Collections.Specialized;
 
 namespace UINamespace
 {
-	public enum UILayoutType
-	{
-		RELATIVE_LAYOUT,
-		PIXEL_LAYOUT
-	};
-
 	public abstract class UIComponentGroup : UIComponent
 	{
 		protected HybridDictionary m_componentDictionary;
@@ -21,8 +15,9 @@ namespace UINamespace
 		                           float xWidth,
 		                           float yHeight,
 		                           UIComponentGroup parentComponentGroup,
+		                           UILayoutType layoutType,
 		                           UIAnchorLocation anchorLocation)
-			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, anchorLocation)
+			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation)
 		{
 			m_componentDictionary = new HybridDictionary();
 			m_listComponent = new LinkedList<UIComponent>();

@@ -27,9 +27,10 @@ namespace UINamespace
 		                    float xWidth,
 		                    float yHeight,
 		                    UIComponentGroup parentComponentGroup,
+		                    UIAnchorLocation anchorLocation,
 		                    int xGridSections,
 		                    int yGridSections)
-			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup)
+			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, anchorLocation)
 		{
 			m_xGridSections = xGridSections;
 			m_yGridSections = yGridSections;
@@ -37,11 +38,15 @@ namespace UINamespace
 			m_grid = new ArrayList(xGridSections * yGridSections);
 		}
 
-		public UIGridLayout AddUIComponent(UIComponentFactoryData componentData, int xSlot, int ySlot, int xSlotWidth, int ySlotWidth)
+		public UIGridLayout AddUIComponent(UIComponentFactoryData componentData, int xSlot, int ySlot, int xSlotWidth, int ySlotHeight)
 		{
-			UIRelativeLayout gridSlotLayout = new UIRelativeLayout();
+			float xGridSlotStart = m_anchor.m_xWidth / (float)m_xGridSections * xSlot;
+			float yGridSlotStart = m_anchor.m_yHeight / (float)m_yGridSections * (m_yGridSections - ySlot - 1);
+			float xGridSlotWidth = m_anchor.m_xWidth / (float)m_xGridSections * xSlotWidth;
+			float yGridSlotHeight = m_anchor.m_yHeight / (float)m_yGridSections * ySlotHeight;
+			UIRelativeLayout gridSlotLayout = new UIRelativeLayout(xGridSlotStart, yGridSlotStart, xGridSlotWidth, yGridSlotHeight, this, UIAnchorLocation.LEFT_BOT);
 
-			UIComponent component = UIComponentFactory.CreateUIComponent(componentData, this);
+			UIComponent component = UIComponentFactory.CreateUIComponent(componentData, gridSlotLayout);
 			if (null == component)
 			{
 				Debug.LogError("UIComponent data incorrect");
@@ -52,7 +57,7 @@ namespace UINamespace
 
 			base.AddUIComponent(gridSlotLayout);
 
-			UIGridLayoutSlot gridSlot = new UIGridLayoutSlot(xSlot, ySlot, xSlotWidth, ySlotWidth);
+			UIGridLayoutSlot gridSlot = new UIGridLayoutSlot(xSlot, ySlot, xSlotWidth, ySlotHeight);
 			m_grid.Add(gridSlot);
 
 			return this;
@@ -65,19 +70,19 @@ namespace UINamespace
 			public int xSlotStart;
 			public int ySlotStart;
 			public int xSlotWidth;
-			public int ySlotWidth;
+			public int ySlotHeight;
 
 			public UIGridLayoutSlot lowerSlot;
 			public UIGridLayoutSlot aboveSlot;
 			public UIGridLayoutSlot leftSlot;
 			public UIGridLayoutSlot rightSlot;
 			
-			public UIGridLayoutSlot(int xSlotStart, int ySlotStart, int xSlotWidth, int ySlotWidth)
+			public UIGridLayoutSlot(int xSlotStart, int ySlotStart, int xSlotWidth, int ySlotHeight)
 			{
 				this.xSlotStart = xSlotStart;
 				this.ySlotStart = ySlotStart;
 				this.xSlotWidth = xSlotWidth;
-				this.ySlotWidth = ySlotWidth;
+				this.ySlotHeight = ySlotHeight;
 			}
 		}
 	}

@@ -17,22 +17,22 @@ namespace UINamespace
 			{
 			case UIEnum.TEST_MENU1:
 			{
-				UIGridLayout menu1Group = new UIGridLayout(0f, 0f, 1f, 1f, null, 1, 3);
+				UIGridLayout menu1Group = new UIGridLayout(0f, 0f, 1f, 1f, null, UIAnchorLocation.LEFT_BOT, 1, 3);
 
 				ArrayList button1List = new ArrayList(1);
-				button1List.Add(UIAnchorLocation.LEFT_TOP);
-				button1List.Add(UILayoutType.PIXEL_LAYOUT);
-				button1List.Add(0);
-				button1List.Add(0);
-				button1List.Add(400);
-				button1List.Add(200);
+				button1List.Add(UIAnchorLocation.LEFT_BOT);
+				button1List.Add(UILayoutType.RELATIVE_LAYOUT);//UILayoutType.PIXEL_LAYOUT);
+				button1List.Add(0f);
+				button1List.Add(0f);
+				button1List.Add(1f);
+				button1List.Add(0.5f);
 				button1List.Add("Button 1");
 				UIComponentFactoryData menu1Button1Data = new UIComponentFactoryData(UIComponentEnum.BUTTON, button1List);
 				ArrayList button2List = new ArrayList(1);
-				button2List.Add(UIAnchorLocation.LEFT_BOT);
+				button2List.Add(UIAnchorLocation.LEFT_TOP);
 				button2List.Add(UILayoutType.RELATIVE_LAYOUT);
 				button2List.Add(0f);
-				button2List.Add(0f);
+				button2List.Add(1f);
 				button2List.Add(0.9f);
 				button2List.Add(0.8f);
 				button2List.Add("Button 2");

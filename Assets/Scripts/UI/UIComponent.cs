@@ -1,17 +1,28 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
+using System.Runtime.InteropServices;
 
 namespace UINamespace
 {
+	public enum UILayoutType
+	{
+		RELATIVE_LAYOUT,
+		PIXEL_LAYOUT
+	};
+
 	public abstract class UIComponent
 	{
 		private int m_componentId;
 
+			// This determines how much screen room this component will use of the amount give.
+			// If there is no parent or the parent is the entire screen (i.e. 0f, 0f, 1f, 1f), then
+			// these values will determine how much of the screen this component uses. If the parent
+			// only uses like half of it, then these values will treat the parent as the screen and
+			// will scale according to the parent, so will be smaller, but these values won't change.
 		protected UIAnchor m_anchor;
-		protected float m_xStart;
-		protected float m_yStart;
-		protected float m_xWidth;
-		protected float m_yHeight;
+
+		protected UILayoutType m_layoutType;
 
 		protected UIComponentGroup m_parentComponentGroup = null;
 
@@ -20,6 +31,8 @@ namespace UINamespace
 
 			// Amount of screen space for child components to work with
 		protected UIComponentRenderingInput m_childRenderingInput = null;
+
+		protected UIPixelRenderingInfo m_pixelRenderingInfo = null;
 
 		public int Id
 		{
@@ -31,29 +44,21 @@ namespace UINamespace
 		                      float xWidth,
 		                      float yHeight,
 		                      UIComponentGroup parentComponentGroup,
+		                      UILayoutType layoutType,
 		                      UIAnchorLocation anchorLocation)
 		{
 			m_componentId = UI.GenerateId();
 
-			m_xStart = xStart;
-			m_yStart = yStart;
-			m_xWidth = xWidth;
-			m_yHeight = yHeight;
-
+			m_anchor = new UIAnchor(anchorLocation, xStart, yStart, xWidth, yHeight);
+			m_layoutType = layoutType;
 			m_parentComponentGroup = parentComponentGroup;
-
-			m_anchor = new UIAnchor(anchorLocation);
 		}
-
-		public float GetStartX() { return m_xStart; }
-		public float GetWidthX() { return m_xWidth; }
-		public float GetStartY() { return m_yStart; }
-		public float GetHeightY() { return m_yHeight; }
 
 		public abstract void DrawGUI();
 		public abstract LinkedList<UIComponent> GetChildComponentsList();
 		public abstract bool HasChildComponents();
 		public abstract void CalculateRenderingOutput(); //Create a UIComponentRenderingInput class/struct to pass to child components
+		public abstract void CalculatePixelRenderingInfo();
 
 		public UIComponentRenderingInput GetChildComponentRenderingInput()
 		{
@@ -64,20 +69,36 @@ namespace UINamespace
 
 		public sealed class UIComponentRenderingInput
 		{
-			public float xStart;
-			public float yStart;
-			public float xWidth;
-			public float yHeight;
-			public UIAnchorLocation anchorLocation;
+			public float xBottomLeft;
+			public float yBottomLeft;
+			public float xTopRight;
+			public float yTopRight;
 			public UILayoutType layoutType;
-			public UIComponentRenderingInput(float xStart, float yStart, float xWidth, float yHeight, UIAnchorLocation anchorLocation, UILayoutType layoutType)
+			public UIComponentRenderingInput(float xBottomLeft, float yBottomLeft, float xTopRight, float yTopRight, UILayoutType layoutType)
 			{
-				this.xStart = xStart;
-				this.yStart = yStart;
-				this.xWidth = xWidth;
-				this.yHeight = yHeight;
-				this.anchorLocation = anchorLocation;
+				this.xBottomLeft = xBottomLeft;
+				this.yBottomLeft = yBottomLeft;
+				this.xTopRight = xTopRight;
+				this.yTopRight = yTopRight;
 				this.layoutType = layoutType;
+			}
+			public float GetWidth()
+			{
+				return xTopRight - xBottomLeft;
+			}
+			public float GetHeight()
+			{
+				return yTopRight - yBottomLeft;
+			}
+		}
+
+		public sealed class UIPixelRenderingInfo
+		{
+			public Rect rect;
+			public ArrayList extraData;
+			public UIPixelRenderingInfo()
+			{
+				extraData = new ArrayList();
 			}
 		}
 	}

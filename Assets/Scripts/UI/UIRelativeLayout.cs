@@ -14,8 +14,9 @@ namespace UINamespace
 		                        float yStart,
 		                        float xWidth,
 		                        float yHeight,
-		                        UIComponentGroup parentComponentGroup)
-			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, UIAnchorLocation.LEFT_BOT)
+		                        UIComponentGroup parentComponentGroup,
+		                        UIAnchorLocation anchorLocation)
+			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, UILayoutType.RELATIVE_LAYOUT, anchorLocation)
 		{
 			// do nothing
 		}
@@ -35,9 +36,22 @@ namespace UINamespace
 		public override void CalculateRenderingOutput()
 		{
 			if (null == m_parentComponentGroup)
-				m_parentRenderingInput = new UIComponentRenderingInput(0f, 0f, 1f, 1f, UIAnchorLocation.LEFT_BOT, UILayoutType.RELATIVE_LAYOUT);
+				m_parentRenderingInput = new UIComponentRenderingInput(0f, 0f, 1f, 1f, UILayoutType.RELATIVE_LAYOUT);
 
-			throw new System.NotImplementedException();
+			if (null == m_parentRenderingInput)
+				m_parentRenderingInput = m_parentComponentGroup.GetChildComponentRenderingInput();
+
+			float xBottomLeft = m_parentRenderingInput.xBottomLeft + m_anchor.GetRelativeXLeft() * m_parentRenderingInput.GetWidth();
+			float yBottomLeft = m_parentRenderingInput.yBottomLeft + m_anchor.GetRelativeYBottom() * m_parentRenderingInput.GetHeight();
+			float xTopRight = m_parentRenderingInput.xBottomLeft + m_anchor.GetRelativeXRight() * m_parentRenderingInput.GetWidth();
+			float yTopRight = m_parentRenderingInput.yBottomLeft + m_anchor.GetRelativeYTop() * m_parentRenderingInput.GetHeight();
+
+			m_childRenderingInput = new UIComponentRenderingInput(xBottomLeft, yBottomLeft, xTopRight, yTopRight, UILayoutType.RELATIVE_LAYOUT);
+		}
+
+		public override void CalculatePixelRenderingInfo()
+		{
+			// do nothing;
 		}
 	}
 }

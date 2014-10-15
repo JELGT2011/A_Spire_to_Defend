@@ -44,12 +44,15 @@ namespace UINamespace
 						componentQueue.Add(new UIComponentGroupIteratorData(component, parentSlot));
 				}
 			}
+
+			foreach (UIComponentGroupIteratorData componentData in m_componentArrayList)
+				componentData.component.CalculatePixelRenderingInfo();
 		}
 
 		public void OnGUI()
 		{
-			foreach (UIComponent component in m_componentArrayList)
-				component.DrawGUI();
+			foreach (UIComponentGroupIteratorData componentData in m_componentArrayList)
+				componentData.component.DrawGUI();
 		}
 
 		private sealed class UIComponentGroupIteratorData

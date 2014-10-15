@@ -22,8 +22,6 @@ namespace UINamespace
 		private UIMenuStack m_menuStack;
 		private HybridDictionary m_menuDictionary;
 
-		private LinkedList<UIMenu>.Enumerator m_menuStackEnumerator;
-
 		public UI(UIEnum whichUI)
 		{
 			m_menuDictionary = new HybridDictionary(4, true);
@@ -44,12 +42,14 @@ namespace UINamespace
 
 		public void OnGUI()
 		{
-			m_menuStackEnumerator = m_menuStack.GetEnumerator();
-			UIMenu currentMenu = m_menuStackEnumerator.Current;
+			LinkedListNode<UIMenu> menuStackNode = m_menuStack.GetHeadNode();
 			int count = 0;
-			while (count < m_menuStack.MaxMenusRendered && null != currentMenu)
+			while (count < m_menuStack.MaxMenusRendered && null != menuStackNode)
 			{
-				currentMenu.OnGUI();
+				UIMenu menu = menuStackNode.Value;
+				menu.OnGUI();
+				menuStackNode = menuStackNode.Next;
+				++count;
 			}
 		}
 

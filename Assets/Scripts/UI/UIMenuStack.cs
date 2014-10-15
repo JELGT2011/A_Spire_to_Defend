@@ -85,9 +85,9 @@ namespace UINamespace
 			return m_menuStack.Last.Value;
 		}
 
-		public LinkedList<UIMenu>.Enumerator GetEnumerator()
+		public LinkedListNode<UIMenu> GetHeadNode()
 		{
-			return m_menuStack.GetEnumerator();
+			return m_menuStack.First;
 		}	
 	}
 }

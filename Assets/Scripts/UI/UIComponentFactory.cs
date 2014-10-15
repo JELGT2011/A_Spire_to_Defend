@@ -31,7 +31,7 @@ namespace UINamespace
 					float yStart = (float)(dataList[3]);
 					float xWidth = (float)(dataList[4]);
 					float yHeight = (float)(dataList[5]);
-					return new UIButton(xStart, yStart, xWidth, yHeight, parentComponentGroup, anchorLocation, text);
+					return new UIButton(xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation, text);
 				}
 				else if (UILayoutType.PIXEL_LAYOUT == layoutType)
 				{
@@ -39,7 +39,7 @@ namespace UINamespace
 					int yStart = (int)(dataList[3]);
 					int xWidth = (int)(dataList[4]);
 					int yHeight = (int)(dataList[5]);
-					return new UIButton(xStart, yStart, xWidth, yHeight, parentComponentGroup, anchorLocation, text);
+					return new UIButton(xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation, text);
 				}
 				return null;
 			}
