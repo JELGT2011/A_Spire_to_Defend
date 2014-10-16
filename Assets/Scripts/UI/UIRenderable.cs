@@ -5,14 +5,17 @@ namespace UINamespace
 	public abstract class UIRenderable : UIComponent
 	{
 		protected UIPixelRenderingInfo m_pixelRenderingInfo = null;
+		protected GUIStyle m_guiStyle = null;
+		protected UIGUIStyle m_uiGUIStyle = null;
 		
 		public UIRenderable(float xStart,
-		                     float yStart,
-		                     float xWidth,
-		                     float yHeight,
-		                     UIComponentGroup parentComponentGroup,
-		                     UILayoutType layoutType,
-		                     UIAnchorLocation anchorLocation)
+		                    float yStart,
+		                    float xWidth,
+		                    float yHeight,
+		                    UIComponentGroup parentComponentGroup,
+		                    UILayoutType layoutType,
+		                    UIAnchorLocation anchorLocation,
+		                    UIGUIStyle uiGUIStyle)
 			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation)
 		{
 			m_componentType = UIComponentType.RENDERABLE;

@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace UINamespace
 {
-	public class UIStringLabel : UIRenderable
+	public class UITextureLabel : UIRenderable
 	{
-		private string m_text;
-				
-		public UIStringLabel(float xStart,
+		private Texture2D m_texture2D;
+		
+		public UITextureLabel(float xStart,
 		                     float yStart,
 		                     float xWidth,
 		                     float yHeight,
@@ -14,15 +14,15 @@ namespace UINamespace
 		                     UILayoutType layoutType,
 		                     UIAnchorLocation anchorLocation,
 		                     UIGUIStyle uiGUIStyle,
-		                     string text)
+		                     Texture2D texture2D)
 			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation, uiGUIStyle)
 		{
-			m_text = text;
+			m_texture2D = texture2D;
 		}
 		
 		public override void DrawGUI()
 		{
-			GUI.Label(m_pixelRenderingInfo.rect, m_text, m_guiStyle);
+			GUI.Label(m_pixelRenderingInfo.rect, m_texture2D, m_guiStyle);
 		}
 		
 		public override void CalculatePixelRenderingInfo()
@@ -33,7 +33,9 @@ namespace UINamespace
 			                                     (1f - m_childRenderingInput.yTopRight) * Screen.height,
 			                                     m_childRenderingInput.GetWidth() * Screen.width,
 			                                     m_childRenderingInput.GetHeight() * Screen.height);
-		}
+
+//			m_pixelRenderingInfo.extraData.Add(backgroundColor);
+		}		
 	}
 }
 
