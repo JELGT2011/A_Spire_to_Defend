@@ -32,8 +32,6 @@ namespace UINamespace
 			PopulateRenderableArrayList();
 			PopulateButtonArrayList();
 
-//			foreach (UIComponentGroupIteratorData componentData in m_componentArrayList)
-//				componentData.component.CalculatePixelRenderingInfo();
 			foreach (UIComponentGroupIteratorData renderableData in m_renderableArrayList)
 				(renderableData.component as UIRenderable).CalculatePixelRenderingInfo();
 		}

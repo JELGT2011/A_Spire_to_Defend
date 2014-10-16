@@ -21,9 +21,9 @@ namespace UINamespace
 		
 		public override void DrawGUI()
 		{
+			GUI.skin.box.normal.background = m_pixelRenderingInfo.extraData[0] as Texture2D;
+			GUI.Box(m_pixelRenderingInfo.rect, GUIContent.none);
 			GUI.Label(m_pixelRenderingInfo.rect, m_text);
-//			GUI.Label(m_pixelRenderingInfo.rect, m_pixelRenderingInfo.extraData[0] as Texture2D);
-//			GUI.Label(m_pixelRenderingInfo.rect, m_text);
 		}
 		
 		public override void CalculateRenderingOutput()
@@ -52,10 +52,7 @@ namespace UINamespace
 			                                     m_childRenderingInput.GetHeight() * Screen.height);
 			Texture2D backgroundColor = new Texture2D(1, 1);
 			backgroundColor.SetPixel(0, 0, new Color(1, 0, 0));
-//			backgroundColor.wrapMode = TextureWrapMode.Repeat;
 			backgroundColor.Apply();
-//			GUIStyle style = new GUIStyle();
-//			style.normal.background = backgroundColor;
 			m_pixelRenderingInfo.extraData.Add(backgroundColor);
 		}
 		
