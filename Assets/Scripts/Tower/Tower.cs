@@ -29,8 +29,8 @@ public class Tower : MonoBehaviour{
         set { _projectileType = value; }
     }
 
-
-    public int Cost { get; set; }
+	[SerializeField]
+	private int cost;
 
 	public int _damage;
 	public int Damage
@@ -65,12 +65,15 @@ public class Tower : MonoBehaviour{
 	
 	public List<GameObject> _targets;
 
+	public TowerInfo myInfo;
+	public float rotationSpeed = 5f;
+	public Transform projectileSource;
+
 	void Start(){
 		IsAlive = true;
 	}
 
-    void Update()
-    {
+    void Update(){
         if (!IsAlive)
         {
             Destroy(gameObject);
@@ -83,6 +86,10 @@ public class Tower : MonoBehaviour{
             if (enemy != null)
             {
                 Fire(enemy.gameObject);
+				//Turn towards
+				Quaternion neededRotation = Quaternion.LookRotation(enemy.transform.position-transform.position);
+				
+				transform.rotation = Quaternion.Slerp(transform.rotation, neededRotation, Time.deltaTime * rotationSpeed);
             }
         }
         else
@@ -94,15 +101,26 @@ public class Tower : MonoBehaviour{
     /// <summary>
     /// Fires a projectile and prevents refiring for time = (1 / FireRate).
     /// </summary>
-    void Fire(GameObject enemy)
+    protected virtual void Fire(GameObject enemy)
     {
         // set cooldown
         LastFired = Time.time;
         // create projectile from Projectile prefab attached
-		GameObject projectile = Instantiate(ProjectileType, transform.position+Vector3.up, ProjectileType.transform.rotation) as GameObject;
+		Vector3 spawnPos = transform.position;
+
+		if (projectileSource != null) {
+			spawnPos = projectileSource.position;		
+		}
+
+		GameObject projectile = Instantiate(ProjectileType, spawnPos+Vector3.up, ProjectileType.transform.rotation) as GameObject;
+
 
         // set its target
 		projectile.GetComponentInChildren<Projectile> ().Target = enemy;
     }
+
+	public int GetCost(){
+		return cost;
+	}
     
 }

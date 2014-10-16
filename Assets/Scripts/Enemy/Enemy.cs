@@ -3,12 +3,8 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
-    public enum TYPE
-    {
-        basic, advanced
-    }
-
-	public TYPE Type;
+	public int resourceGain = 10;
+	public int lifeDamage = 1;
 
     public int _maxHealth;
     public int MaxHealth
@@ -26,6 +22,8 @@ public class Enemy : MonoBehaviour
         set { _maxSpeed = value; }
     }
 
+	public float rotationSpeed = 5f;
+
     public float CurrentSpeed { get; set; }
 
     public float Accuracy { get; set; }
@@ -36,7 +34,7 @@ public class Enemy : MonoBehaviour
 
 	public GridPoint Target;
 
-	protected const float MIN_DIST = 0.1f;
+	protected const float MIN_DIST = 0.2f;
 
 	public SpriteRenderer healthRenderer;
 
@@ -57,8 +55,8 @@ public class Enemy : MonoBehaviour
 
 		path = AStar.Path (start, target);
 
-		foreach (GridPoint pnt in path) {
-		}
+		//foreach (GridPoint pnt in path) {
+		//}
     }
 
     /// <summary>
@@ -71,15 +69,13 @@ public class Enemy : MonoBehaviour
     }
 
 	protected virtual void EnemyUpdate(){
-		if(path!=null && path.Length>0){
+		if(path!=null && path.Length>0 && pathIndex<path.Length){
 			Vector3 differenceToGoal = (path[pathIndex].transform.position+Vector3.up) - transform.position;
 			
 			if (differenceToGoal.magnitude < MIN_DIST) {
 				
 				if(path.Length<=pathIndex+1){
-					IsAlive =false;
-					
-					//TODO; hurt the player
+					OnReachGoal();
 				}
 				else{
 					pathIndex++;
@@ -103,16 +99,27 @@ public class Enemy : MonoBehaviour
 			}
 			else{
 				transform.position+=differenceToGoal.normalized*CurrentSpeed*Time.deltaTime;
-				
-				//TODO; smooth look at
+
+				//Smooth lookat
+				Quaternion neededRotation = Quaternion.LookRotation(differenceToGoal);
+
+				transform.rotation = Quaternion.Slerp(transform.rotation, neededRotation, Time.deltaTime * rotationSpeed);
 			}
 		}
 		
 		
 		if (!IsAlive){
+			//TODO; Play Death Sound
 			Global.Instance.RemoveEnemy(this);
 			Destroy(transform.root.gameObject);
 		}
+	}
+
+	protected virtual void OnReachGoal(){
+		Global.Instance.AlterLives (lifeDamage);
+		Global.Instance.RemoveEnemy(this);
+		Destroy(transform.root.gameObject);
+		//TODO; Play sound
 	}
 
     /// <summary>
@@ -134,8 +141,8 @@ public class Enemy : MonoBehaviour
 
 
 
-            if (CurrentHealth <= 0)
-            {
+            if (CurrentHealth <= 0){
+				Global.Instance.AlterResources(resourceGain);
                 IsAlive = false;
             }
 			else{

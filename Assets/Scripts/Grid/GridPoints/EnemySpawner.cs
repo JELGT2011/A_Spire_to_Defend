@@ -40,6 +40,10 @@ public class EnemySpawner : GridPoint {
 		}
 	}
 
+	public bool IsDone(){
+		return currState.Equals (State.DONE);
+	}
+
 	void SpawnEnemy(){
 		GameObject enemy = (GameObject)(Instantiate ((enemyWaves [currentWaveIndex].enemyList [currentEnemyIndex]).gameObject) as GameObject);
 		Enemy realEnemy = (enemy).GetComponent<Enemy> ();
