@@ -10,49 +10,85 @@ namespace UINamespace
 		private HybridDictionary m_componentDictionary;
 		private ArrayList m_componentArrayList;
 
-		private UIComponentGroup m_componentGroup;
+		private UIComponentGroup m_headComponentGroup;
 
-		public UIComponentGroupIterator(UIComponentGroup inputComponentGroup)
+		private ArrayList m_renderableArrayList;
+//		private ArrayList m_layoutArrayList;
+		private ArrayList m_buttonArrayList;
+
+		public UIComponentGroupIterator(UIComponentGroup headComponentGroup)
 		{
 			m_componentDictionary = new HybridDictionary();
 			m_componentArrayList = new ArrayList();
 
-			m_componentGroup = inputComponentGroup;
+			m_headComponentGroup = headComponentGroup;
 
+			m_renderableArrayList = new ArrayList();
+//			m_layoutArrayList = new ArrayList();
+			m_buttonArrayList = new ArrayList();
+
+			PopulateComponentArrayList();
+
+			PopulateRenderableArrayList();
+			PopulateButtonArrayList();
+
+//			foreach (UIComponentGroupIteratorData componentData in m_componentArrayList)
+//				componentData.component.CalculatePixelRenderingInfo();
+			foreach (UIComponentGroupIteratorData renderableData in m_renderableArrayList)
+				(renderableData.component as UIRenderable).CalculatePixelRenderingInfo();
+		}
+
+		private void PopulateComponentArrayList()
+		{
 			List<UIComponentGroupIteratorData> componentQueue = new List<UIComponentGroupIteratorData>();
 			int parentSlot = -1;
 			int componentArrayListIndex = -1;
-			componentQueue.Add(new UIComponentGroupIteratorData(inputComponentGroup, parentSlot));
+			componentQueue.Add(new UIComponentGroupIteratorData(m_headComponentGroup, parentSlot));
 			while (componentQueue.Count > 0)
 			{
 				UIComponentGroupIteratorData currentComponentData = componentQueue[0];
 				currentComponentData.component.CalculateRenderingOutput();
-
+				
 				m_componentArrayList.Add(currentComponentData);
 				++componentArrayListIndex;
-
+				
 				m_componentDictionary.Add(currentComponentData.component.Id, currentComponentData.component);
-
+				
 				componentQueue.RemoveAt(0);
-
+				
 				if (currentComponentData.component.HasChildComponents())
 				{
 					LinkedList<UIComponent> childComponents = currentComponentData.component.GetChildComponentsList();
-
+					
 					parentSlot = componentArrayListIndex;
 					foreach (UIComponent component in childComponents)
 						componentQueue.Add(new UIComponentGroupIteratorData(component, parentSlot));
 				}
 			}
+		}
 
-			foreach (UIComponentGroupIteratorData componentData in m_componentArrayList)
-				componentData.component.CalculatePixelRenderingInfo();
+		private void PopulateRenderableArrayList()
+		{
+			m_renderableArrayList.Clear();
+
+			for (int n = 0; n < m_componentArrayList.Count; ++n)
+				if ((m_componentArrayList[n] as UIComponentGroupIteratorData).component.GetComponentType() == UIComponentType.RENDERABLE)
+					m_renderableArrayList.Add(m_componentArrayList[n]);
+		}
+
+		private void PopulateButtonArrayList()
+		{
+			m_buttonArrayList.Clear();
+
+			for (int n = 0; n < m_componentArrayList.Count; ++n)
+				if ((m_componentArrayList[n] as UIComponentGroupIteratorData).component.GetComponentType() == UIComponentType.BUTTON)
+					m_buttonArrayList.Add(m_componentArrayList[n]);
 		}
 
 		public void OnGUI()
 		{
-			foreach (UIComponentGroupIteratorData componentData in m_componentArrayList)
-				componentData.component.DrawGUI();
+			foreach (UIComponentGroupIteratorData componentData in m_renderableArrayList)
+				(componentData.component as UIRenderable).DrawGUI();
 		}
 
 		private sealed class UIComponentGroupIteratorData

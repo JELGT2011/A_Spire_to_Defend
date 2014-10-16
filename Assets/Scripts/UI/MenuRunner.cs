@@ -10,6 +10,8 @@ public class MenuRunner : MonoBehaviour
 	public Camera m_camera;
 	private UI m_ui;
 
+	public GUIStyle guiStyle;
+
 	void Start()
 	{
 		m_ui = new UI(UIEnum.TEST_UI);

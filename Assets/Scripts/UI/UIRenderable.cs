@@ -2,19 +2,24 @@ using UnityEngine;
 
 namespace UINamespace
 {
-	public abstract class UIButton : UIComponentGroup
+	public abstract class UIRenderable : UIComponent
 	{
-		public UIButton(float xStart,
-		                float yStart,
-		                float xWidth,
-		                float yHeight,
-		                UIComponentGroup parentComponentGroup,
-		                UILayoutType layoutType,
-		                UIAnchorLocation anchorLocation)
+		protected UIPixelRenderingInfo m_pixelRenderingInfo = null;
+		
+		public UIRenderable(float xStart,
+		                     float yStart,
+		                     float xWidth,
+		                     float yHeight,
+		                     UIComponentGroup parentComponentGroup,
+		                     UILayoutType layoutType,
+		                     UIAnchorLocation anchorLocation)
 			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation)
 		{
-			m_componentType = UIComponentType.BUTTON;
+			m_componentType = UIComponentType.RENDERABLE;
 		}
+
+		public abstract void DrawGUI();
+		public abstract void CalculatePixelRenderingInfo();
 
 		public override void CalculateRenderingOutput()
 		{
@@ -31,13 +36,17 @@ namespace UINamespace
 			
 			m_childRenderingInput = new UIComponentRenderingInput(xBottomLeft, yBottomLeft, xTopRight, yTopRight, UILayoutType.RELATIVE_LAYOUT);
 		}
-
-		public new UIButton AddUIComponent(UIComponent component)
+		
+		// There are no child UIComponents
+		public override bool HasChildComponents()
 		{
-			base.AddUIComponent(component);
-
-			return this;
+			return false;
 		}
+		public override System.Collections.Generic.LinkedList<UIComponent> GetChildComponentsList()
+		{
+			return null;
+		}
+		
 	}
 }
 

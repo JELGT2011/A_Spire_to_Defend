@@ -27,13 +27,18 @@ namespace UINamespace
 		{
 			m_componentDictionary.Add(component.Id, component);
 			m_listComponent.AddLast(component);
+
+			component.SetParentComponentGroup(this);
 			
 			return this;
 		}
 
 		public override bool HasChildComponents()
 		{
-			return true;
+			if (m_listComponent.Count > 0)
+				return true;
+			else
+				return false;
 		}
 
 		public override LinkedList<UIComponent> GetChildComponentsList()

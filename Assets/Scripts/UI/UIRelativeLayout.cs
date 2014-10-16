@@ -18,7 +18,7 @@ namespace UINamespace
 		                        UIAnchorLocation anchorLocation)
 			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, UILayoutType.RELATIVE_LAYOUT, anchorLocation)
 		{
-			// do nothing
+			m_componentType = UIComponentType.LAYOUT;
 		}
 
 		public new UIRelativeLayout AddUIComponent(UIComponent component)
@@ -26,11 +26,6 @@ namespace UINamespace
 			base.AddUIComponent(component);
 
 			return this;
-		}
-
-		public override void DrawGUI()
-		{
-			// do nothing;
 		}
 
 		public override void CalculateRenderingOutput()
@@ -47,11 +42,6 @@ namespace UINamespace
 			float yTopRight = m_parentRenderingInput.yBottomLeft + m_anchor.GetRelativeYTop() * m_parentRenderingInput.GetHeight();
 
 			m_childRenderingInput = new UIComponentRenderingInput(xBottomLeft, yBottomLeft, xTopRight, yTopRight, UILayoutType.RELATIVE_LAYOUT);
-		}
-
-		public override void CalculatePixelRenderingInfo()
-		{
-			// do nothing;
 		}
 	}
 }

@@ -11,9 +11,17 @@ namespace UINamespace
 		PIXEL_LAYOUT
 	};
 
+	public enum UIComponentType
+	{
+		RENDERABLE,
+		BUTTON,
+		LAYOUT
+	};
+
 	public abstract class UIComponent
 	{
 		private int m_componentId;
+		protected UIComponentType m_componentType;
 
 			// This determines how much screen room this component will use of the amount give.
 			// If there is no parent or the parent is the entire screen (i.e. 0f, 0f, 1f, 1f), then
@@ -25,6 +33,10 @@ namespace UINamespace
 		protected UILayoutType m_layoutType;
 
 		protected UIComponentGroup m_parentComponentGroup = null;
+		public void SetParentComponentGroup(UIComponentGroup newParent)
+		{
+			m_parentComponentGroup = newParent;
+		}
 
 			// Amount of screen space for this component to work with
 		protected UIComponentRenderingInput m_parentRenderingInput = null;
@@ -32,11 +44,16 @@ namespace UINamespace
 			// Amount of screen space for child components to work with
 		protected UIComponentRenderingInput m_childRenderingInput = null;
 
-		protected UIPixelRenderingInfo m_pixelRenderingInfo = null;
+
 
 		public int Id
 		{
 			get { return m_componentId; }
+		}
+
+		public UIComponentType GetComponentType()
+		{
+			return m_componentType;
 		}
 
 		protected UIComponent(float xStart,
@@ -54,11 +71,9 @@ namespace UINamespace
 			m_parentComponentGroup = parentComponentGroup;
 		}
 
-		public abstract void DrawGUI();
 		public abstract LinkedList<UIComponent> GetChildComponentsList();
 		public abstract bool HasChildComponents();
 		public abstract void CalculateRenderingOutput(); //Create a UIComponentRenderingInput class/struct to pass to child components
-		public abstract void CalculatePixelRenderingInfo();
 
 		public UIComponentRenderingInput GetChildComponentRenderingInput()
 		{
