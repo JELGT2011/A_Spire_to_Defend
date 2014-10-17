@@ -46,6 +46,7 @@ public class EnemySpawner : GridPoint {
 
 	void SpawnEnemy(){
 		GameObject enemy = (GameObject)(Instantiate ((enemyWaves [currentWaveIndex].enemyList [currentEnemyIndex]).gameObject) as GameObject);
+		enemy.transform.position = transform.position + Vector3.up;
 		Enemy realEnemy = (enemy).GetComponent<Enemy> ();
 
 		Global.Instance.AddEnemy (realEnemy);
