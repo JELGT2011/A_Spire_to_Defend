@@ -22,7 +22,7 @@ namespace UINamespace
 		private UIMenuStack m_menuStack;
 		private HybridDictionary m_menuDictionary;
 
-		public UI(UIEnum whichUI)
+		public UI(UIEnum whichUI, Font font)
 		{
 			m_menuDictionary = new HybridDictionary(4, true);
 			m_menuStack = new UIMenuStack();
@@ -31,8 +31,8 @@ namespace UINamespace
 			{
 			case UIEnum.TEST_UI:
 			{
-				UIMenu menu1 = new UIMenu(UIEnum.TEST_MENU1);
-				UIMenu menu2 = new UIMenu(UIEnum.TEST_MENU2);
+				UIMenu menu1 = new UIMenu(UIEnum.TEST_MENU1, font);
+				UIMenu menu2 = new UIMenu(UIEnum.TEST_MENU2, font);
 				m_menuDictionary.Add(UIEnum.TEST_MENU1, menu1);
 				m_menuDictionary.Add(UIEnum.TEST_MENU2, menu2);
 			}

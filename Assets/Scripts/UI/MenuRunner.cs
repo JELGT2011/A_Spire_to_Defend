@@ -7,6 +7,7 @@ using UINamespace;
 /// </summary>
 public class MenuRunner : MonoBehaviour
 {
+	public Font m_font;
 	public Camera m_camera;
 	private UI m_ui;
 
@@ -14,7 +15,7 @@ public class MenuRunner : MonoBehaviour
 
 	void Start()
 	{
-		m_ui = new UI(UIEnum.TEST_UI);
+		m_ui = new UI(UIEnum.TEST_UI, m_font);
 		m_ui.SetStartMenu(UIEnum.TEST_MENU1);
 	}
 
