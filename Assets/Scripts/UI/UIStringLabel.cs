@@ -4,7 +4,8 @@ namespace UINamespace
 {
 	public class UIStringLabel : UIRenderable
 	{
-		private string m_text;
+		protected string m_text;
+		protected UITextInfo m_textInfo = null;
 				
 		public UIStringLabel(float xStart,
 		                     float yStart,
@@ -13,16 +14,19 @@ namespace UINamespace
 		                     UIComponentGroup parentComponentGroup,
 		                     UILayoutType layoutType,
 		                     UIAnchorLocation anchorLocation,
-		                     UIGUIStyle uiGUIStyle,
+		                     UITextInfo textInfo,
 		                     string text)
-			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation, uiGUIStyle)
+			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation)
 		{
+			m_guiStyle = textInfo.GetGUIStyle();
+			m_textInfo = textInfo;
 			m_text = text;
 		}
 		
 		public override void DrawGUI()
 		{
 			GUI.Label(m_pixelRenderingInfo.rect, m_text, m_guiStyle);
+//			GUI.Label(m_pixelRenderingInfo.rect, m_text);
 		}
 		
 		public override void CalculatePixelRenderingInfo()

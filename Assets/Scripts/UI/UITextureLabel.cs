@@ -13,16 +13,21 @@ namespace UINamespace
 		                     UIComponentGroup parentComponentGroup,
 		                     UILayoutType layoutType,
 		                     UIAnchorLocation anchorLocation,
-		                     UIGUIStyle uiGUIStyle,
 		                     Texture2D texture2D)
-			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation, uiGUIStyle)
+			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation)
 		{
 			m_texture2D = texture2D;
+			m_guiStyle = new GUIStyle();
+
+//			m_texture2D = new Texture2D(1, 1);
+//			m_texture2D.SetPixel(0, 0, new Color(0, 1, 0));
+//			m_texture2D.Apply();
 		}
 		
 		public override void DrawGUI()
 		{
-			GUI.Label(m_pixelRenderingInfo.rect, m_texture2D, m_guiStyle);
+			GUI.DrawTexture(m_pixelRenderingInfo.rect, m_texture2D, ScaleMode.StretchToFill);
+//			GUI.Label(m_pixelRenderingInfo.rect, m_texture2D, m_guiStyle);
 		}
 		
 		public override void CalculatePixelRenderingInfo()

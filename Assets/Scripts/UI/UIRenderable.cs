@@ -6,7 +6,6 @@ namespace UINamespace
 	{
 		protected UIPixelRenderingInfo m_pixelRenderingInfo = null;
 		protected GUIStyle m_guiStyle = null;
-		protected UIGUIStyle m_uiGUIStyle = null;
 		
 		public UIRenderable(float xStart,
 		                    float yStart,
@@ -14,8 +13,7 @@ namespace UINamespace
 		                    float yHeight,
 		                    UIComponentGroup parentComponentGroup,
 		                    UILayoutType layoutType,
-		                    UIAnchorLocation anchorLocation,
-		                    UIGUIStyle uiGUIStyle)
+		                    UIAnchorLocation anchorLocation)
 			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation)
 		{
 			m_componentType = UIComponentType.RENDERABLE;
