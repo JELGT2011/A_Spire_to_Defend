@@ -12,7 +12,7 @@ public class FreezeEnemy : Enemy {
 				if(path.Length<=pathIndex+1){
 					IsAlive =false;
 					
-					//TODO; hurt the player
+					//TODO; hurt the player	
 				}
 				else{
 					pathIndex++;

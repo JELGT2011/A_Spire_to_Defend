@@ -71,7 +71,8 @@ public class Enemy : MonoBehaviour
 	protected virtual void EnemyUpdate(){
 		if(path!=null && path.Length>0 && pathIndex<path.Length){
 			Vector3 differenceToGoal = (path[pathIndex].transform.position+Vector3.up) - transform.position;
-			
+
+			GridPoint grid = path[pathIndex].ArriveAtGridpoint(this);
 			if (differenceToGoal.magnitude < MIN_DIST) {
 				
 				if(path.Length<=pathIndex+1){
@@ -80,7 +81,7 @@ public class Enemy : MonoBehaviour
 				else{
 					pathIndex++;
 
-					GridPoint grid = path[pathIndex].ArriveAtGridpoint(this);
+					//GridPoint grid = path[pathIndex].ArriveAtGridpoint(this);
 
 					if(grid==null){
 
@@ -98,6 +99,7 @@ public class Enemy : MonoBehaviour
 				
 			}
 			else{
+
 				transform.position+=differenceToGoal.normalized*CurrentSpeed*Time.deltaTime;
 
 				//Smooth lookat
@@ -138,8 +140,6 @@ public class Enemy : MonoBehaviour
         if ((projectile = other.GetComponentInChildren<Projectile>()) != null)
         {
             CurrentHealth -= projectile.Damage;
-
-
 
             if (CurrentHealth <= 0){
 				Global.Instance.AlterResources(resourceGain);
