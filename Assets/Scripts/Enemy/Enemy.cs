@@ -40,6 +40,7 @@ public class Enemy : MonoBehaviour
 
 	protected GridPoint[] path;
 	protected int pathIndex=0;
+	public int pathPerception = 1;
 	
     /// <summary>
     /// Initializes common values.  Do not override.
@@ -73,7 +74,13 @@ public class Enemy : MonoBehaviour
 			if (differenceToGoal.magnitude < MIN_DIST) {
 				
 				if(path.Length<=pathIndex+1){
-					OnReachGoal();
+					if(path[pathIndex-1]==Target){
+						OnReachGoal();
+					}
+					else{
+						path = AStar.Path(path[pathIndex-1],Target);
+						pathIndex = 0;
+					}
 				}
 				else{
 					pathIndex++;
@@ -82,15 +89,20 @@ public class Enemy : MonoBehaviour
 
 					if(grid==null){
 
-						if(Grid.Instance.GetGridPoint(path[pathIndex]).CanPassThough()){
+						bool pathIsSound = true;
+						int add = 0;
+
+						while(pathIndex+add<path.Length && add<=pathPerception && pathIsSound ){
+							pathIsSound =Grid.Instance.GetGridPoint(path[pathIndex+add]).CanPassThough();
+							add++;
+						}
+
+						if(pathIsSound){
 							//Do nothing! We're good
 						}
 						else{
 							path = AStar.Path(path[pathIndex-1],Target);
-
-							foreach(GridPoint g in path){
-								Debug.Log ("Plan: "+g.transform.position);
-							}
+							pathIndex = 0;
 						}
 					}
 					else{
