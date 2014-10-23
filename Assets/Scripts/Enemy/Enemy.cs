@@ -64,8 +64,6 @@ public class Enemy : MonoBehaviour
     /// </summary>
     void Update(){
 		EnemyUpdate ();
-
-
     }
 
 	protected virtual void EnemyUpdate(){
@@ -89,6 +87,10 @@ public class Enemy : MonoBehaviour
 						}
 						else{
 							path = AStar.Path(path[pathIndex-1],Target);
+
+							foreach(GridPoint g in path){
+								Debug.Log ("Plan: "+g.transform.position);
+							}
 						}
 					}
 					else{
@@ -109,10 +111,14 @@ public class Enemy : MonoBehaviour
 		
 		
 		if (!IsAlive){
-			//TODO; Play Death Sound
-			Global.Instance.RemoveEnemy(this);
-			Destroy(transform.root.gameObject);
+			DestroyEnemy();
 		}
+	}
+
+	protected virtual void DestroyEnemy(){
+		//TODO; Play Death Sound
+		Global.Instance.RemoveEnemy(this);
+		Destroy(transform.root.gameObject);
 	}
 
 	protected virtual void OnReachGoal(){

@@ -33,7 +33,7 @@ public class GridPoint : MonoBehaviour {
 	}
 
 	public virtual bool CanBuild(){
-		return myTraits != null && !myTraits.Contains (Trait.NON_BUILDABLE) ;
+		return myTraits != null && !myTraits.Contains (Trait.NON_BUILDABLE);
 	}
 
 	public virtual bool CanPassThough(){
@@ -55,16 +55,14 @@ public class GridPoint : MonoBehaviour {
 	//Set up this GridPoint to be built on
 	public virtual void CreateTower(Tower _tower){
 		myTraits.Add (Trait.IMPASSABLE);
-		myTraits.Add (Trait.NON_BUILDABLE);
 
 		tower = _tower;
 	}
 
 	//Remove the Building on this thing
 	public virtual void DestroyTower(){
-		myTraits.Remove (Trait.NON_BUILDABLE);
 
-		Destroy (tower);
+		Destroy (tower.gameObject);
 		tower = null;
 	}
 }

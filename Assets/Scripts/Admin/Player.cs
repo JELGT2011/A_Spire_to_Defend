@@ -67,7 +67,7 @@ public class Player : MonoBehaviour
 		for(int i = 0; i<TowerTypes.Length; i++){
 			if(Input.GetKeyDown(towerkeys[i])){
 				Tower t = TowerTypes[i].GetComponent<Tower>();
-				if(lastClickedGridPoint.CanBuild() && Global.Instance.CanBuild(t)){
+				if(lastClickedGridPoint.CanBuild() && Global.Instance.CanBuild(t) && !lastClickedGridPoint.HasTower()){
 					//TODO; build tower sound
 					lastClickedGridPoint.CreateTower(Global.Instance.CreateTower(TowerTypes[i], lastClickedGridPoint.transform.position+Vector3.up));
 				}
