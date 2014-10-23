@@ -1,19 +1,28 @@
 using UnityEngine;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 
 namespace UINamespace
 {
 	public abstract class UIButton : UIComponentGroup
 	{
+		protected IUIButtonListener m_buttonListener;
+
 		public UIButton(float xStart,
 		                float yStart,
 		                float xWidth,
 		                float yHeight,
 		                UIComponentGroup parentComponentGroup,
 		                UILayoutType layoutType,
-		                UIAnchorLocation anchorLocation)
+		                UIAnchorLocation anchorLocation,
+		                IUIButtonListener buttonListener)
 			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation)
 		{
 			m_componentType = UIComponentType.BUTTON;
+			if (null == buttonListener)
+				m_buttonListener = new UIButtonListenerDoNothing();
+			else
+				m_buttonListener = buttonListener;
 		}
 
 		public override void CalculateRenderingOutput()
@@ -24,19 +33,55 @@ namespace UINamespace
 			if (null == m_parentRenderingInput)
 				m_parentRenderingInput = m_parentComponentGroup.GetChildComponentRenderingInput();
 			
-			float xBottomLeft = m_parentRenderingInput.xBottomLeft + m_anchor.GetRelativeXLeft() * m_parentRenderingInput.GetWidth();
-			float yBottomLeft = m_parentRenderingInput.yBottomLeft + m_anchor.GetRelativeYBottom() * m_parentRenderingInput.GetHeight();
-			float xTopRight = m_parentRenderingInput.xBottomLeft + m_anchor.GetRelativeXRight() * m_parentRenderingInput.GetWidth();
-			float yTopRight = m_parentRenderingInput.yBottomLeft + m_anchor.GetRelativeYTop() * m_parentRenderingInput.GetHeight();
-			
-			m_childRenderingInput = new UIComponentRenderingInput(xBottomLeft, yBottomLeft, xTopRight, yTopRight, UILayoutType.RELATIVE_LAYOUT);
+			m_childRenderingInput = new UIComponentRenderingInput(m_parentRenderingInput.xBottomLeft,
+			                                                      m_parentRenderingInput.yBottomLeft,
+			                                                      m_parentRenderingInput.xTopRight,
+			                                                      m_parentRenderingInput.yTopRight,
+			                                                      m_parentRenderingInput.layoutType);
 		}
 
 		public new UIButton AddUIComponent(UIComponent component)
 		{
 			base.AddUIComponent(component);
-
+			
 			return this;
+		}
+
+		public void AddButtonListener(IUIButtonListener buttonListener)
+		{
+			m_buttonListener = buttonListener;
+		}
+		
+		public abstract void OnMouseEnter();
+		public abstract void OnMouseExit();
+		public abstract void OnMouseClick();
+		public abstract void OnHighlighted();
+		public abstract void OnIdle();
+		public abstract void OnSelected();
+
+		public abstract bool CheckIfInputInButton(float x, float y);
+		public abstract bool CheckIfInputInButton(int x, int y);
+		public abstract bool AcknowledgeInput(float x, float y);
+		public abstract bool AcknowledgeInput(int x, int y);
+
+		public abstract void SetStartStateIdle();
+	}
+
+	public class UIButtonListenerDoNothing : IUIButtonListener
+	{
+		public void OnHighlighted()
+		{
+			// do nothing
+		}
+
+		public void OnIdle()
+		{
+			// do nothing
+		}
+
+		public void OnSelected()
+		{
+			// do nothing
 		}
 	}
 }

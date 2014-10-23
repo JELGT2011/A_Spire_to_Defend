@@ -44,7 +44,7 @@ namespace UINamespace
 			// Amount of screen space for child components to work with
 		protected UIComponentRenderingInput m_childRenderingInput = null;
 
-
+		protected bool m_enabled = true;
 
 		public int Id
 		{
@@ -54,6 +54,16 @@ namespace UINamespace
 		public UIComponentType GetComponentType()
 		{
 			return m_componentType;
+		}
+
+		public bool Enabled
+		{
+			get { return m_enabled; }
+			set
+			{
+				SetChildrenEnabled(value);
+				m_enabled = value;
+			}
 		}
 
 		protected UIComponent(float xStart,
@@ -74,6 +84,7 @@ namespace UINamespace
 		public abstract LinkedList<UIComponent> GetChildComponentsList();
 		public abstract bool HasChildComponents();
 		public abstract void CalculateRenderingOutput(); //Create a UIComponentRenderingInput class/struct to pass to child components
+		public abstract void SetChildrenEnabled(bool enabled);
 
 		public UIComponentRenderingInput GetChildComponentRenderingInput()
 		{

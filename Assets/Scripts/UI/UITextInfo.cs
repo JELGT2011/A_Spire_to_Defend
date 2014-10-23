@@ -35,7 +35,7 @@ namespace UINamespace
 		public UITextInfo SetFontSize(int fontSize)
 		{
 			m_fontSizeInput = fontSize;
-			m_fontSizeRelative = (int)(alpha * (fontSize * Screen.width / 1280));
+			m_fontSizeRelative = Mathf.RoundToInt(alpha * (m_fontSizeInput * Screen.width / 1280));
 			m_guiStyle.fontSize = m_fontSizeRelative;
 			return this;
 		}
@@ -130,6 +130,11 @@ namespace UINamespace
 		public GUIStyle GetGUIStyle()
 		{
 			return m_guiStyle;
+		}
+
+		public int GetFontSizeInput()
+		{
+			return m_fontSizeInput;
 		}
 	}
 }

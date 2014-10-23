@@ -6,7 +6,7 @@ namespace UINamespace
 	{
 		protected UIPixelRenderingInfo m_pixelRenderingInfo = null;
 		protected GUIStyle m_guiStyle = null;
-		
+
 		public UIRenderable(float xStart,
 		                    float yStart,
 		                    float xWidth,
@@ -47,7 +47,11 @@ namespace UINamespace
 		{
 			return null;
 		}
-		
+
+		public override void SetChildrenEnabled(bool enabled)
+		{
+			// do nothing;
+		}
 	}
 }
 

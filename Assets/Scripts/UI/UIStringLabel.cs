@@ -25,8 +25,15 @@ namespace UINamespace
 		
 		public override void DrawGUI()
 		{
-			GUI.Label(m_pixelRenderingInfo.rect, m_text, m_guiStyle);
-//			GUI.Label(m_pixelRenderingInfo.rect, m_text);
+			if (m_enabled)
+				GUI.Label(m_pixelRenderingInfo.rect, m_text, m_guiStyle);
+		}
+
+		public override void CalculateRenderingOutput()
+		{
+			base.CalculateRenderingOutput();
+
+			m_textInfo.SetFontSize(m_textInfo.GetFontSizeInput());
 		}
 		
 		public override void CalculatePixelRenderingInfo()

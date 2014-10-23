@@ -11,12 +11,18 @@ public class MenuRunner : MonoBehaviour
 	public Camera m_camera;
 	private UI m_ui;
 
+	private int screenWidth;
+	private int screenHeight;
+
 	public GUIStyle guiStyle;
 
 	void Start()
 	{
 		m_ui = new UI(UIEnum.TEST_UI, m_font);
 		m_ui.SetStartMenu(UIEnum.TEST_MENU1);
+
+		screenWidth = Screen.width;
+		screenHeight = Screen.height;
 	}
 
 	void OnGUI()
@@ -24,8 +30,24 @@ public class MenuRunner : MonoBehaviour
 		m_ui.OnGUI();
 	}
 
-	void OnUpdate()
+	void Update()
 	{
-		m_ui.UpdateDeltaTime(Time.deltaTime);
+//		m_ui.UpdateDeltaTime(Time.deltaTime);
+//
+//		m_ui.CheckIfInputInButton((int)Input.mousePosition.x, (int)Input.mousePosition.y);
+//
+//		Debug.Break();
+//
+//		if (Input.GetMouseButtonDown(0))
+//		{
+//			m_ui.AcknowledgeInput(Input.mousePosition.x, Input.mousePosition.y);
+//			Debug.Break();
+//		}
+		if (screenWidth != Screen.width || screenHeight != Screen.height)
+		{
+			screenWidth = Screen.width;
+			screenHeight = Screen.height;
+			m_ui.CalculateRenderingOutput();
+		}
 	}
 }

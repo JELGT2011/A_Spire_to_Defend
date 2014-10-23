@@ -32,12 +32,13 @@ namespace UINamespace
 			PopulateRenderableArrayList();
 			PopulateButtonArrayList();
 
-			foreach (UIComponentGroupIteratorData renderableData in m_renderableArrayList)
-				(renderableData.component as UIRenderable).CalculatePixelRenderingInfo();
+			CalculateRenderingOutput();
 		}
 
 		private void PopulateComponentArrayList()
 		{
+			m_componentArrayList.Clear();
+
 			List<UIComponentGroupIteratorData> componentQueue = new List<UIComponentGroupIteratorData>();
 			int parentSlot = -1;
 			int componentArrayListIndex = -1;
@@ -45,7 +46,6 @@ namespace UINamespace
 			while (componentQueue.Count > 0)
 			{
 				UIComponentGroupIteratorData currentComponentData = componentQueue[0];
-				currentComponentData.component.CalculateRenderingOutput();
 				
 				m_componentArrayList.Add(currentComponentData);
 				++componentArrayListIndex;
@@ -65,6 +65,19 @@ namespace UINamespace
 			}
 		}
 
+		public void CalculateRenderingOutput()
+		{
+			for (int n = 0; n < m_componentArrayList.Count; ++n)
+				(m_componentArrayList[n] as UIComponentGroupIteratorData).component.CalculateRenderingOutput();
+			CalculatePixelRenderingInfo();
+		}
+
+		public void CalculatePixelRenderingInfo()
+		{
+			foreach (UIComponentGroupIteratorData renderableData in m_renderableArrayList)
+				(renderableData.component as UIRenderable).CalculatePixelRenderingInfo();
+		}
+
 		private void PopulateRenderableArrayList()
 		{
 			m_renderableArrayList.Clear();
@@ -80,13 +93,46 @@ namespace UINamespace
 
 			for (int n = 0; n < m_componentArrayList.Count; ++n)
 				if ((m_componentArrayList[n] as UIComponentGroupIteratorData).component.GetComponentType() == UIComponentType.BUTTON)
+				{
 					m_buttonArrayList.Add(m_componentArrayList[n]);
+					((m_componentArrayList[n] as UIComponentGroupIteratorData).component as UIButton).SetStartStateIdle();
+					
+				}
 		}
 
 		public void OnGUI()
 		{
 			foreach (UIComponentGroupIteratorData componentData in m_renderableArrayList)
 				(componentData.component as UIRenderable).DrawGUI();
+		}
+
+		public void CheckIfInputInButton(int x, int y)
+		{
+			foreach (UIComponentGroupIteratorData componentData in m_buttonArrayList)
+				(componentData.component as UIButton).CheckIfInputInButton(x, y);
+		}
+
+		public void CheckIfInputInButton(float x, float y)
+		{
+			foreach (UIComponentGroupIteratorData componentData in m_buttonArrayList)
+				(componentData.component as UIButton).CheckIfInputInButton(x, y);
+		}
+
+		public bool AcknowledgeInput(int x, int y)
+		{
+			bool returnValue = false;
+			foreach (UIComponentGroupIteratorData componentData in m_buttonArrayList)
+				if ((componentData.component as UIButton).AcknowledgeInput(x, y))
+					returnValue = true;
+			return returnValue;
+		}
+		public bool AcknowledgeInput(float x, float y)
+		{
+			bool returnValue = false;
+			foreach (UIComponentGroupIteratorData componentData in m_buttonArrayList)
+				if ((componentData.component as UIButton).AcknowledgeInput(x, y))
+					returnValue = true;
+			return returnValue;
 		}
 
 		private sealed class UIComponentGroupIteratorData

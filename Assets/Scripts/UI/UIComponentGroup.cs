@@ -45,5 +45,26 @@ namespace UINamespace
 		{
 			return m_listComponent;
 		}
+
+		public override void SetChildrenEnabled(bool enabled)
+		{
+			LinkedListNode<UIComponent> currentNode = m_listComponent.First;
+			while (null != currentNode)
+			{
+				switch (currentNode.Value.GetComponentType())
+				{
+				case UIComponentType.RENDERABLE:
+					currentNode.Value.Enabled = enabled;
+					break;
+				case UIComponentType.BUTTON:
+					(currentNode.Value as UIButton).SetChildrenEnabled(enabled);
+					break;
+				case UIComponentType.LAYOUT:
+					(currentNode.Value as UIComponentGroup).SetChildrenEnabled(enabled);
+					break;
+				}
+				currentNode = currentNode.Next;
+			}
+		}
 	}
 }
