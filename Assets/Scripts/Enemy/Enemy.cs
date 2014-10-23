@@ -102,7 +102,7 @@ public class Enemy : MonoBehaviour
 				//landed on a conveyor belt grid point. This GridPoint will move the enemy in the direction of the grid point.
 				if(grid is ConveyorBeltGridPoint)
 				{
-
+					differenceToGoal = this.transform.position
 				}
 				else{
 					transform.position+=differenceToGoal.normalized*CurrentSpeed*Time.deltaTime;
