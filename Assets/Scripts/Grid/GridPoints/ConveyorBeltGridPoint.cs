@@ -5,7 +5,8 @@ public class ConveyorBeltGridPoint : GridPoint {
 
 	private Color _oldColor;
 
-	public enum Direction {Left, Right, Up, Down};
+	//We will change enemy's direction to up, down, or right depending on the type of tile
+	public enum Direction {Right, Up, Down};
 	public Direction newDirection;
 	
 	public float newSpeed = 0.1f;
@@ -17,26 +18,30 @@ public class ConveyorBeltGridPoint : GridPoint {
 			if(newDirection == Direction.Up)
 			{
 				//TODO: Figure out how to rotate the enemy up
-				//TODO: Set the material to the appropriate material
-				//this.renderer.material = abalksdjfajksdfa;
+				//TODO: set the Tile''s material to the appropriate material
+
+				Vector3 newPosition = (Vector3.up) - enemy.transform.position;
+				Quaternion neededRotation = Quaternion.LookRotation(newPosition);
+				enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, neededRotation,Time.deltaTime*enemy.rotationSpeed*4);
+				
 			}
 			else if(newDirection == Direction.Down)
 			{
 				//TODO: Figure out how to rotate the enemy Down
-
-			}
-			else if(newDirection == Direction.Left)
-			{
-				//TODO: Figure out how to rotate the enemy Left
-
+				Vector3 newPosition = (Vector3.back) - enemy.transform.position;
+				Quaternion neededRotation = Quaternion.LookRotation(newPosition);
+				enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, neededRotation,Time.deltaTime*enemy.rotationSpeed*4);
 			}
 			else if(newDirection == Direction.Right)
 			{
 				//TODO: Figure out how to rotate the enemy Right
-
+				
+				Vector3 newPosition = (Vector3.right) - enemy.transform.position;
+				Quaternion neededRotation = Quaternion.LookRotation(newPosition);
+				enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, neededRotation,Time.deltaTime*enemy.rotationSpeed*4);
 			}
 
-			enemy.CurrentSpeed+= newSpeed;
+
 		}
 		return this;
 	}

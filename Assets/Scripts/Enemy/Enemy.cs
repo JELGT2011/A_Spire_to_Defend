@@ -99,13 +99,18 @@ public class Enemy : MonoBehaviour
 				
 			}
 			else{
+				//landed on a conveyor belt grid point. This GridPoint will move the enemy in the direction of the grid point.
+				if(grid is ConveyorBeltGridPoint)
+				{
 
-				transform.position+=differenceToGoal.normalized*CurrentSpeed*Time.deltaTime;
+				}
+				else{
+					transform.position+=differenceToGoal.normalized*CurrentSpeed*Time.deltaTime;
 
-				//Smooth lookat
-				Quaternion neededRotation = Quaternion.LookRotation(differenceToGoal);
-
-				transform.rotation = Quaternion.Slerp(transform.rotation, neededRotation, Time.deltaTime * rotationSpeed);
+					//Smooth lookat
+					Quaternion neededRotation = Quaternion.LookRotation(differenceToGoal);
+					transform.rotation = Quaternion.Slerp(transform.rotation, neededRotation, Time.deltaTime * rotationSpeed);
+				}
 			}
 		}
 		
