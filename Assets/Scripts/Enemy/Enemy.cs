@@ -74,7 +74,7 @@ public class Enemy : MonoBehaviour
 			if (differenceToGoal.magnitude < MIN_DIST) {
 				
 				if(path.Length<=pathIndex+1){
-					if(path[pathIndex-1]==Target){
+					if(path[path.Length-1]==Target){
 						OnReachGoal();
 					}
 					else{
