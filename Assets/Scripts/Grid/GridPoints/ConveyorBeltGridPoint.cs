@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ConveyorBeltGridPoint : GridPoint {
 
@@ -11,37 +12,28 @@ public class ConveyorBeltGridPoint : GridPoint {
 	
 	public float newSpeed = 0.1f;
 
+	public ConveyorBeltGridPoint next;
+
+	public List<GridPoint> gridPointList;
+	
 	public override GridPoint ArriveAtGridpoint (Enemy enemy)
 	{
+		gridPointList = new List<GridPoint>();
 		if(enemy != null)
 		{
-			if(newDirection == Direction.Up)
-			{
-				//TODO: Figure out how to rotate the enemy up
-				//TODO: set the Tile''s material to the appropriate material
+			ConveyorBeltGridPoint current = this;
 
-				Vector3 newPosition = (Vector3.up) - enemy.transform.position;
-				Quaternion neededRotation = Quaternion.LookRotation(newPosition);
-				enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, neededRotation,Time.deltaTime*enemy.rotationSpeed*4);
-				
-			}
-			else if(newDirection == Direction.Down)
+			while(current.next != null)
 			{
-				//TODO: Figure out how to rotate the enemy Down
-				Vector3 newPosition = (Vector3.back) - enemy.transform.position;
-				Quaternion neededRotation = Quaternion.LookRotation(newPosition);
-				enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, neededRotation,Time.deltaTime*enemy.rotationSpeed*4);
-			}
-			else if(newDirection == Direction.Right)
-			{
-				//TODO: Figure out how to rotate the enemy Right
-				
-				Vector3 newPosition = (Vector3.right) - enemy.transform.position;
-				Quaternion neededRotation = Quaternion.LookRotation(newPosition);
-				enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, neededRotation,Time.deltaTime*enemy.rotationSpeed*4);
+				gridPointList.Add(next);
+				current = current.next;
 			}
 
-
+			if(gridPointList.Count > 0)
+			{
+				//Make the enemy move along the path of conveyorbelt nodes
+				enemy.setPath(gridPointList.ToArray());
+			}
 		}
 		return this;
 	}

@@ -38,7 +38,7 @@ public class Enemy : MonoBehaviour
 
 	public SpriteRenderer healthRenderer;
 
-	protected GridPoint[] path;
+	public GridPoint[] path;
 	protected int pathIndex=0;
 	
     /// <summary>
@@ -64,10 +64,14 @@ public class Enemy : MonoBehaviour
     /// </summary>
     void Update(){
 		EnemyUpdate ();
-
-
     }
-
+	
+	public void setPath(GridPoint[] path)
+	{
+		pathIndex = 0;
+		this.path = path;
+	}
+	
 	protected virtual void EnemyUpdate(){
 		if(path!=null && path.Length>0 && pathIndex<path.Length){
 			Vector3 differenceToGoal = (path[pathIndex].transform.position+Vector3.up) - transform.position;
@@ -99,18 +103,11 @@ public class Enemy : MonoBehaviour
 				
 			}
 			else{
-				//landed on a conveyor belt grid point. This GridPoint will move the enemy in the direction of the grid point.
-				if(grid is ConveyorBeltGridPoint)
-				{
-					differenceToGoal = this.transform.position
-				}
-				else{
 					transform.position+=differenceToGoal.normalized*CurrentSpeed*Time.deltaTime;
 
 					//Smooth lookat
 					Quaternion neededRotation = Quaternion.LookRotation(differenceToGoal);
 					transform.rotation = Quaternion.Slerp(transform.rotation, neededRotation, Time.deltaTime * rotationSpeed);
-				}
 			}
 		}
 		
@@ -123,10 +120,19 @@ public class Enemy : MonoBehaviour
 	}
 
 	protected virtual void OnReachGoal(){
-		Global.Instance.AlterLives (lifeDamage);
-		Global.Instance.RemoveEnemy(this);
-		Destroy(transform.root.gameObject);
-		//TODO; Play sound
+
+		if(path[path.Length - 1] == Target)
+		{
+			//TODO; Play sound
+			Global.Instance.AlterLives (lifeDamage);
+			Global.Instance.RemoveEnemy(this);
+			Destroy(transform.root.gameObject);
+		}
+		else
+		{
+			//replan the path
+			path = AStar.Path(path[path.Length - 1], Target);
+		}
 	}
 
     /// <summary>
