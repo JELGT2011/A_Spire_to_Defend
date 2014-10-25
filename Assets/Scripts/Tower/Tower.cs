@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-
+[RequireComponent (typeof(AudioSource))]
 public class Tower : MonoBehaviour{
     public enum TYPE
     {
@@ -69,6 +69,8 @@ public class Tower : MonoBehaviour{
 	public float rotationSpeed = 5f;
 	public Transform projectileSource;
 
+	public AudioClip fire;
+
 	void Start(){
 		IsAlive = true;
 	}
@@ -85,11 +87,19 @@ public class Tower : MonoBehaviour{
             
             if (enemy != null)
             {
-                Fire(enemy.gameObject);
+                
 				//Turn towards
 				Quaternion neededRotation = Quaternion.LookRotation(enemy.transform.position-transform.position);
 				
 				transform.rotation = Quaternion.Slerp(transform.rotation, neededRotation, Time.deltaTime * rotationSpeed);
+
+				if(Quaternion.Angle(transform.rotation,neededRotation)<1f){
+					Fire(enemy.gameObject);
+					if(!this.audio.isPlaying){
+						this.audio.clip = fire;
+						this.audio.Play();
+					}
+				}
             }
         }
         else

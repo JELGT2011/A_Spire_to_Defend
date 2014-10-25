@@ -38,10 +38,12 @@ public class Enemy : MonoBehaviour
 
 	public SpriteRenderer healthRenderer;
 
-	protected GridPoint[] path;
+	public GridPoint[] path;
 	protected int pathIndex=0;
 	public int pathPerception = 1;
-	
+
+	public AudioClip onDeath, onGoal, onSpawn;
+
     /// <summary>
     /// Initializes common values.  Do not override.
     /// </summary>
@@ -55,6 +57,10 @@ public class Enemy : MonoBehaviour
         Accuracy = 1f;
 
 		path = AStar.Path (start, target);
+
+		if (onSpawn != null) {
+			AudioSource.PlayClipAtPoint(onSpawn,transform.position);		
+		}
 
 		//foreach (GridPoint pnt in path) {
 		//}
@@ -78,7 +84,7 @@ public class Enemy : MonoBehaviour
 						OnReachGoal();
 					}
 					else{
-						path = AStar.Path(path[pathIndex-1],Target);
+						path = AStar.Path(path[path.Length-1],Target);
 						pathIndex = 0;
 					}
 				}
@@ -107,6 +113,7 @@ public class Enemy : MonoBehaviour
 					}
 					else{
 						path = AStar.Path(grid,Target);
+						pathIndex = 0;
 					}
 				}
 				
@@ -128,16 +135,22 @@ public class Enemy : MonoBehaviour
 	}
 
 	protected virtual void DestroyEnemy(){
-		//TODO; Play Death Sound
 		Global.Instance.RemoveEnemy(this);
 		Destroy(transform.root.gameObject);
+
+		if (onDeath != null) {
+			AudioSource.PlayClipAtPoint(onDeath,transform.position);		
+		}
 	}
 
 	protected virtual void OnReachGoal(){
 		Global.Instance.AlterLives (lifeDamage);
 		Global.Instance.RemoveEnemy(this);
 		Destroy(transform.root.gameObject);
-		//TODO; Play sound
+
+		if (onGoal != null) {
+			AudioSource.PlayClipAtPoint(onGoal,transform.position);		
+		}
 	}
 
     /// <summary>
@@ -157,8 +170,6 @@ public class Enemy : MonoBehaviour
         {
             CurrentHealth -= projectile.Damage;
 
-
-
             if (CurrentHealth <= 0){
 				Global.Instance.AlterResources(resourceGain);
                 IsAlive = false;
@@ -168,4 +179,10 @@ public class Enemy : MonoBehaviour
 			}
         }
     }
+
+	public void SetPath(GridPoint[] _path){
+		path = _path;
+
+		pathIndex = 0;
+	}
 }

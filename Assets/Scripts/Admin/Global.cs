@@ -26,6 +26,8 @@ public class Global : MonoBehaviour
 
 	private const string LEVEL_SELECT = "Levels";
 
+	public AudioClip onTowerSpawn;
+
     void Start()
     {
         Towers = new List<GameObject>();
@@ -50,6 +52,9 @@ public class Global : MonoBehaviour
 		AlterResources(-1*t.GetCost ());
 
 		//TODO; Make a sound
+		if (onTowerSpawn != null) {
+			AudioSource.PlayClipAtPoint(onTowerSpawn,transform.position);
+		}
 
 		return t;
     }
@@ -108,7 +113,6 @@ public class Global : MonoBehaviour
 
 		resourcesText.text = RESOURCES_TEXT + "" + resources;
 
-		//TODO; play noise
 	}
 
 	public void AlterLives(int lifeDamage){
@@ -119,7 +123,6 @@ public class Global : MonoBehaviour
 			Application.LoadLevel(Application.loadedLevelName);
 		}
 
-		//TODO; play noise
 		lifeText.text = LIFE_TEXT + "" + lives;
 	}
 
