@@ -21,6 +21,7 @@ namespace UINamespace
 	public abstract class UIComponent
 	{
 		private int m_componentId;
+		private string m_componentName;
 		protected UIComponentType m_componentType;
 
 			// This determines how much screen room this component will use of the amount give.
@@ -51,6 +52,11 @@ namespace UINamespace
 			get { return m_componentId; }
 		}
 
+		public string Name
+		{
+			get { return m_componentName; }
+		}
+
 		public UIComponentType GetComponentType()
 		{
 			return m_componentType;
@@ -66,7 +72,8 @@ namespace UINamespace
 			}
 		}
 
-		protected UIComponent(float xStart,
+		protected UIComponent(string componentName,
+		                      float xStart,
 		                      float yStart,
 		                      float xWidth,
 		                      float yHeight,
@@ -91,31 +98,6 @@ namespace UINamespace
 			if (null == m_childRenderingInput)
 				CalculateRenderingOutput();
 			return m_childRenderingInput;
-		}
-
-		public sealed class UIComponentRenderingInput
-		{
-			public float xBottomLeft;
-			public float yBottomLeft;
-			public float xTopRight;
-			public float yTopRight;
-			public UILayoutType layoutType;
-			public UIComponentRenderingInput(float xBottomLeft, float yBottomLeft, float xTopRight, float yTopRight, UILayoutType layoutType)
-			{
-				this.xBottomLeft = xBottomLeft;
-				this.yBottomLeft = yBottomLeft;
-				this.xTopRight = xTopRight;
-				this.yTopRight = yTopRight;
-				this.layoutType = layoutType;
-			}
-			public float GetWidth()
-			{
-				return xTopRight - xBottomLeft;
-			}
-			public float GetHeight()
-			{
-				return yTopRight - yBottomLeft;
-			}
 		}
 
 		public sealed class UIPixelRenderingInfo

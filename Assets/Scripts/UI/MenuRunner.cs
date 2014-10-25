@@ -32,17 +32,17 @@ public class MenuRunner : MonoBehaviour
 
 	void Update()
 	{
-//		m_ui.UpdateDeltaTime(Time.deltaTime);
-//
-//		m_ui.CheckIfInputInButton((int)Input.mousePosition.x, (int)Input.mousePosition.y);
-//
+		m_ui.UpdateDeltaTime(Time.deltaTime);
+
+		m_ui.CheckIfInputInButton((int)Input.mousePosition.x, (int)Input.mousePosition.y);
+
 //		Debug.Break();
-//
-//		if (Input.GetMouseButtonDown(0))
-//		{
-//			m_ui.AcknowledgeInput(Input.mousePosition.x, Input.mousePosition.y);
+
+		if (Input.GetMouseButtonDown(0))
+		{
+			m_ui.AcknowledgeInput((int)Input.mousePosition.x, (int)Input.mousePosition.y);
 //			Debug.Break();
-//		}
+		}
 		if (screenWidth != Screen.width || screenHeight != Screen.height)
 		{
 			screenWidth = Screen.width;

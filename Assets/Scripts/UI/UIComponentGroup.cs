@@ -7,10 +7,12 @@ namespace UINamespace
 {
 	public abstract class UIComponentGroup : UIComponent
 	{
-		protected HybridDictionary m_componentDictionary;
+		protected HybridDictionary m_componentIdDictionary;
+		protected HybridDictionary m_componentNameDictionary;
 		protected LinkedList<UIComponent> m_listComponent;
 
-		protected UIComponentGroup(float xStart,
+		protected UIComponentGroup(string componentName,
+		                           float xStart,
 		                           float yStart,
 		                           float xWidth,
 		                           float yHeight,
@@ -19,13 +21,15 @@ namespace UINamespace
 		                           UIAnchorLocation anchorLocation)
 			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation)
 		{
-			m_componentDictionary = new HybridDictionary();
+			m_componentIdDictionary = new HybridDictionary();
+			m_componentNameDictionary = new HybridDictionary ();
 			m_listComponent = new LinkedList<UIComponent>();
 		}
 
 		public UIComponentGroup AddUIComponent(UIComponent component)
 		{
-			m_componentDictionary.Add(component.Id, component);
+			m_componentIdDictionary.Add(component.Id, component);
+			m_componentNameDictionary.Add(component.Name, component);
 			m_listComponent.AddLast(component);
 
 			component.SetParentComponentGroup(this);

@@ -8,9 +8,9 @@ namespace UINamespace
 		private UIAnchor m_anchor;
 
 		private UIButton m_parentComponentGroup;
-		private UIComponent.UIComponentRenderingInput m_parentRenderingInput = null;
-		private UIComponent.UIComponentRenderingInput m_hitBoxRelative;
-		private Rect m_hitBoxPixels;
+		private UIComponentRenderingInput m_parentRenderingInput = null;
+		private UIComponentRenderingInput m_hitBoxRelative;
+		private UIComponentRenderingInput m_hitBoxPixels;
 
 		public UIButtonHitBox(float xStart,
 		                      float yStart,
@@ -28,7 +28,7 @@ namespace UINamespace
 		public void CalculateRenderingOutput()
 		{
 			if (null == m_parentComponentGroup)
-				m_parentRenderingInput = new UIComponent.UIComponentRenderingInput(0f, 0f, 1f, 1f, UILayoutType.RELATIVE_LAYOUT);
+				m_parentRenderingInput = new UIComponentRenderingInput(0f, 0f, 1f, 1f, UILayoutType.RELATIVE_LAYOUT);
 			
 			if (null == m_parentRenderingInput)
 				m_parentRenderingInput = m_parentComponentGroup.GetChildComponentRenderingInput();
@@ -38,17 +38,18 @@ namespace UINamespace
 			float xTopRight = m_parentRenderingInput.xBottomLeft + m_anchor.GetRelativeXRight() * m_parentRenderingInput.GetWidth();
 			float yTopRight = m_parentRenderingInput.yBottomLeft + m_anchor.GetRelativeYTop() * m_parentRenderingInput.GetHeight();
 			
-			m_hitBoxRelative = new UIComponent.UIComponentRenderingInput(xBottomLeft, yBottomLeft, xTopRight, yTopRight, UILayoutType.RELATIVE_LAYOUT);
+			m_hitBoxRelative = new UIComponentRenderingInput(xBottomLeft, yBottomLeft, xTopRight, yTopRight, UILayoutType.RELATIVE_LAYOUT);
 
 			CalculatePixelOutput();
 		}
 
 		public void CalculatePixelOutput()
 		{
-			m_hitBoxPixels = new Rect(m_hitBoxRelative.xBottomLeft * Screen.width,
-			                               (1f - m_hitBoxRelative.yTopRight) * Screen.height,
-			                               m_hitBoxRelative.GetWidth() * Screen.width,
-			                               m_hitBoxRelative.GetHeight() * Screen.height);
+			m_hitBoxPixels = new UIComponentRenderingInput(m_hitBoxRelative.xBottomLeft * Screen.width,
+			                                               m_hitBoxRelative.yBottomLeft * Screen.height,
+			                                               m_hitBoxRelative.xTopRight * Screen.width,
+			                                               m_hitBoxRelative.yTopRight * Screen.height,
+			                                               UILayoutType.RELATIVE_LAYOUT);
 		}
 
 		public bool CheckIfInputInButton(float x, float y)
@@ -61,9 +62,8 @@ namespace UINamespace
 		}
 		public bool CheckIfInputInButton(int x, int y)
 		{
-			Debug.Log("ID: " + m_parentComponentGroup.Id + "| x: " + x + ", y: " + y + " | " + m_hitBoxPixels.min + "," + m_hitBoxPixels.max);
-			if (x > m_hitBoxPixels.xMin && x < m_hitBoxPixels.xMax &&
-				y > m_hitBoxPixels.yMax && y < m_hitBoxPixels.yMin)
+			if (x > m_hitBoxPixels.xBottomLeft && x < m_hitBoxPixels.xTopRight &&
+				y > m_hitBoxPixels.yBottomLeft && y < m_hitBoxPixels.yTopRight)
 				return true;
 			else
 				return false;

@@ -26,14 +26,14 @@ namespace UINamespace
 				Texture2D menuLeftSideTexture = Resources.Load<Texture2D>("UITextures/LeftSideThing");
 				Texture2D buttonBorderTexture = Resources.Load<Texture2D>("UITextures/ButtonBorder");
 
-				UIRelativeLayout playButtonLayoutGroupIdle = new UIRelativeLayout(0f, 0f, 1f, 1f, null, UIAnchorLocation.LEFT_BOT);
-				UIRelativeLayout playButtonLayoutGroupHighlighted = new UIRelativeLayout(0f, 0f, 1f, 1f, null, UIAnchorLocation.LEFT_BOT);
-				UIRelativeLayout tutorialButtonLayoutGroupIdle = new UIRelativeLayout(0f, 0f, 1f, 1f, null, UIAnchorLocation.LEFT_BOT);
-				UIRelativeLayout tutorialButtonLayoutGroupHighlighted = new UIRelativeLayout(0f, 0f, 1f, 1f, null, UIAnchorLocation.LEFT_BOT);
-				UIRelativeLayout creditsButtonLayoutGroupIdle = new UIRelativeLayout(0f, 0f, 1f, 1f, null, UIAnchorLocation.LEFT_BOT);
-				UIRelativeLayout creditsButtonLayoutGroupHighlighted = new UIRelativeLayout(0f, 0f, 1f, 1f, null, UIAnchorLocation.LEFT_BOT);
+				UIRelativeLayout playButtonLayoutGroupIdle = new UIRelativeLayout("playButtonLayoutGroupIdle", 0f, 0f, 1f, 1f, null, UIAnchorLocation.LEFT_BOT);
+				UIRelativeLayout playButtonLayoutGroupHighlighted = new UIRelativeLayout("playButtonLayoutGroupHighlighted", 0f, 0f, 1f, 1f, null, UIAnchorLocation.LEFT_BOT);
+				UIRelativeLayout tutorialButtonLayoutGroupIdle = new UIRelativeLayout("tutorialButtonLayoutGroupIdle", 0f, 0f, 1f, 1f, null, UIAnchorLocation.LEFT_BOT);
+				UIRelativeLayout tutorialButtonLayoutGroupHighlighted = new UIRelativeLayout("tutorialButtonLayoutGroupHighlighted", 0f, 0f, 1f, 1f, null, UIAnchorLocation.LEFT_BOT);
+				UIRelativeLayout creditsButtonLayoutGroupIdle = new UIRelativeLayout("creditsButtonLayoutGroupIdle", 0f, 0f, 1f, 1f, null, UIAnchorLocation.LEFT_BOT);
+				UIRelativeLayout creditsButtonLayoutGroupHighlighted = new UIRelativeLayout("creditsButtonLayoutGroupHighlighted", 0f, 0f, 1f, 1f, null, UIAnchorLocation.LEFT_BOT);
 
-				UITextureLabel playButtonBorderIdle = new UITextureLabel(0.1f, 0.1f, 0.8f, 0.8f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.LEFT_BOT, buttonBorderTexture);
+				UITextureLabel playButtonBorderIdle = new UITextureLabel("playButtonBorderIdle", 0.1f, 0.1f, 0.8f, 0.8f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.LEFT_BOT, buttonBorderTexture);
 				UITextureLabel playButtonBorderHighlighted = new UITextureLabel(0.1f, 0.1f, 0.8f, 0.8f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.LEFT_BOT, buttonBorderTexture);
 				UITextureLabel tutorialButtonBorderIdle = new UITextureLabel(0.1f, 0.1f, 0.8f, 0.8f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.LEFT_BOT, buttonBorderTexture);
 				UITextureLabel tutorialButtonBorderHighlighted = new UITextureLabel(0.1f, 0.1f, 0.8f, 0.8f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.LEFT_BOT, buttonBorderTexture);

@@ -5,11 +5,11 @@ public class  PlayButtonListener : UINamespace.IUIButtonListener
 {
 	public void OnHighlighted()
 	{
-		Debug.Log("Play Button Highlighted");
+//		Debug.Log("Play Button Highlighted");
 	}
 	public void OnIdle()
 	{
-		Debug.Log("Play Button Unhighlighed");
+//		Debug.Log("Play Button Unhighlighed");
 	}
 	public void OnSelected()
 	{
@@ -21,11 +21,11 @@ public class  TutorialButtonListener : UINamespace.IUIButtonListener
 {
 	public void OnHighlighted()
 	{
-		Debug.Log("Tutorial Button Highlighted");
+//		Debug.Log("Tutorial Button Highlighted");
 	}
 	public void OnIdle()
 	{
-		Debug.Log("Tutorial Button Unhighlighted");
+//		Debug.Log("Tutorial Button Unhighlighted");
 	}
 	public void OnSelected()
 	{
@@ -37,11 +37,11 @@ public class  CreditsButtonListener : UINamespace.IUIButtonListener
 {
 	public void OnHighlighted()
 	{
-		Debug.Log("Credits Button Highlighted");
+//		Debug.Log("Credits Button Highlighted");
 	}
 	public void OnIdle()
 	{
-		Debug.Log("Credits Button Unhighlighted");
+//		Debug.Log("Credits Button Unhighlighted");
 	}
 	public void OnSelected()
 	{
