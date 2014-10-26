@@ -7,6 +7,23 @@ namespace UINamespace
 		protected string m_text;
 		protected UITextInfo m_textInfo = null;
 				
+		public UIStringLabel(string componentName,
+		                     float xStart,
+		                     float yStart,
+		                     float xWidth,
+		                     float yHeight,
+		                     UIComponentGroup parentComponentGroup,
+		                     UILayoutType layoutType,
+		                     UIAnchorLocation anchorLocation,
+		                     UITextInfo textInfo,
+		                     string text)
+			: base(componentName, xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation)
+		{
+			m_guiStyle = textInfo.GetGUIStyle();
+			m_textInfo = textInfo;
+			m_text = text;
+		}
+
 		public UIStringLabel(float xStart,
 		                     float yStart,
 		                     float xWidth,
@@ -16,11 +33,9 @@ namespace UINamespace
 		                     UIAnchorLocation anchorLocation,
 		                     UITextInfo textInfo,
 		                     string text)
-			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation)
+			: this("", xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation, textInfo, text)
 		{
-			m_guiStyle = textInfo.GetGUIStyle();
-			m_textInfo = textInfo;
-			m_text = text;
+			SetName(Id.ToString());
 		}
 		
 		public override void DrawGUI()
@@ -44,6 +59,12 @@ namespace UINamespace
 			                                     (1f - m_childRenderingInput.yTopRight) * Screen.height,
 			                                     m_childRenderingInput.GetWidth() * Screen.width,
 			                                     m_childRenderingInput.GetHeight() * Screen.height);
+		}
+
+		public string Text
+		{
+			get { return m_text; }
+			set { m_text = value; }
 		}
 	}
 }

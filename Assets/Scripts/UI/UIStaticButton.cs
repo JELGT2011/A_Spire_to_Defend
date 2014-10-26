@@ -11,18 +11,31 @@ namespace UINamespace
 
 		private UIButtonHitBox m_hitBox;
 
-		public UIStaticButton(float xStart,
-		                float yStart,
-		                float xWidth,
-		                float yHeight,
-		                UIComponentGroup parentComponentGroup,
-		                UILayoutType layoutType,
-		                UIAnchorLocation anchorLocation,
-		                IUIButtonListener buttonListener)
-			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation, buttonListener)
+		public UIStaticButton(string componentName,
+		                      float xStart,
+		                      float yStart,
+		                      float xWidth,
+		                      float yHeight,
+		                      UIComponentGroup parentComponentGroup,
+		                      UILayoutType layoutType,
+		                      UIAnchorLocation anchorLocation,
+		                      IUIButtonListener buttonListener)
+			: base(componentName, xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation, buttonListener)
 		{
-			m_componentType = UIComponentType.BUTTON;
 			m_hitBox = new UIButtonHitBox(xStart, yStart, xWidth, yHeight, this, layoutType, anchorLocation);
+		}
+
+		public UIStaticButton(float xStart,
+		                      float yStart,
+		                      float xWidth,
+		                      float yHeight,
+		                      UIComponentGroup parentComponentGroup,
+		                      UILayoutType layoutType,
+		                      UIAnchorLocation anchorLocation,
+		                      IUIButtonListener buttonListener)
+			: this("", xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation, buttonListener)
+		{
+			SetName(Id.ToString());
 		}
 
 		public override void SetStartStateIdle()

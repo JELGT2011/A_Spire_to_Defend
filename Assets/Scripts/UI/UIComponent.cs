@@ -57,6 +57,11 @@ namespace UINamespace
 			get { return m_componentName; }
 		}
 
+		protected void SetName(string name)
+		{
+			m_componentName = name;
+		}
+
 		public UIComponentType GetComponentType()
 		{
 			return m_componentType;
@@ -82,6 +87,7 @@ namespace UINamespace
 		                      UIAnchorLocation anchorLocation)
 		{
 			m_componentId = UI.GenerateId();
+			m_componentName = componentName;
 
 			m_anchor = new UIAnchor(anchorLocation, xStart, yStart, xWidth, yHeight);
 			m_layoutType = layoutType;

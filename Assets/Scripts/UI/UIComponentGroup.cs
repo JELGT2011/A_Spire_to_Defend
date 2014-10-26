@@ -19,10 +19,10 @@ namespace UINamespace
 		                           UIComponentGroup parentComponentGroup,
 		                           UILayoutType layoutType,
 		                           UIAnchorLocation anchorLocation)
-			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation)
+			: base(componentName, xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation)
 		{
 			m_componentIdDictionary = new HybridDictionary();
-			m_componentNameDictionary = new HybridDictionary ();
+			m_componentNameDictionary = new HybridDictionary();
 			m_listComponent = new LinkedList<UIComponent>();
 		}
 

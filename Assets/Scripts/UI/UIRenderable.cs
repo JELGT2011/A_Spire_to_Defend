@@ -7,14 +7,15 @@ namespace UINamespace
 		protected UIPixelRenderingInfo m_pixelRenderingInfo = null;
 		protected GUIStyle m_guiStyle = null;
 
-		public UIRenderable(float xStart,
+		public UIRenderable(string componentName,
+		                    float xStart,
 		                    float yStart,
 		                    float xWidth,
 		                    float yHeight,
 		                    UIComponentGroup parentComponentGroup,
 		                    UILayoutType layoutType,
 		                    UIAnchorLocation anchorLocation)
-			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation)
+			: base(componentName, xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation)
 		{
 			m_componentType = UIComponentType.RENDERABLE;
 		}

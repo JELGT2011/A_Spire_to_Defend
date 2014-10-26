@@ -22,6 +22,22 @@ namespace UINamespace
 			get { return m_yGridSections; }
 		}
 
+		public UIGridLayout(string componentName,
+		                    float xStart,
+		                    float yStart,
+		                    float xWidth,
+		                    float yHeight,
+		                    UIComponentGroup parentComponentGroup,
+		                    UIAnchorLocation anchorLocation,
+		                    int xGridSections,
+		                    int yGridSections)
+			: base(componentName, xStart, yStart, xWidth, yHeight, parentComponentGroup, anchorLocation)
+		{
+			m_xGridSections = xGridSections;
+			m_yGridSections = yGridSections;
+
+			m_grid = new ArrayList(xGridSections * yGridSections);
+		}
 		public UIGridLayout(float xStart,
 		                    float yStart,
 		                    float xWidth,
@@ -30,12 +46,9 @@ namespace UINamespace
 		                    UIAnchorLocation anchorLocation,
 		                    int xGridSections,
 		                    int yGridSections)
-			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, anchorLocation)
+			: this("", xStart, yStart, xWidth, yHeight, parentComponentGroup, anchorLocation, xGridSections, yGridSections)
 		{
-			m_xGridSections = xGridSections;
-			m_yGridSections = yGridSections;
-
-			m_grid = new ArrayList(xGridSections * yGridSections);
+			SetName(Id.ToString());
 		}
 
 		public UIGridLayout AddUIComponent(UIComponent component, int xSlot, int ySlot, int xSlotWidth, int ySlotHeight)

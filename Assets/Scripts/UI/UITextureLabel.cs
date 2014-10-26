@@ -6,22 +6,32 @@ namespace UINamespace
 	{
 		private Texture2D m_texture2D;
 		
-		public UITextureLabel(float xStart,
-		                     float yStart,
-		                     float xWidth,
-		                     float yHeight,
-		                     UIComponentGroup parentComponentGroup,
-		                     UILayoutType layoutType,
-		                     UIAnchorLocation anchorLocation,
-		                     Texture2D texture2D)
-			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation)
+		public UITextureLabel(string componentName,
+		                      float xStart,
+		                      float yStart,
+		                      float xWidth,
+		                      float yHeight,
+		                      UIComponentGroup parentComponentGroup,
+		                      UILayoutType layoutType,
+		                      UIAnchorLocation anchorLocation,
+		                      Texture2D texture2D)
+			: base(componentName, xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation)
 		{
 			m_texture2D = texture2D;
 			m_guiStyle = new GUIStyle();
+		}
 
-//			m_texture2D = new Texture2D(1, 1);
-//			m_texture2D.SetPixel(0, 0, new Color(0, 1, 0));
-//			m_texture2D.Apply();
+		public UITextureLabel(float xStart,
+		                      float yStart,
+		                      float xWidth,
+		                      float yHeight,
+		                      UIComponentGroup parentComponentGroup,
+		                      UILayoutType layoutType,
+		                      UIAnchorLocation anchorLocation,
+		                      Texture2D texture2D)
+			: this("", xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation, texture2D)
+		{
+			SetName(Id.ToString());
 		}
 		
 		public override void DrawGUI()

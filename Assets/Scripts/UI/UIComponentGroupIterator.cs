@@ -7,7 +7,8 @@ namespace UINamespace
 {
 	public class UIComponentGroupIterator
 	{
-		private HybridDictionary m_componentDictionary;
+		private HybridDictionary m_componentIdDictionary;
+		private HybridDictionary m_componentNameDictionary;
 		private ArrayList m_componentArrayList;
 
 		private UIComponentGroup m_headComponentGroup;
@@ -18,7 +19,8 @@ namespace UINamespace
 
 		public UIComponentGroupIterator(UIComponentGroup headComponentGroup)
 		{
-			m_componentDictionary = new HybridDictionary();
+			m_componentIdDictionary = new HybridDictionary();
+			m_componentNameDictionary = new HybridDictionary();
 			m_componentArrayList = new ArrayList();
 
 			m_headComponentGroup = headComponentGroup;
@@ -50,8 +52,9 @@ namespace UINamespace
 				m_componentArrayList.Add(currentComponentData);
 				++componentArrayListIndex;
 				
-				m_componentDictionary.Add(currentComponentData.component.Id, currentComponentData.component);
-				
+				m_componentIdDictionary.Add(currentComponentData.component.Id, currentComponentData.component);
+				m_componentNameDictionary.Add(currentComponentData.component.Name, currentComponentData.component);
+
 				componentQueue.RemoveAt(0);
 				
 				if (currentComponentData.component.HasChildComponents())

@@ -10,15 +10,27 @@ namespace UINamespace
 	/// </summary>
 	public class UIRelativeLayout : UIComponentGroup
 	{
+		public UIRelativeLayout(string componentName,
+		                        float xStart,
+		                        float yStart,
+		                        float xWidth,
+		                        float yHeight,
+		                        UIComponentGroup parentComponentGroup,
+		                        UIAnchorLocation anchorLocation)
+			: base(componentName, xStart, yStart, xWidth, yHeight, parentComponentGroup, UILayoutType.RELATIVE_LAYOUT, anchorLocation)
+		{
+			m_componentType = UIComponentType.LAYOUT;
+		}
+
 		public UIRelativeLayout(float xStart,
 		                        float yStart,
 		                        float xWidth,
 		                        float yHeight,
 		                        UIComponentGroup parentComponentGroup,
 		                        UIAnchorLocation anchorLocation)
-			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, UILayoutType.RELATIVE_LAYOUT, anchorLocation)
+			: this("", xStart, yStart, xWidth, yHeight, parentComponentGroup, anchorLocation)
 		{
-			m_componentType = UIComponentType.LAYOUT;
+			SetName(Id.ToString());
 		}
 
 		public new UIRelativeLayout AddUIComponent(UIComponent component)

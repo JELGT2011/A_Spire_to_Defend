@@ -8,7 +8,8 @@ namespace UINamespace
 	{
 		protected IUIButtonListener m_buttonListener;
 
-		public UIButton(float xStart,
+		public UIButton(string componentName,
+		                float xStart,
 		                float yStart,
 		                float xWidth,
 		                float yHeight,
@@ -16,7 +17,7 @@ namespace UINamespace
 		                UILayoutType layoutType,
 		                UIAnchorLocation anchorLocation,
 		                IUIButtonListener buttonListener)
-			: base(xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation)
+			: base(componentName, xStart, yStart, xWidth, yHeight, parentComponentGroup, layoutType, anchorLocation)
 		{
 			m_componentType = UIComponentType.BUTTON;
 			if (null == buttonListener)
