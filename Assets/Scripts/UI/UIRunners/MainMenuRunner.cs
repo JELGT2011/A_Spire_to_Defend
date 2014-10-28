@@ -22,7 +22,7 @@ public class MainMenuRunner : MonoBehaviour
 	private string[] end = new string[]{"Defendrs", "Baby Boomer \nDistrust of \nMillennials", "VGDevs", "Vague \nDisappointment",
 		"Freaking \nNERDS", "Blood Loss", "Graphic T-shirts", "Hipster Glasses", "No Shave \nNovember", "Skinny Jeans", 
 		"Christmas", "Halloween", "Thanksgiving", "Distrust of Authority", "Unexplainable Rage", "The loss of \ninnocence",
-		"What the heck", "[Insert Title Here]", "Titles", "Endless Questions", "Two more weeks", "Something Something"};
+		"What the heck", "[Insert Title Here]", "Titles", "Endless Questions", "One more week", "Something Something"};
 	
 	void Start()
 	{
@@ -54,10 +54,6 @@ public class MainMenuRunner : MonoBehaviour
 		playButton.			SetUIComponentIdle(playLabelSmall).			SetUIComponentHighlighted(playLabelLarge);
 		creditsButton.		SetUIComponentIdle(creditsLabelSmall).		SetUIComponentHighlighted(creditsLabelLarge);
 		instructionsButton.	SetUIComponentIdle(instructionsLabelSmall).	SetUIComponentHighlighted(instructionsLabelLarge);
-
-		playButton.SetStartStateIdle();
-		creditsButton.SetStartStateIdle();
-		instructionsButton.SetStartStateIdle();
 
 		rootLayout.AddUIComponent(titleLabel)
 			.AddUIComponent(playButton)

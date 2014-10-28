@@ -4,7 +4,7 @@ using UINamespace;
 
 public class MenuButtonListener : IUIButtonListener
 {
-	private string levelName = "Level1";
+	private string levelName;
 	private AudioClip hover;
 	private AudioClip dehover;
 

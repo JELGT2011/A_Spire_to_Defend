@@ -53,16 +53,16 @@ namespace UINamespace
 
 		public UIGridLayout AddUIComponent(UIComponent component, int xSlot, int ySlot, int xSlotWidth, int ySlotHeight)
 		{
-//			float xGridSlotStart = m_anchor.m_xWidth / (float)m_xGridSections * xSlot;
-//			float yGridSlotStart = m_anchor.m_yHeight / (float)m_yGridSections * (m_yGridSections - ySlot - 1);
-//			float xGridSlotWidth = m_anchor.m_xWidth / (float)m_xGridSections * xSlotWidth;
-//			float yGridSlotHeight = m_anchor.m_yHeight / (float)m_yGridSections * ySlotHeight;
+//			float xGridSlotStart = 1f / m_xGridSections * xSlot;
+//			float yGridSlotStart = 1f / m_yGridSections * (m_yGridSections - ySlot - 1);
+//			float xGridSlotWidth = 1f / m_xGridSections * xSlotWidth;
+//			float yGridSlotHeight = 1f / m_yGridSections * ySlotHeight;
 //			UIRelativeLayout gridSlotLayout = new UIRelativeLayout(xGridSlotStart, yGridSlotStart, xGridSlotWidth, yGridSlotHeight, this, UIAnchorLocation.LEFT_BOT);
 
-			float xGridSlotStart = m_anchor.m_xWidth / (float)m_xGridSections * xSlot;
-			float yGridSlotStart = m_anchor.m_yHeight / (float)m_yGridSections * (m_yGridSections - ySlot);
-			float xGridSlotWidth = m_anchor.m_xWidth / (float)m_xGridSections * xSlotWidth;
-			float yGridSlotHeight = m_anchor.m_yHeight / (float)m_yGridSections * ySlotHeight;
+			float xGridSlotStart = 1f / m_xGridSections * xSlot;
+			float yGridSlotStart = 1f / m_yGridSections * (m_yGridSections - ySlot);
+			float xGridSlotWidth = 1f / (float)m_xGridSections * xSlotWidth;
+			float yGridSlotHeight = 1f / (float)m_yGridSections * ySlotHeight;
 			UIRelativeLayout gridSlotLayout = new UIRelativeLayout(xGridSlotStart, yGridSlotStart, xGridSlotWidth, yGridSlotHeight, this, UIAnchorLocation.LEFT_TOP);
 
 			gridSlotLayout.AddUIComponent(component);

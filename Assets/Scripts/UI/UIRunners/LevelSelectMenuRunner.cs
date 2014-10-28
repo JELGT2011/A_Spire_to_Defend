@@ -4,9 +4,14 @@ using UINamespace;
 
 public class LevelSelectMenuRunner : MonoBehaviour
 {
-	public Font fontButtons;
+	public Font fontLevels;
+	public Font fontBack;
 		
 	public AudioClip hover, dehover;
+
+	public string[] levelNames;
+	
+	public Texture2D levelBorderTexture;
 	
 	private UI m_panel;
 
@@ -16,36 +21,49 @@ public class LevelSelectMenuRunner : MonoBehaviour
 	void Start()
 	{
 		UITextInfo buttonsTextInfo = new UITextInfo();
-		buttonsTextInfo.SetFont(fontButtons).SetFontSize(36).SetColor(new Color(1f, 1f, 1f)).SetTextAlignment(UIAnchorLocation.CENTER);
+		buttonsTextInfo.SetFont(fontLevels).SetFontSize(64).SetColor(new Color(1f, 1f, 1f)).SetTextAlignment(UIAnchorLocation.CENTER);
 		
 		UITextInfo buttonsLargerTextInfo = new UITextInfo();
-		buttonsLargerTextInfo.SetFont(fontButtons).SetFontSize(48).SetColor(new Color(1f, 1f, 1f)).SetTextAlignment(UIAnchorLocation.CENTER);
-		
-		UIRelativeLayout rootLayout = new UIRelativeLayout(0f, 0f, 1f, 1f, null, UIAnchorLocation.LEFT_BOT);
+		buttonsLargerTextInfo.SetFont(fontLevels).SetFontSize(72).SetColor(new Color(1f, 1f, 1f)).SetTextAlignment(UIAnchorLocation.CENTER);
 
-		UIStringLabel playLabelSmall = 			new UIStringLabel(0.5f, 0.3f, 0.8f, 0.2f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.CENTER, buttonsTextInfo, "Play");
-		UIStringLabel creditsLabelSmall = 		new UIStringLabel(0.5f, 0.2f, 0.8f, 0.2f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.CENTER, buttonsTextInfo, "Credits");
-		UIStringLabel instructionsLabelSmall = 	new UIStringLabel(0.5f, 0.1f, 0.8f, 0.2f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.CENTER, buttonsTextInfo, "Instructions");
+		UITextInfo backTextInfo = new UITextInfo();
+		backTextInfo.SetFont(fontBack).SetFontSize(24).SetColor(new Color(1f, 1f, 1f)).SetTextAlignment(UIAnchorLocation.LEFT_TOP);
+
+		UITextInfo backTextLargerInfo = new UITextInfo();
+		backTextLargerInfo.SetFont(fontBack).SetFontSize(28).SetColor(new Color(1f, 1f, 1f)).SetTextAlignment(UIAnchorLocation.LEFT_TOP);
 		
-		UIStringLabel playLabelLarge = 			new UIStringLabel(0.5f, 0.3f, 0.8f, 0.2f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.CENTER, buttonsLargerTextInfo, "Play");
-		UIStringLabel creditsLabelLarge = 		new UIStringLabel(0.5f, 0.2f, 0.8f, 0.2f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.CENTER, buttonsLargerTextInfo, "Credits");
-		UIStringLabel instructionsLabelLarge = 	new UIStringLabel(0.5f, 0.1f, 0.8f, 0.2f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.CENTER, buttonsLargerTextInfo, "Instructions");
-		
-		UIStaticButton playButton = 		new UIStaticButton(0.5f, 0.3f, 0.8f, 0.1f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.CENTER, new MenuButtonListener(hover, dehover, "Levels"));
-		UIStaticButton creditsButton = 		new UIStaticButton(0.5f, 0.2f, 0.8f, 0.1f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.CENTER, new MenuButtonListener(hover, dehover, "Credits"));
-		UIStaticButton instructionsButton = new UIStaticButton(0.5f, 0.1f, 0.8f, 0.1f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.CENTER, new MenuButtonListener(hover, dehover, "Instructions"));
-		
-		playButton.			SetUIComponentIdle(playLabelSmall).			SetUIComponentHighlighted(playLabelLarge);
-		creditsButton.		SetUIComponentIdle(creditsLabelSmall).		SetUIComponentHighlighted(creditsLabelLarge);
-		instructionsButton.	SetUIComponentIdle(instructionsLabelSmall).	SetUIComponentHighlighted(instructionsLabelLarge);
-		
-		playButton.SetStartStateIdle();
-		creditsButton.SetStartStateIdle();
-		instructionsButton.SetStartStateIdle();
-		
-		rootLayout.AddUIComponent(playButton)
-				.AddUIComponent(creditsButton)
-				.AddUIComponent(instructionsButton);
+		UIRelativeLayout rootLayout = new UIRelativeLayout("rootLayout", 0f, 0f, 1f, 1f, null, UIAnchorLocation.LEFT_BOT);
+
+		UIStringLabel backLabelSmall = new UIStringLabel(0.01f, 0.99f, 0.2f, 0.1f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.LEFT_TOP, backTextInfo, "Back");
+		UIStringLabel backLabelLarge = new UIStringLabel(0.01f, 0.99f, 0.2f, 0.1f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.LEFT_TOP, backTextLargerInfo, "Back");
+		UIStaticButton backButton = new UIStaticButton(0.01f, 0.99f, 0.1f, 0.08f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.LEFT_TOP, new MenuButtonListener(hover, dehover, "MainMenu"));
+
+		backButton.SetUIComponentIdle(backLabelSmall).SetUIComponentHighlighted(backLabelLarge);
+
+		rootLayout.AddUIComponent(backButton);
+
+		UIGridLayout gridLayout = new UIGridLayout("GridLayout", 0.5f, 0.5f, 0.85f, 0.8f, null, UIAnchorLocation.CENTER, 2, 3);
+
+		for (int n = 0; n < levelNames.Length; ++n)
+		{
+			UIRelativeLayout highlightedLayout = new UIRelativeLayout(0.015f, 0.05f, 0.97f, 0.90f, null, UIAnchorLocation.LEFT_BOT);
+
+			highlightedLayout.AddUIComponent(new UITextureLabel(0f, 0f, 1f, 1f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.LEFT_BOT, levelBorderTexture))
+				.AddUIComponent(new UIStringLabel(0f, 0f, 1f, 1f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.LEFT_BOT, buttonsLargerTextInfo, "Level " + (n+1)));
+
+			UIRelativeLayout notHighlightedLayout = new UIRelativeLayout(0.015f, 0.05f, 0.97f, 0.90f, null, UIAnchorLocation.LEFT_BOT);
+
+			notHighlightedLayout.AddUIComponent(new UITextureLabel("Level" + (n+1) + "relativeLayout", 0f, 0f, 1f, 1f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.LEFT_BOT, levelBorderTexture))
+				.AddUIComponent(new UIStringLabel(0f, 0f, 1f, 1f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.LEFT_BOT, buttonsTextInfo, "Level " + (n+1)));
+
+			UIStaticButton levelButton = new UIStaticButton(0.015f, 0.05f, 0.97f, 0.90f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.LEFT_BOT, new MenuButtonListener(hover, dehover, levelNames[n]));
+
+			levelButton.SetUIComponentIdle(notHighlightedLayout).SetUIComponentHighlighted(highlightedLayout);
+
+			gridLayout.AddUIComponent(levelButton, n % 2, n / 2, 1, 1);
+		}
+
+		rootLayout.AddUIComponent(gridLayout);
 		
 		m_panel = new UI(rootLayout);
 		m_panel.SetStartMenu(1);
