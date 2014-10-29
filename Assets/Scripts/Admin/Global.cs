@@ -28,6 +28,8 @@ public class Global : MonoBehaviour
 
 	public AudioClip onTowerSpawn;
 
+	private GUIRunner guiRunner;
+
     void Start()
     {
         Towers = new List<GameObject>();
@@ -41,6 +43,9 @@ public class Global : MonoBehaviour
 		lifeText.text = LIFE_TEXT + "" + lives;
 
 		enemySpanwers = GameObject.FindObjectsOfType<EnemySpawner> ();
+
+		guiRunner = gameObject.GetComponent<GUIRunner>();
+		guiRunner.Setup();
     }
 
     public Tower CreateTower(GameObject tower, Vector3 coordinates){
