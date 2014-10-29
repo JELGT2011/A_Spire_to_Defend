@@ -13,8 +13,11 @@ public class GUIRunner : MonoBehaviour
 	
 	private int screenWidth;
 	private int screenHeight;
+
+	private UIStringLabel healthNumber;
+	private UIStringLabel resourcesNumber;
 	
-	public void Setup()
+	public void Setup(int startingHealth, int startingResources)
 	{
 		UITextInfo backTextInfo = new UITextInfo();
 		backTextInfo.SetFont(font).SetFontSize(24).SetColor(new Color(0f, 0f, 0f)).SetTextAlignment(UIAnchorLocation.LEFT_TOP);
@@ -22,16 +25,19 @@ public class GUIRunner : MonoBehaviour
 		backTextLargerInfo.SetFont(font).SetFontSize(28).SetColor(new Color(0f, 0f, 0f)).SetTextAlignment(UIAnchorLocation.LEFT_TOP);
 
 		UITextInfo healthTextInfo = new UITextInfo();
-		healthTextInfo.SetFont(font).SetFontSize(48).SetColor(new Color(1f, 0f, 0f)).SetTextAlignment(UIAnchorLocation.RIGHT_MID);
-		UITextInfo resourcesTextInfo = new UITextInfo();
-		resourcesTextInfo.SetFont(font).SetFontSize(48).SetColor(new Color(0f, 0f, 0f)).SetTextAlignment(UIAnchorLocation.RIGHT_MID);
-		UITextInfo resourcesNumberTextInfo = new UITextInfo();
-		resourcesNumberTextInfo.SetFont(font).SetFontSize(48).SetColor(new Color(0f, 0f, 0f)).SetTextAlignment(UIAnchorLocation.CENTER);
+		healthTextInfo.SetFont(font).SetFontSize(28).SetColor(new Color(1f, 0f, 0f)).SetTextAlignment(UIAnchorLocation.RIGHT_MID);
+
 		UITextInfo healthNumberTextInfo = new UITextInfo();
-		healthNumberTextInfo.SetFont(font).SetFontSize(48).SetColor(new Color(1f, 0f, 0f)).SetTextAlignment(UIAnchorLocation.CENTER);
+		healthNumberTextInfo.SetFont(font).SetFontSize(28).SetColor(new Color(1f, 0f, 0f)).SetTextAlignment(UIAnchorLocation.LEFT_MID);
+
+		UITextInfo resourcesTextInfo = new UITextInfo();
+		resourcesTextInfo.SetFont(font).SetFontSize(28).SetColor(new Color(0f, 0f, 0f)).SetTextAlignment(UIAnchorLocation.RIGHT_MID);
+
+		UITextInfo resourcesNumberTextInfo = new UITextInfo();
+		resourcesNumberTextInfo.SetFont(font).SetFontSize(28).SetColor(new Color(0f, 0f, 0f)).SetTextAlignment(UIAnchorLocation.LEFT_MID);
 
 		UITextInfo everythingElseTextInfo = new UITextInfo();
-		healthTextInfo.SetFont(font).SetFontSize(32).SetColor(new Color(0f, 0f, 0f)).SetTextAlignment(UIAnchorLocation.LEFT_TOP);
+		everythingElseTextInfo.SetFont(font).SetFontSize(32).SetColor(new Color(0f, 0f, 0f)).SetTextAlignment(UIAnchorLocation.LEFT_TOP);
 		
 		UIRelativeLayout rootLayout = new UIRelativeLayout("rootLayout", 0f, 0f, 1f, 1f, null, UIAnchorLocation.LEFT_BOT);
 		
@@ -40,8 +46,18 @@ public class GUIRunner : MonoBehaviour
 		UIStaticButton backButton = new UIStaticButton(0.01f, 0.99f, 0.1f, 0.08f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.LEFT_TOP, new MenuButtonListener(hover, dehover, "MainMenu"));
 		
 		backButton.SetUIComponentIdle(backLabelSmall).SetUIComponentHighlighted(backLabelLarge);
-		
-		rootLayout.AddUIComponent(backButton);
+
+		UIStringLabel healthWord = new UIStringLabel(0.9f, 1.0f, 0.4f, 0.05f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.RIGHT_TOP, healthTextInfo, "Health:");
+		UIStringLabel resourcesWord = new UIStringLabel(0.9f, 0.96f, 0.4f, 0.05f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.RIGHT_TOP, resourcesTextInfo, "Resources:");		
+
+		healthNumber = new UIStringLabel(0.91f, 1.0f, 0.4f, 0.05f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.LEFT_TOP, healthNumberTextInfo, startingHealth.ToString());
+		resourcesNumber = new UIStringLabel(0.91f, 0.96f, 0.4f, 0.05f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.LEFT_TOP, resourcesNumberTextInfo, startingResources.ToString());
+
+		rootLayout.AddUIComponent(backButton)
+			.AddUIComponent(healthWord)
+				.AddUIComponent(resourcesWord)
+				.AddUIComponent(healthNumber)
+				.AddUIComponent(resourcesNumber);
 		
 		m_panel = new UI(rootLayout);
 		m_panel.SetStartMenu(1);
@@ -69,5 +85,15 @@ public class GUIRunner : MonoBehaviour
 			screenHeight = Screen.height;
 			m_panel.CalculateRenderingOutput();
 		}
+	}
+
+	public void SetHealthDisplay(int newHealth)
+	{
+		healthNumber.Text = newHealth.ToString();
+	}
+
+	public void SetResourceDisplay(int newResources)
+	{
+		resourcesNumber.Text = newResources.ToString();
 	}
 }

@@ -39,13 +39,13 @@ public class Global : MonoBehaviour
 			Instance = this;		
 		}
 
-		resourcesText.text = RESOURCES_TEXT + "" + resources;
-		lifeText.text = LIFE_TEXT + "" + lives;
+//		resourcesText.text = RESOURCES_TEXT + "" + resources;
+//		lifeText.text = LIFE_TEXT + "" + lives;
 
 		enemySpanwers = GameObject.FindObjectsOfType<EnemySpawner> ();
 
 		guiRunner = gameObject.GetComponent<GUIRunner>();
-		guiRunner.Setup();
+		guiRunner.Setup(lives, resources);
     }
 
     public Tower CreateTower(GameObject tower, Vector3 coordinates){
@@ -116,8 +116,8 @@ public class Global : MonoBehaviour
 			resources = 0;		
 		}
 
-		resourcesText.text = RESOURCES_TEXT + "" + resources;
-
+//		resourcesText.text = RESOURCES_TEXT + "" + resources;
+		guiRunner.SetResourceDisplay(resources);
 	}
 
 	public void AlterLives(int lifeDamage){
@@ -128,7 +128,8 @@ public class Global : MonoBehaviour
 			Application.LoadLevel(Application.loadedLevelName);
 		}
 
-		lifeText.text = LIFE_TEXT + "" + lives;
+//		lifeText.text = LIFE_TEXT + "" + lives;
+		guiRunner.SetHealthDisplay(lives);
 	}
 
 	public void SetUpTowerInfo(TowerInfo[] towerInfos){
