@@ -37,7 +37,7 @@ public class MainMenuRunner : MonoBehaviour
 
 		UIRelativeLayout rootLayout = new UIRelativeLayout(0f, 0f, 1f, 1f, null, UIAnchorLocation.LEFT_BOT);
 
-		UIStringLabel titleLabel = new UIStringLabel(0.5f, 0.7f, 0.1f, 0.5f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.CENTER, titleTextInfo, start + end[Random.Range (0, end.Length)]);
+		UIStringLabel titleLabel = new UIStringLabel(0.5f, 0.7f, 1f, 0.5f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.CENTER, titleTextInfo, start + end[Random.Range (0, end.Length)]);
 
 		UIStringLabel playLabelSmall = 			new UIStringLabel(0.5f, 0.3f, 0.8f, 0.2f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.CENTER, buttonsTextInfo, "Play");
 		UIStringLabel creditsLabelSmall = 		new UIStringLabel(0.5f, 0.2f, 0.8f, 0.2f, null, UILayoutType.RELATIVE_LAYOUT, UIAnchorLocation.CENTER, buttonsTextInfo, "Credits");
