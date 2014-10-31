@@ -18,13 +18,16 @@ public class LevelSelectMenuRunner : MonoBehaviour
 	private int screenWidth;
 	private int screenHeight;
 
+	public int xGridSections;
+	public int yGridSections;
+
 	void Start()
 	{
 		UITextInfo buttonsTextInfo = new UITextInfo();
 		buttonsTextInfo.SetFont(fontLevels).SetFontSize(64).SetColor(new Color(1f, 1f, 1f)).SetTextAlignment(UIAnchorLocation.CENTER);
 		
 		UITextInfo buttonsLargerTextInfo = new UITextInfo();
-		buttonsLargerTextInfo.SetFont(fontLevels).SetFontSize(72).SetColor(new Color(1f, 1f, 1f)).SetTextAlignment(UIAnchorLocation.CENTER);
+		buttonsLargerTextInfo.SetFont(fontLevels).SetFontSize(80).SetColor(new Color(1f, 1f, 1f)).SetTextAlignment(UIAnchorLocation.CENTER);
 
 		UITextInfo backTextInfo = new UITextInfo();
 		backTextInfo.SetFont(fontBack).SetFontSize(24).SetColor(new Color(1f, 1f, 1f)).SetTextAlignment(UIAnchorLocation.LEFT_TOP);
@@ -42,7 +45,7 @@ public class LevelSelectMenuRunner : MonoBehaviour
 
 		rootLayout.AddUIComponent(backButton);
 
-		UIGridLayout gridLayout = new UIGridLayout("GridLayout", 0.5f, 0.5f, 0.85f, 0.8f, null, UIAnchorLocation.CENTER, 2, 3);
+		UIGridLayout gridLayout = new UIGridLayout("GridLayout", 0.5f, 0.5f, 0.85f, 0.8f, null, UIAnchorLocation.CENTER, xGridSections, yGridSections);
 
 		for (int n = 0; n < levelNames.Length; ++n)
 		{
@@ -60,7 +63,7 @@ public class LevelSelectMenuRunner : MonoBehaviour
 
 			levelButton.SetUIComponentIdle(notHighlightedLayout).SetUIComponentHighlighted(highlightedLayout);
 
-			gridLayout.AddUIComponent(levelButton, n % 2, n / 2, 1, 1);
+			gridLayout.AddUIComponent(levelButton, n % xGridSections, n / xGridSections, 1, 1);
 		}
 
 		rootLayout.AddUIComponent(gridLayout);
